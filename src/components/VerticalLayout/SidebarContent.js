@@ -13,6 +13,7 @@ import {
     changeSidebarType,
     changePreloader,
 } from "../../store/actions";
+import { authProtectedRoutes } from "routes";
 
 class SidebarContent extends Component {
     constructor(props) {
@@ -83,24 +84,33 @@ class SidebarContent extends Component {
                     <ul className="metismenu list-unstyled" id="side-menu">
                         <li className="menu-title">Menu</li>
 
-                        <li>
+                        {/* <li>
                             <Link to="/dashboard" className="waves-effect">
                                 <i className="ri-dashboard-line"></i>
-                                <span className="badge badge-pill badge-success float-right">
-                                    3
-                                </span>
-                                <span className="ml-1">Dashboard</span>
+                                <span className="badge badge-pill badge-success float-right">3</span>
+                                <span className="ml-1">Feed</span>
                             </Link>
-                        </li>
+                        </li> */}
 
-                        <li>
+                        {authProtectedRoutes.map((route, index) => {
+                            return (
+                                <li key={`sidebar-list-item-${index}`}>
+                                    <Link to={route.path} className="waves-effect">
+                                        {route.icon && <i className={route.icon} />}
+                                        <span className="ml-1">{route.title}</span>
+                                    </Link>
+                                </li>
+                            );
+                        })}
+
+                        {/* <li>
                             <Link to="products" className="waves-effect">
                                 <i className="fas fa-archive"></i>
                                 <span className="ml-1">Products</span>
                             </Link>
-                        </li>
+                        </li> */}
 
-                        <li>
+                        {/* <li>
                             <Link to="calendar" className=" waves-effect">
                                 <i className="ri-calendar-2-line"></i>
                                 <span className="ml-1">Calendar</span>
@@ -431,7 +441,7 @@ class SidebarContent extends Component {
                                     </ul>
                                 </li>
                             </ul>
-                        </li>
+                        </li> */}
                     </ul>
                 </div>
             </React.Fragment>

@@ -12,6 +12,8 @@ import Account from "./auth/register/reducer";
 import Login from "./auth/login/reducer";
 import Forget from "./auth/forgetpwd/reducer";
 
+import Auth from "./auth/reducer";
+
 const rootReducer = combineReducers({
     // public
     Layout,
@@ -23,6 +25,7 @@ const rootReducer = combineReducers({
 
     Products,
     Categories,
+    Auth,
 });
 
 export default rootReducer;

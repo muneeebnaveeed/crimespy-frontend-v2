@@ -1,198 +1,94 @@
-import React, { Component } from "react";
+import React, { useEffect } from "react";
 
 import { Row, Col, Input, Button, Alert, Container, Label, FormGroup } from "reactstrap";
 
 // Redux
-import { connect } from "react-redux";
-import { withRouter, Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
-// availity-reactstrap-validation
-import { AvForm, AvField } from "availity-reactstrap-validation";
-
-// actions
-import { checkLogin, apiError } from "../../store/actions";
+import _ from "lodash";
 
 // import images
 import logodark from "../../assets/images/logo-dark.png";
+import { auth, getLoggedInUser, setSession, signInWithFacebook } from "helpers/auth";
+import { setUser } from "store/auth/actions";
+import { Redirect, useHistory } from "react-router";
 
-class Login extends Component {
-    constructor(props) {
-        super(props);
-        this.state = { username: "admin@themesdesign.in", password: "123456" };
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
+function Login(props) {
+    const dispatch = useDispatch();
+    const history = useHistory();
 
-    handleSubmit(event, values) {
-        this.props.checkLogin(values, this.props.history);
-    }
+    const state = useSelector((state) => state.Auth);
 
-    componentDidMount() {
-        this.props.apiError("");
+    useEffect(() => {
         document.body.classList.add("auth-body-bg");
-    }
+        return () => {
+            document.body.classList.remove("auth-body-bg");
+        };
+    }, []);
 
-    componentWillUnmount() {
-        document.body.classList.remove("auth-body-bg");
-    }
+    const handleLogin = async () => {
+        try {
+            const res = await signInWithFacebook();
+            const user = _.pick(res.user, ["uid", "displayName", "email", "photoURL"]);
+            dispatch(setUser(user));
+            setSession(user);
+            history.push("/");
+        } catch (err) {
+            console.error(err.message);
+        }
+    };
 
-    render() {
-        return (
-            <React.Fragment>
-                <div className="home-btn d-none d-sm-block">
-                    <Link to="/">
-                        <i className="mdi mdi-home-variant h2 text-white"></i>
-                    </Link>
-                </div>
+    if (getLoggedInUser()) return <Redirect to={{ pathname: "/", from: "/login" }} />;
 
-                <div>
-                    <Container fluid className="p-0">
-                        <Row className="no-gutters">
-                            <Col lg={4}>
-                                <div className="authentication-page-content p-4 d-flex align-items-center min-vh-100">
-                                    <div className="w-100">
-                                        <Row className="justify-content-center">
-                                            <Col lg={9}>
-                                                <div>
-                                                    <div className="text-center">
-                                                        <div>
-                                                            <Link to="/" className="logo">
-                                                                <img
-                                                                    src={logodark}
-                                                                    height="20"
-                                                                    alt="logo"
-                                                                />
-                                                            </Link>
-                                                        </div>
+    return (
+        <>
+            <div className="home-btn d-none d-sm-block">
+                <i className="mdi mdi-home-variant h2 text-white"></i>
+            </div>
 
-                                                        <h4 className="font-size-18 mt-4">
-                                                            Welcome Back !
-                                                        </h4>
-                                                        <p className="text-muted">
-                                                            Sign in to continue to Nazox.
-                                                        </p>
+            <div>
+                <Container fluid className="p-0">
+                    <Row className="no-gutters">
+                        <Col lg={4}>
+                            <div className="authentication-page-content p-4 d-flex align-items-center min-vh-100">
+                                <div className="w-100">
+                                    <Row className="justify-content-center">
+                                        <Col lg={9}>
+                                            <div>
+                                                <div className="text-center">
+                                                    <div>
+                                                        <img src={logodark} height="20" alt="logo" />
                                                     </div>
 
-                                                    {this.props.loginError &&
-                                                    this.props.loginError ? (
-                                                        <Alert color="danger">
-                                                            {this.props.loginError}
-                                                        </Alert>
-                                                    ) : null}
-
-                                                    <div className="p-2 mt-5">
-                                                        <AvForm
-                                                            className="form-horizontal"
-                                                            onValidSubmit={this.handleSubmit}
-                                                        >
-                                                            <FormGroup className="auth-form-group-custom mb-4">
-                                                                <i className="ri-user-2-line auti-custom-input-icon"></i>
-                                                                <Label htmlFor="username">
-                                                                    Username
-                                                                </Label>
-                                                                <AvField
-                                                                    name="username"
-                                                                    value={this.state.username}
-                                                                    type="text"
-                                                                    className="form-control"
-                                                                    id="username"
-                                                                    validate={{
-                                                                        email: true,
-                                                                        required: true,
-                                                                    }}
-                                                                    placeholder="Enter username"
-                                                                />
-                                                            </FormGroup>
-
-                                                            <FormGroup className="auth-form-group-custom mb-4">
-                                                                <i className="ri-lock-2-line auti-custom-input-icon"></i>
-                                                                <Label htmlFor="userpassword">
-                                                                    Password
-                                                                </Label>
-                                                                <AvField
-                                                                    name="password"
-                                                                    value={this.state.password}
-                                                                    type="password"
-                                                                    className="form-control"
-                                                                    id="userpassword"
-                                                                    placeholder="Enter password"
-                                                                />
-                                                            </FormGroup>
-
-                                                            <div className="custom-control custom-checkbox">
-                                                                <Input
-                                                                    type="checkbox"
-                                                                    className="custom-control-input"
-                                                                    id="customControlInline"
-                                                                />
-                                                                <Label
-                                                                    className="custom-control-label"
-                                                                    htmlFor="customControlInline"
-                                                                >
-                                                                    Remember me
-                                                                </Label>
-                                                            </div>
-
-                                                            <div className="mt-4 text-center">
-                                                                <Button
-                                                                    color="primary"
-                                                                    className="w-md waves-effect waves-light"
-                                                                    type="submit"
-                                                                >
-                                                                    Log In
-                                                                </Button>
-                                                            </div>
-
-                                                            <div className="mt-4 text-center">
-                                                                <Link
-                                                                    to="/forgot-password"
-                                                                    className="text-muted"
-                                                                >
-                                                                    <i className="mdi mdi-lock mr-1"></i>{" "}
-                                                                    Forgot your password?
-                                                                </Link>
-                                                            </div>
-                                                        </AvForm>
-                                                    </div>
-
-                                                    <div className="mt-5 text-center">
-                                                        <p>
-                                                            Don't have an account ?{" "}
-                                                            <Link
-                                                                to="/register"
-                                                                className="font-weight-medium text-primary"
-                                                            >
-                                                                {" "}
-                                                                Register{" "}
-                                                            </Link>{" "}
-                                                        </p>
-                                                        <p>
-                                                            © 2020 Nazox. Crafted with{" "}
-                                                            <i className="mdi mdi-heart text-danger"></i>{" "}
-                                                            by Themesdesign
-                                                        </p>
-                                                    </div>
+                                                    <h4 className="font-size-18 mt-4">Welcome Back !</h4>
+                                                    <p className="text-muted">Sign in to continue to Crimespy.</p>
                                                 </div>
-                                            </Col>
-                                        </Row>
-                                    </div>
+
+                                                <div className="p-2 mt-5 d-flex justify-content-center">
+                                                    <Button color="primary" onClick={handleLogin}>
+                                                        <i className="fab fa-facebook-f mr-1" /> Login with Facebook
+                                                    </Button>
+                                                </div>
+
+                                                <div className="mt-5 text-center">
+                                                    <p>© 2021 Crimespy</p>
+                                                </div>
+                                            </div>
+                                        </Col>
+                                    </Row>
                                 </div>
-                            </Col>
-                            <Col lg={8}>
-                                <div className="authentication-bg">
-                                    <div className="bg-overlay"></div>
-                                </div>
-                            </Col>
-                        </Row>
-                    </Container>
-                </div>
-            </React.Fragment>
-        );
-    }
+                            </div>
+                        </Col>
+                        <Col lg={8}>
+                            <div className="authentication-bg">
+                                <div className="bg-overlay"></div>
+                            </div>
+                        </Col>
+                    </Row>
+                </Container>
+            </div>
+        </>
+    );
 }
 
-const mapStatetoProps = (state) => {
-    const { loginError } = state.Login;
-    return { loginError };
-};
-
-export default withRouter(connect(mapStatetoProps, { checkLogin, apiError })(Login));
+export default Login;

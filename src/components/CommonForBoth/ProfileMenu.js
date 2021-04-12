@@ -1,5 +1,9 @@
+import { getLoggedInUser, setSession, signOutFireabse } from "helpers/auth";
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from "reactstrap";
+import { setUser } from "store/auth/actions";
 
 // users
 import avatar2 from "../../assets/images/users/avatar-2.jpg";
@@ -9,6 +13,7 @@ class ProfileMenu extends Component {
         super(props);
         this.state = {
             menu: false,
+            user: getLoggedInUser(),
         };
         this.toggle = this.toggle.bind(this);
     }
@@ -19,33 +24,28 @@ class ProfileMenu extends Component {
         }));
     }
 
-    render() {
-        let username = "Admin";
-        if (localStorage.getItem("authUser")) {
-            const obj = JSON.parse(localStorage.getItem("authUser"));
-            const uNm = obj.email.split("@")[0];
-            username = uNm.charAt(0).toUpperCase() + uNm.slice(1);
+    handleLogout = async () => {
+        try {
+            await signOutFireabse();
+            setSession(null);
+            this.props.history.push("/login");
+        } catch (err) {
+            console.error(err.message);
         }
+    };
 
+    render() {
         return (
             <React.Fragment>
-                <Dropdown
-                    isOpen={this.state.menu}
-                    toggle={this.toggle}
-                    className="d-inline-block user-dropdown"
-                >
+                <Dropdown isOpen={this.state.menu} toggle={this.toggle} className="d-inline-block user-dropdown">
                     <DropdownToggle
                         tag="button"
                         className="btn header-item waves-effect"
                         id="page-header-user-dropdown"
                     >
-                        <img
-                            className="rounded-circle header-profile-user mr-1"
-                            src={avatar2}
-                            alt="Header Avatar"
-                        />
+                        <img className="rounded-circle header-profile-user mr-1" src={avatar2} alt="Header Avatar" />
                         <span className="d-none d-xl-inline-block ml-1 text-transform">
-                            {username}
+                            {this.state.user.displayName}
                         </span>
                         <i className="mdi mdi-chevron-down d-none ml-1 d-xl-inline-block"></i>
                     </DropdownToggle>
@@ -64,9 +64,8 @@ class ProfileMenu extends Component {
                             <i className="ri-lock-unlock-line align-middle mr-1"></i> Lock screen
                         </DropdownItem>
                         <DropdownItem divider />
-                        <DropdownItem className="text-danger" href="/logout">
-                            <i className="ri-shut-down-line align-middle mr-1 text-danger"></i>{" "}
-                            Logout
+                        <DropdownItem className="text-danger" onClick={this.handleLogout}>
+                            <i className="ri-shut-down-line align-middle mr-1 text-danger"></i> Logout
                         </DropdownItem>
                     </DropdownMenu>
                 </Dropdown>
@@ -75,4 +74,8 @@ class ProfileMenu extends Component {
     }
 }
 
-export default ProfileMenu;
+const mapStatetoProps = ({ Auth }) => {
+    return Auth;
+};
+
+export default withRouter(connect(mapStatetoProps, { setUser })(ProfileMenu));

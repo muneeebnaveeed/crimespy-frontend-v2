@@ -22,7 +22,7 @@ import { productSchema } from "helpers/schema";
 import { toggleCreateProductDisclosure } from "store/routes/products/actions";
 import { Col, Row } from "reactstrap/lib";
 import Select from "components/Common/Select";
-import useCategoriesQuery from "../categories/useCategoriesQuery";
+// import useCategoriesQuery from "../categories/useCategoriesQuery";
 
 function CreateProduct(props) {
     const { createDisclosure, categoryId } = useSelector((state) => state.Products);
@@ -33,7 +33,8 @@ function CreateProduct(props) {
 
     const focusRef = useRef();
 
-    const { data } = useCategoriesQuery();
+    // const { data } = useCategoriesQuery();
+    const data = [];
 
     const categories = useMemo(() => data?.map((cat) => ({ value: cat.id.toString(), label: cat.name })), [data]);
 
