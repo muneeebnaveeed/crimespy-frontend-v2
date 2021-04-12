@@ -43,7 +43,7 @@ class ProfileMenu extends Component {
                         className="btn header-item waves-effect"
                         id="page-header-user-dropdown"
                     >
-                        <img className="rounded-circle header-profile-user mr-1" src={avatar2} alt="Header Avatar" />
+                        <img className="rounded-circle header-profile-user mr-1" src={this.state.user.photoURL} alt="Header Avatar" />
                         <span className="d-none d-xl-inline-block ml-1 text-transform">
                             {this.state.user.displayName}
                         </span>
