@@ -37,11 +37,15 @@ function Login(props) {
                          uid: dbuser.uid,
                          email: dbuser.email,
                          username: dbuser.displayName,
+                         geder:'',
+                         bio:'',
+                         dob:'',
+                         photoUrl:dbuser.photoURL,
                          displayName:dbuser.displayName,
                          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                        };
                       db.collection('users').doc(dbuser.uid).set(userMap)
-                  
+                  console.log(dbuser)
           
             const user = _.pick(res.user, ["uid", "displayName", "email", "photoURL"]);
             dispatch(setUser(user));
