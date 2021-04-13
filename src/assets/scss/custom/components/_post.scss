@@ -2,38 +2,36 @@
     display: flex;
     padding: 12px;
     justify-content: space-between;
-  }
+}
 
-  .post {
-   
-   width: 100%;
+.post {
+    width: 100%;
     margin-bottom: 16px;
     padding: 16px;
-  }
+}
 
-  .post__headerInfo {
+.post__headerInfo {
     margin-left: 10px;
-  }
+}
 
-  .post__image {
+.post__image {
     width: 100%;
     object-fit: contain;
     border-top: 0.5px solid #eff2f2;
     border-bottom: 0.5px solid #eff2f2;
     border-radius: 5px;
-    
-  }
+}
 
-  .post__bottom{
+.post__bottom {
     padding: 6px 12px;
-  }
+}
 
-  .post__button{
-      border: none;
-      background-color: white;
-      cursor: pointer;
-  }
+.post__button {
+    border: none;
+    background-color: white;
+    cursor: pointer;
+}
 
-  .post__button:focus{
-      outline: none;
-  }
+.post__button:focus {
+    outline: none;
+}

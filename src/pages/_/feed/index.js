@@ -2,7 +2,6 @@ import React from "react";
 import ProductsTable from "./ProductsTable";
 import DeleteProduct from "./DeleteProduct";
 import CreateProduct from "./CreateProduct";
-import "./style.css";
 
 function Products() {
     return (
