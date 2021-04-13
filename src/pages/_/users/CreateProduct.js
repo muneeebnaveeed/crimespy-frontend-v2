@@ -22,7 +22,6 @@ import { productSchema } from "helpers/schema";
 import { toggleCreateProductDisclosure } from "store/routes/products/actions";
 import { Col, Row } from "reactstrap/lib";
 import Select from "components/Common/Select";
-import useCategoriesQuery from "./categories/useCategoriesQuery";
 
 function CreateProduct(props) {
     const { createDisclosure, categoryId } = useSelector((state) => state.Products);
@@ -32,10 +31,6 @@ function CreateProduct(props) {
     const [isCreatingProduct, setIsCreatingProduct] = useState(false);
 
     const focusRef = useRef();
-
-    const { data } = useCategoriesQuery();
-
-    const categories = useMemo(() => data?.map((cat) => ({ value: cat.id.toString(), label: cat.name })), [data]);
 
     const handleCreateProduct = useCallback(
         async (values, form) => {
@@ -154,7 +149,6 @@ function CreateProduct(props) {
                                         </span>
                                     </InputGroupAddon>
                                     <Select
-                                        options={categories}
                                         noOptionsMessage="No category found"
                                         name="category"
                                         onChange={(category) => setFieldValue("category", category.value)}
