@@ -30,19 +30,22 @@ function Posts(props) {
         init();
     }, []);
 
-    return posts.map(({ id, post }) => {
-        return (
-            <Post
-                key={id}
-                id={id}
-                username={post.username}
-                comments={post.comments}
-                profileUrl={post.profileUrl}
-                description={post.description}
-                photoURL={post.mediaUrl}
-            />
-        );
-    });
+    return (
+        <>
+            {posts.map(({ id, post }) => (
+                <Post
+                    key={id}
+                    id={id}
+                    username={post.username}
+                    comments={post.comments}
+                    profileUrl={post.profileUrl}
+                    description={post.description}
+                    photoURL={post.mediaUrl}
+                />
+            ))}
+            <p className="mt-4 text-center">{posts.length ? "No more posts available" : "No posts found"}</p>
+        </>
+    );
 }
 
 export default Posts;
