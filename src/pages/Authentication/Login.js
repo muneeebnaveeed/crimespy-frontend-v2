@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 
 import { Row, Col, Input, Button, Alert, Container, Label, FormGroup } from "reactstrap";
-import {db} from '../../helpers/auth'
-import firebase from 'firebase/app'
+import { db } from "../../helpers/auth";
+import firebase from "firebase/app";
 
 // Redux
 import { useDispatch, useSelector } from "react-redux";
@@ -30,24 +30,24 @@ function Login(props) {
 
     const handleLogin = async () => {
         try {
-            const res = await signInWithFacebook()
-             
-                      let dbuser = res.user;
-                      const userMap = {
-                         uid: dbuser.uid,
-                         email: dbuser.email,
-                         username: dbuser.displayName,
-                         geder:'',
-                         bio:'',
-                         dob:'',
-                         photoUrl:dbuser.photoURL,
-                         displayName:dbuser.displayName,
-                         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                       };
-                      db.collection('users').doc(dbuser.uid).set(userMap)
-                  console.log(dbuser)
-          
+            const res = await signInWithFacebook();
+
             const user = _.pick(res.user, ["uid", "displayName", "email", "photoURL"]);
+
+            const userExistsInDb = (await db.collection("users").doc(user.uid).get()).data();
+
+            if (!userExistsInDb) {
+                const dbUser = {
+                    ...user,
+                    gender: "",
+                    bio: "",
+                    dob: "",
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                };
+
+                await db.collection("users").doc(dbUser.uid).set(dbUser);
+            }
+
             dispatch(setUser(user));
             setSession(user);
             history.push("/");

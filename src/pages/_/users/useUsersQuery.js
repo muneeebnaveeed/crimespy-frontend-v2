@@ -3,7 +3,7 @@ import qs from "querystring";
 import { useCallback } from "react";
 import { useSelector } from "react-redux";
 
-const fetchProducts = ({ sort, order, page, pageSize }) => {
+const fetchUsers = ({ sort, order, page, pageSize }) => {
     const query = qs.stringify({
         _sort: `${sort}:${order}`,
         _limit: pageSize,
@@ -15,7 +15,7 @@ const fetchProducts = ({ sort, order, page, pageSize }) => {
 function useUsersQuery() {
     const { page, pageSize, sort, order } = useSelector((state) => state.Products);
 
-    const queryFn = useCallback(() => fetchProducts({ sort, order, page, pageSize }), [sort, order, page, pageSize]);
+    const queryFn = useCallback(() => fetchUsers({ sort, order, page, pageSize }), [sort, order, page, pageSize]);
 
     const query = useModifiedQuery("users", queryFn, {
         keepPreviousData: true,

@@ -4,11 +4,7 @@ import { Route, Redirect } from "react-router-dom";
 import { getLoggedInUser } from "helpers/auth";
 
 const AppRoute = ({ component: Component, layout: Layout, isAuthProtected = false, roles = [], ...rest }) => {
-    const auth = useSelector((state) => state.Auth);
-
     const isUserLoggedIn = getLoggedInUser();
-
-    console.log(isUserLoggedIn);
 
     return (
         <Route
