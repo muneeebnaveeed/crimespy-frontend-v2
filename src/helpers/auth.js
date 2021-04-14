@@ -12,8 +12,8 @@ const firebaseConfig = {
     storageBucket: "crimespyv3.appspot.com",
     messagingSenderId: "287743355804",
     appId: "1:287743355804:web:4759f001f135a9f057b659",
-    measurementId: "G-5NK3RTNND8"
-  };
+    measurementId: "G-5NK3RTNND8",
+};
 // Initialize Firebase
 
 const firebaseapp = firebase.initializeApp(firebaseConfig);
@@ -33,6 +33,12 @@ export const setSession = (user) => {
     let cookies = new Cookies();
     if (user) cookies.set("user", user, { path: "/" });
     else cookies.remove("user", { path: "/" });
+};
+
+export const isUserAuthorized = (roles, user) => {
+    if (!roles) return true;
+    if (roles.includes(user.role)) return true;
+    return false;
 };
 
 /**

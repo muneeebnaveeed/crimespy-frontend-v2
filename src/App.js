@@ -17,6 +17,7 @@ import "./theme.scss";
 import fakeBackend from "./helpers/AuthType/fakeBackend";
 
 import { QueryProvider } from "helpers/query";
+import { getLoggedInUser, isUserAuthorized } from "helpers/auth";
 
 // Activating fake backend
 fakeBackend();
@@ -24,7 +25,9 @@ fakeBackend();
 class App extends Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            user: getLoggedInUser(),
+        };
     }
 
     render() {
@@ -43,16 +46,21 @@ class App extends Component {
                                 />
                             ))}
 
-                            {authProtectedRoutes.map((route, idx) => (
-                                <AppRoute
-                                    exact
-                                    key={idx}
-                                    path={route.path}
-                                    layout={VerticalLayout}
-                                    component={route.component}
-                                    isAuthProtected
-                                />
-                            ))}
+                            {authProtectedRoutes.map((route, idx) => {
+                                if (isUserAuthorized(route.roles, this.state.user))
+                                    return (
+                                        <AppRoute
+                                            exact
+                                            key={idx}
+                                            path={route.path}
+                                            layout={VerticalLayout}
+                                            component={route.component}
+                                            isAuthProtected
+                                        />
+                                    );
+
+                                return null;
+                            })}
                         </Switch>
                     </QueryProvider>
                 </Router>

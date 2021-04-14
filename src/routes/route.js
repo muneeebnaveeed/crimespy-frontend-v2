@@ -1,16 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Route, Redirect } from "react-router-dom";
 import { getLoggedInUser } from "helpers/auth";
 
-const AppRoute = ({ component: Component, layout: Layout, isAuthProtected = false, roles = [], ...rest }) => {
-    const isUserLoggedIn = getLoggedInUser();
+const user = getLoggedInUser();
 
+const AppRoute = ({ component: Component, layout: Layout, isAuthProtected = false, roles = [], ...rest }) => {
     return (
         <Route
             {...rest}
             render={(props) => {
-                if (isAuthProtected && !isUserLoggedIn) {
+                if (isAuthProtected && !user) {
                     return (
                         <Redirect
                             to={{

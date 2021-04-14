@@ -45,7 +45,7 @@ function Feed() {
                                     className="m-0 mr-1"
                                     ref={whatsOnYourMindRef}
                                 >
-                                    What's on your mind? <i class="fas fa-plus" />
+                                    What's on your mind? <i className="fas fa-plus" />
                                 </h1>
                             </div>
                         </Col>

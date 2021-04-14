@@ -15,7 +15,7 @@ import {
 } from "../../store/actions";
 import { authProtectedRoutes } from "routes";
 
-import { getLoggedInUser } from "helpers/auth";
+import { getLoggedInUser, isUserAuthorized } from "helpers/auth";
 
 class SidebarContent extends Component {
     constructor(props) {
@@ -97,18 +97,15 @@ class SidebarContent extends Component {
                         </li> */}
 
                         {authProtectedRoutes.map((route, index) => {
-                            const list = (
-                                <li key={`sidebar-list-item-${index}`}>
-                                    <Link to={route.path} className="waves-effect">
-                                        {route.icon && <i className={route.icon} />}
-                                        <span className="ml-1">{route.title}</span>
-                                    </Link>
-                                </li>
-                            );
-
-                            if (!route.roles) return list;
-
-                            if (route.roles.includes(this.state.user.role)) return list;
+                            if (isUserAuthorized(route.roles, this.state.user))
+                                return (
+                                    <li key={`sidebar-list-item-${index}`}>
+                                        <Link to={route.path} className="waves-effect">
+                                            {route.icon && <i className={route.icon} />}
+                                            <span className="ml-1">{route.title}</span>
+                                        </Link>
+                                    </li>
+                                );
 
                             return null;
                         })}

@@ -35,7 +35,7 @@ function UsersTable() {
         <Card>
             {isLoading && !isError && <Spinner />}
             {isError && !isLoading && <Error for="users" onClick={refetch} />}
-            <CardBody className="pt-0" style={{ minHeight: 150 }}>
+            <CardBody className="pt-0" style={{ minHeight: 350 }}>
                 <Table
                     responsive
                     size="xl"
