@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Post from "./Post";
 import Breadcrumbs from "components/Common/Breadcrumb";
 import { Col, Container, Row } from "reactstrap";
@@ -20,6 +20,7 @@ const breadcrumbItems = [
 
 function Feed() {
     const { isOpen, toggle } = useDisclosure();
+    const whatsOnYourMindRef = useRef();
 
     return (
         <>
@@ -28,9 +29,24 @@ function Feed() {
                     <Breadcrumbs title="Feed" breadcrumbItems={breadcrumbItems} />
                     <Row>
                         <Col xs={12}>
-                            <div className="PostCreation">
-                                <p>u can make post here</p>
-                                <button onClick={toggle}>Make Post</button>
+                            <div
+                                style={{ width: "100%", backgroundColor: "#fff", cursor: "pointer" }}
+                                className="rounded d-flex justify-content-center align-items-center shadow-sm p-4"
+                                onClick={toggle}
+                                onMouseEnter={() => {
+                                    whatsOnYourMindRef.current.classList.toggle("whatsOnYourMind-active", true);
+                                }}
+                                onMouseLeave={() => {
+                                    whatsOnYourMindRef.current.classList.toggle("whatsOnYourMind-active", false);
+                                }}
+                            >
+                                <h1
+                                    style={{ fontSize: "1rem", fontWeight: "bold" }}
+                                    className="m-0 mr-1"
+                                    ref={whatsOnYourMindRef}
+                                >
+                                    What's on your mind? <i class="fas fa-plus" />
+                                </h1>
                             </div>
                         </Col>
                     </Row>
