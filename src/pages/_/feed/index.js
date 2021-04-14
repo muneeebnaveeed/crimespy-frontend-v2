@@ -1,6 +1,8 @@
 import React from "react";
 import Post from "./Post";
+import CreatePost from "./CreatePost";
 import Breadcrumbs from "components/Common/Breadcrumb";
+
 import { Col, Container, Row } from "reactstrap";
 
 const breadcrumbItems = [
@@ -21,6 +23,7 @@ function Feed() {
                 <Breadcrumbs title="Feed" breadcrumbItems={breadcrumbItems} />
                 <Row>
                     <Col xs={12} className="align-items-center">
+                        <CreatePost></CreatePost>
                         <Post
                             username="wasef"
                             comments="This is comment"
