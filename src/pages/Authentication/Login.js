@@ -32,21 +32,23 @@ function Login(props) {
         try {
             const res = await signInWithFacebook();
 
-            const user = _.pick(res.user, ["uid", "displayName", "email", "photoURL"]);
+            navigator.geolocation.getCurrentPosition((position) => console.log(position.coords));
 
-            const userExistsInDb = (await db.collection("users").doc(user.uid).get()).data();
+            const fbUser = _.pick(res.user, ["uid", "displayName", "email", "photoURL"]);
 
-            if (!userExistsInDb) {
-                const dbUser = {
-                    ...user,
-                    gender: "",
-                    bio: "",
-                    dob: "",
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                };
+            const dbUser = (await db.collection("users").doc(fbUser.uid).get()).data();
 
-                await db.collection("users").doc(dbUser.uid).set(dbUser);
-            }
+            let user = {
+                ...fbUser,
+                role: "user",
+                gender: "",
+                bio: "",
+                dob: "",
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+            };
+
+            if (!dbUser) await db.collection("users").doc(user.uid).set(user);
+            else user = dbUser;
 
             dispatch(setUser(user));
             setSession(user);

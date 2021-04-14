@@ -15,10 +15,14 @@ import {
 } from "../../store/actions";
 import { authProtectedRoutes } from "routes";
 
+import { getLoggedInUser } from "helpers/auth";
+
 class SidebarContent extends Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            user: getLoggedInUser(),
+        };
     }
 
     componentDidMount() {
@@ -93,7 +97,7 @@ class SidebarContent extends Component {
                         </li> */}
 
                         {authProtectedRoutes.map((route, index) => {
-                            return (
+                            const list = (
                                 <li key={`sidebar-list-item-${index}`}>
                                     <Link to={route.path} className="waves-effect">
                                         {route.icon && <i className={route.icon} />}
@@ -101,6 +105,12 @@ class SidebarContent extends Component {
                                     </Link>
                                 </li>
                             );
+
+                            if (!route.roles) return list;
+
+                            if (route.roles.includes(this.state.user.role)) return list;
+
+                            return null;
                         })}
 
                         {/* <li>
