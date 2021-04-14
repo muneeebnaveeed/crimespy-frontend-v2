@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Post from "./Post";
 import CreatePost from "./CreatePost";
 import Breadcrumbs from "components/Common/Breadcrumb";
 
 import { Col, Container, Row } from "reactstrap";
+import { db, getLoggedInUser } from "helpers/auth";
 
 const breadcrumbItems = [
     {
@@ -17,27 +18,45 @@ const breadcrumbItems = [
 ];
 
 function Feed() {
+    const [posts, setPosts] = useState([]);
+    const user = getLoggedInUser();
+    const postRef = db.collection("posts").doc(user.uid).collection("userPosts");
+    useEffect(() => {
+        postRef.orderBy("timestamp", "desc").onSnapshot((snapshot) => {
+            setPosts(snapshot.docs.map((doc) => ({ id: doc.id, post: doc.data() })));
+        });
+        console.log(posts);
+        // postRef.get().then( snapshot => {
+        //     const document = [];
+        //     snapshot.forEach( (doc) =>{
+        //         const data = doc.data()
+        //         document.push(data);
+        //         setPosts(document);
+        //         console.log("Post",posts);
+        //     })
+        // })
+    }, []);
+    console.log("Post", posts);
+
     return (
         <div className="page-content">
             <Container fluid>
                 <Breadcrumbs title="Feed" breadcrumbItems={breadcrumbItems} />
                 <Row>
                     <Col xs={12} className="align-items-center">
-                        <CreatePost></CreatePost>
-                        <Post
-                            username="wasef"
-                            comments="This is comment"
-                            profileUrl="https://graph.facebook.com/3839782289438433/picture"
-                            description="Hello there THis is first Post Hello there THis is first Post Hello there THis is first Post Hello there THis is first Post Hello there THis is first Post Hello there THis is first Post Hello there THis is first Post Hello there THis is first Post Hello there THis is first Post Hello there THis is first Post Hello there THis is first Post Hello there THis is first Post Hello there THis is first Post Hello there THis is first Post Hello there THis is first Post Hello there THis is first Post"
-                            photoURL="https://firebasestorage.googleapis.com/v0/b/crimespy-6fc6f.appspot.com/o/images%2Fundefinedvb3tOs7tZZ.jpg?alt=media&token=cc8e3bb4-3f7e-4e50-94ab-ea1ecb84b067"
-                        />
-                        <Post
-                            username="wasef"
-                            comments="This is comment This is comment This is comment This is comment This is comment This is comment This is comment This is comment This is comment This is comment This is comment This is comment This is comment This is comment This is comment This is comment This is comment This is comment This is comment This is comment"
-                            profileUrl="https://graph.facebook.com/3839782289438433/picture"
-                            description="Hello there THis is first Post Hello there THis is first Post Hello there THis is first Post Hello there THis is first Post Hello there THis is first Post Hello there THis is first Post Hello there THis is first Post Hello there THis is first Post Hello there THis is first Post Hello there THis is first Post Hello there THis is first Post Hello there THis is first Post Hello there THis is first Post Hello there THis is first Post Hello there THis is first Post Hello there THis is first Post"
-                            photoURL="https://firebasestorage.googleapis.com/v0/b/crimespy-6fc6f.appspot.com/o/images%2Fundefinedvb3tOs7tZZ.jpg?alt=media&token=cc8e3bb4-3f7e-4e50-94ab-ea1ecb84b067"
-                        />
+                        {posts.map(({ id, post }) => {
+                            return (
+                                <Post
+                                    key={id}
+                                    id={id}
+                                    username={post.username}
+                                    comments={post.comments}
+                                    profileUrl={post.profileUrl}
+                                    description={post.description}
+                                    photoURL={post.mediaUrl}
+                                />
+                            );
+                        })}
                     </Col>
                 </Row>
             </Container>
