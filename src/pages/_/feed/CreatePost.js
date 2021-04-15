@@ -230,6 +230,7 @@ const CreatePost = ({toggle, isOpen}) => {
                             Image Upload
                         </Button> */} </FormGroup>
                 </ModalBody>
+                {/* {Post upload progess} */}
                 <ModalFooter>
                 <p>`Post {progress != 0 ? progress: ""}</p>
                     <Button color="light" size="sm"
