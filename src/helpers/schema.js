@@ -35,6 +35,10 @@ export const postSchema = Joi.object({
         "string.max": `Only {#limit} characters are allowed`,
         "string.min": `Please Enter comprehensive Description above the limit {#limit} characters`,
     }),
+    image: Joi.any().required().messages({
+        "string.empty": `Please attach an image`,
+        "any.required": `Please attach an image`,
+    }),
 });
 
 export const categorySchema = {

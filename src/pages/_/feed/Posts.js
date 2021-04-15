@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import Post from "./Post";
 import { db, getLoggedInUser } from "helpers/auth";
 import { useModifiedQuery } from "helpers/query";
+import { Col } from "reactstrap";
+import { Row } from "reactstrap/lib";
 
 const fetchPosts = async () => {
     const user = getLoggedInUser();
@@ -22,29 +24,22 @@ const fetchPosts = async () => {
 function Posts(props) {
     const posts = useModifiedQuery("posts", fetchPosts);
 
-    // useEffect(() => {
-    //     const init = async () => {
-    //         const posts = await fetchPosts();
-    //         console.log(posts);
-    //     };
-
-    //     init();
-    // }, []);
-
-    console.log(posts.data);
-
     return (
-        <div className="d-flex flex-column align-items-center">
+        <>
             {posts.data?.map((post) => (
-                <Post
-                    key={post.id}
-                    id={post.id}
-                    username={post.username}
-                    comments={post.comments}
-                    profileUrl={post.profileUrl}
-                    description={post.description}
-                    photoURL={post.mediaUrl}
-                />
+                <Row>
+                    <Col xs={12} className="d-flex justify-content-center">
+                        <Post
+                            key={post.id}
+                            id={post.id}
+                            username={post.username}
+                            comments={post.comments}
+                            profileUrl={post.profileUrl}
+                            description={post.description}
+                            photoURL={post.mediaUrl}
+                        />
+                    </Col>
+                </Row>
             ))}
             {posts.isLoading ? (
                 <p className="mt-4 text-center">Fetching posts...</p>
@@ -53,7 +48,7 @@ function Posts(props) {
                     {posts.length ? "No more posts available" : "You've reached the end of the internet"}
                 </p>
             )}
-        </div>
+        </>
     );
 }
 

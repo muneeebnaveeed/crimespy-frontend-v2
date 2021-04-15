@@ -8,19 +8,19 @@ import Actions from "./Actions";
 
 function Post({ username, profileUrl, description, comments, id, photoURL }) {
     return (
-        <Card style={{ maxWidth: 800 }} className="m-0 mt-4">
+        <Card className="m-0 mt-4" style={{ maxWidth: 840 }}>
             <CardBody className="p-0">
                 <div className="d-flex p-3 justify-content-between">
                     <div className="d-flex align-items-center">
                         <Avatar alt={username.toLowerCase()} src={profileUrl} style={{ width: 35, height: 35 }}>
                             {username.charAt(0)}
                         </Avatar>
-                        <span className="ml-2">{username}</span>
+                        <span className="ml-2 text-capitalize">{username}</span>
                     </div>
 
                     <i className="fa fa-sliders fa-lg" />
                 </div>
-                <img className="post__image" width="500px" height="400px" src={photoURL} />
+                <img className="post__image d-block mx-auto" width="500px" height="400px" src={photoURL} />
                 <p className="p-3 m-0">{description}</p>
                 <Actions />
                 <Comments username={username} comment="informative post" />

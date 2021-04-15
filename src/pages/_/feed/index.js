@@ -50,11 +50,7 @@ function Feed() {
                             </div>
                         </Col>
                     </Row>
-                    <Row>
-                        <Col xs={12} className="align-items-center">
-                            <Posts />
-                        </Col>
-                    </Row>
+                    <Posts />
                 </Container>
             </div>
             <CreatePost isOpen={isOpen} toggle={toggle} />

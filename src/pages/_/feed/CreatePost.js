@@ -22,6 +22,8 @@ import firebase from "firebase";
 import { postSchema } from "helpers/schema";
 import { db, getLoggedInUser, storage } from "helpers/auth";
 import makeid from "helpers/imagefunction";
+import { useQueryClient } from "react-query";
+import { showSuccessToast } from "helpers/showToast";
 
 const CreatePost = ({ toggle, isOpen }) => {
     const uuid = (a) => {
@@ -31,17 +33,15 @@ const CreatePost = ({ toggle, isOpen }) => {
     };
     const postRef = db.collection("posts");
     const fileimageRef = useRef();
-    const [image, setImage] = useState(null);
-    const [progress, setProgress] = useState(0);
     const user = getLoggedInUser();
-    const postId = uuid();
+    const [isCreatingPost, setIsCreatingPost] = useState(false);
+    const queryClient = useQueryClient();
 
     const handleChange = (e) => {
         e.preventDefault();
         if (e.target.files[0]) {
-            setImage(e.target.files[0]);
+            formik.setFieldValue("image", e.target.files[0]);
             var selectedImageSrc = URL.createObjectURL(e.target.files[0]);
-            console.log(image);
 
             var imagepreview = document.getElementById("image-preview");
             imagepreview.src = selectedImageSrc;
@@ -49,50 +49,55 @@ const CreatePost = ({ toggle, isOpen }) => {
         }
     };
 
+    const handleSubmit = useCallback((values) => {
+        var imageName = makeid(10);
+        const uploadTask = storage.ref(`images/${imageName}.jpg`).put(values.image);
+        setIsCreatingPost(true);
+        uploadTask.on(
+            "state_changed",
+            (snapshot) => {},
+            (error) => {
+                console.log(error);
+            },
+            async () => {
+                const postId = uuid();
+                // GET DOWNLOAD URL AND UPLOAD THE POST INFO
+
+                try {
+                    const imageUrl = await storage.ref("images").child(`${imageName}.jpg`).getDownloadURL();
+
+                    const newPost = {
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                        postId: postId,
+                        ownerId: user.uid,
+                        Title: values.title,
+                        description: values.description,
+                        location: values.location,
+                        mediaUrl: imageUrl,
+                        username: user.displayName.toLowerCase(),
+                        profileUrl: user.photoURL,
+                    };
+
+                    await postRef.doc(user.uid).collection("userPosts").doc(postId).set(newPost);
+                    await queryClient.invalidateQueries("posts");
+                    showSuccessToast({ message: "Post has been created" });
+                    toggleModal();
+                    setIsCreatingPost(false);
+                } catch (err) {
+                    console.error(err.message);
+                }
+            }
+        );
+    }, []);
+
     const formik = useFormik({
         initialValues: {
             title: "",
             description: "",
             location: "",
+            image: "",
         },
-        onSubmit: (values) => {
-            if (image) {
-                var imageName = makeid(10);
-                const uploadTask = storage.ref(`images/${imageName}.jpg`).put(image);
-                uploadTask.on(
-                    "state_changed",
-                    (snapshot) => {
-                        // progress Funtion 1%
-                        const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-                        setProgress(progress);
-                    },
-                    (error) => {
-                        console.log(error);
-                    },
-                    () => {
-                        // GET DOWNLOAD URL AND UPLOAD THE POST INFO
-                        storage
-                            .ref("images")
-                            .child(`${imageName}.jpg`)
-                            .getDownloadURL()
-                            .then((imageUrl) => {
-                                postRef.doc(user.uid).collection("userPosts").doc(postId).set({
-                                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                                    postId: postId,
-                                    ownerId: user.uid,
-                                    Title: values.title,
-                                    description: values.description,
-                                    location: values.location,
-                                    mediaUrl: imageUrl,
-                                    username: user.displayName.toLowerCase(),
-
-                                    profileUrl: user.photoURL,
-                                });
-                            });
-                    }
-                );
-            }
-        },
+        onSubmit: handleSubmit,
         validate: (values) => {
             let errors = {};
 
@@ -105,9 +110,13 @@ const CreatePost = ({ toggle, isOpen }) => {
         validateOnChange: false,
     });
 
+    const toggleModal = useCallback(() => {
+        if (!isCreatingPost) toggle();
+    }, [isCreatingPost, toggle]);
+
     return (
         <>
-            <Modal isOpen={isOpen} toggle={toggle} centered>
+            <Modal isOpen={isOpen} toggle={toggleModal} centered>
                 <ModalHeader>Create Post</ModalHeader>
                 <form onSubmit={formik.handleSubmit}>
                     <ModalBody>
@@ -197,21 +206,16 @@ const CreatePost = ({ toggle, isOpen }) => {
                                     style={{ display: "none" }}
                                     ref={fileimageRef}
                                 />
-                                Image Upload
+                                Attach Image
                             </Label>
-                            {/* <Button w="auto" color="primary" size="sm"
-                            onClick={handleImageUpload}>
-                            Image Upload
-                        </Button> */}
+                            <div className="invalid-feedback">{formik.errors.image}</div>
                         </FormGroup>
                     </ModalBody>
-                    {/* {Post upload progess} */}
                     <ModalFooter>
-                        <p>`Post {progress != 0 ? progress : ""}</p>
-                        <Button color="light" size="sm" onClick={toggle}>
+                        <Button color="light" size="sm" onClick={toggleModal}>
                             Cancel
                         </Button>
-                        <Button w="55.5px" color="primary" size="sm" type="submit">
+                        <Button loading={isCreatingPost} w="55.5px" color="primary" size="sm" type="submit">
                             Post
                         </Button>
                     </ModalFooter>
