@@ -26,8 +26,8 @@ function Posts(props) {
 
     return (
         <>
-            {posts.data?.map((post) => (
-                <Row>
+            {posts.data?.map((post,i) => (
+                <Row key={i}>
                     <Col xs={12} className="d-flex justify-content-center">
                         <Post
                             key={post.id}

@@ -23,7 +23,7 @@ function Post({ username, profileUrl, description, comments, id, photoURL }) {
                 <img className="post__image d-block mx-auto" width="500px" height="400px" src={photoURL} />
                 <p className="p-3 m-0">{description}</p>
                 <Actions />
-                <Comments username={username} comment="informative post" />
+                <Comments username={username} comments={comments} />
                 <CreateComment comments={comments} id={id} user="Wasef" />
             </CardBody>
         </Card>

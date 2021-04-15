@@ -8,12 +8,25 @@ function Comment({ username, comment }) {
     );
 }
 
-export default function Comments({ username, comment }) {
+export default function Comments({ username, comments }) {
     return (
         <div className="px-3 d-flex flex-column">
+        {
+            comments ? (
+                comments.map((comment,i) => (
+                    <div key={i}>
+
+                    <Comment username={comment.username} comment={comment.comment} />
+
+                    </div>
+                ))
+            ) : (
+                <> </>
+            )
+        }
+            {/* <Comment username={username} comment={comment} />
             <Comment username={username} comment={comment} />
-            <Comment username={username} comment={comment} />
-            <Comment username={username} comment={comment} />
+            <Comment username={username} comment={comment} /> */}
         </div>
     );
 }
