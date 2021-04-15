@@ -8,7 +8,7 @@ import Actions from "./Actions";
 
 function Post({ username, profileUrl, description, comments, id, photoURL }) {
     return (
-        <Card style={{ maxWidth: 900 }} className="mr-0">
+        <Card style={{ maxWidth: 800 }} className="m-0 mt-4">
             <CardBody className="p-0">
                 <div className="d-flex p-3 justify-content-between">
                     <div className="d-flex align-items-center">
@@ -20,7 +20,7 @@ function Post({ username, profileUrl, description, comments, id, photoURL }) {
 
                     <i className="fa fa-sliders fa-lg" />
                 </div>
-                <img className="post__image" src={photoURL} />
+                <img className="post__image" width="500px" height="400px" src={photoURL} />
                 <p className="p-3 m-0">{description}</p>
                 <Actions />
                 <Comments username={username} comment="informative post" />

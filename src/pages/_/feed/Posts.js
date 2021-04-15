@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Post from "./Post";
 import { db, getLoggedInUser } from "helpers/auth";
+import { useModifiedQuery } from "helpers/query";
 
 const fetchPosts = async () => {
     const user = getLoggedInUser();
@@ -19,23 +20,25 @@ const fetchPosts = async () => {
 };
 
 function Posts(props) {
-    const [posts, setPosts] = useState([]);
+    const posts = useModifiedQuery("posts", fetchPosts);
 
-    useEffect(() => {
-        const init = async () => {
-            const posts = await fetchPosts();
-            console.log(posts);
-        };
+    // useEffect(() => {
+    //     const init = async () => {
+    //         const posts = await fetchPosts();
+    //         console.log(posts);
+    //     };
 
-        init();
-    }, []);
+    //     init();
+    // }, []);
+
+    console.log(posts.data);
 
     return (
-        <>
-            {posts.map(({ id, post }) => (
+        <div className="d-flex flex-column align-items-center">
+            {posts.data?.map((post) => (
                 <Post
-                    key={id}
-                    id={id}
+                    key={post.id}
+                    id={post.id}
                     username={post.username}
                     comments={post.comments}
                     profileUrl={post.profileUrl}
@@ -43,8 +46,14 @@ function Posts(props) {
                     photoURL={post.mediaUrl}
                 />
             ))}
-            <p className="mt-4 text-center">{posts.length ? "No more posts available" : "No posts found"}</p>
-        </>
+            {posts.isLoading ? (
+                <p className="mt-4 text-center">Fetching posts...</p>
+            ) : (
+                <p className="mt-4 text-center">
+                    {posts.length ? "No more posts available" : "You've reached the end of the internet"}
+                </p>
+            )}
+        </div>
     );
 }
 
