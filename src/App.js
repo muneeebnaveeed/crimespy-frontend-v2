@@ -36,6 +36,18 @@ class App extends Component {
                 <Router>
                     <QueryProvider>
                         <Switch>
+                            {authProtectedRoutes.map((route, idx) => {
+                                return (
+                                    <AppRoute
+                                        exact
+                                        key={idx}
+                                        path={route.path}
+                                        layout={VerticalLayout}
+                                        component={route.component}
+                                        isAuthProtected
+                                    />
+                                );
+                            })}
                             {publicRoutes.map((route, idx) => (
                                 <AppRoute
                                     exact
@@ -45,22 +57,6 @@ class App extends Component {
                                     component={route.component}
                                 />
                             ))}
-
-                            {authProtectedRoutes.map((route, idx) => {
-                                if (isUserAuthorized(route.roles, this.state.user))
-                                    return (
-                                        <AppRoute
-                                            exact
-                                            key={idx}
-                                            path={route.path}
-                                            layout={VerticalLayout}
-                                            component={route.component}
-                                            isAuthProtected
-                                        />
-                                    );
-
-                                return null;
-                            })}
                         </Switch>
                     </QueryProvider>
                 </Router>

@@ -193,12 +193,11 @@ const authProtectedRoutes = [
 
     { path: "/dashboard", icon: "fas fa-columns", title: "Feed", component: Feed },
     { path: "/users", icon: "fas fa-users", title: "Users", component: Users, roles: ["admin"] }, // doesn't appear for users
-
-    // this route should be at the end of all other routes
-    { path: "/", exact: true, component: () => <Redirect to="/dashboard" /> },
 ];
 
 const publicRoutes = [
+    // this route should be at the end of all other routes
+    { path: "/", exact: true, component: () => <Redirect to="/dashboard" /> },
     { path: "/logout", component: Logout },
     { path: "/login", component: Login },
     { path: "/forgot-password", component: ForgetPwd },

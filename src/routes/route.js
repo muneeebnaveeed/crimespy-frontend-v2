@@ -3,9 +3,8 @@ import { useSelector } from "react-redux";
 import { Route, Redirect } from "react-router-dom";
 import { getLoggedInUser } from "helpers/auth";
 
-const user = getLoggedInUser();
-
 const AppRoute = ({ component: Component, layout: Layout, isAuthProtected = false, roles = [], ...rest }) => {
+    const [user, setUser] = useState(getLoggedInUser());
     return (
         <Route
             {...rest}
