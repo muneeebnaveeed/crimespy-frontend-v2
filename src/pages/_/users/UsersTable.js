@@ -1,7 +1,7 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { Card, CardBody, Table } from "reactstrap";
 
-//Import Breadcrumb
+// Import Breadcrumb
 import { batch, useDispatch, useSelector } from "react-redux";
 import { fetchProducts, useModifiedQuery } from "helpers/query";
 
@@ -12,27 +12,39 @@ import Button from "components/Common/Button";
 import { setDeleteProductId, toggleDeleteProductDisclosure } from "store/routes/products/actions";
 import Th from "components/Common/Th";
 import useProductsQuery from "./useUsersQuery";
+import { db, getLoggedInUser } from "helpers/auth";
 
-function UsersTable() {
-    // const { page, pageSize, sort, order } = useSelector(
-    //   (state) => state.Products
-    // );
+const fetchUser = async () => {
+    const user = getLoggedInUser();
+    const snapshot = db.collection("users").get();
+    const docs = (await snapshot).docs;
+
+    return new Promise((resolve, reject) => {
+        const users = docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+        }));
+        resolve(users);
+    });
+};
+
+function UsersTable(props) {
+    const users = useModifiedQuery("users", fetchUser);
+
     const dispatch = useDispatch();
+
+    // console.log(users);
 
     const { data, isLoading, isError, refetch } = useProductsQuery();
 
-    const handleDeleteCategory = useCallback(
-        (id) => {
-            batch(() => {
-                dispatch(toggleDeleteProductDisclosure());
-                dispatch(setDeleteProductId(id));
-            });
-        },
-        [dispatch]
-    );
+    const onDelete = (user) => {
+       
+        db.collection('users').doc(user.id).delete()
+                           }
 
     return (
         <Card>
+            {" "}
             {isLoading && !isError && <Spinner />}
             {isError && !isLoading && <Error for="users" onClick={refetch} />}
             <CardBody className="pt-0" style={{ minHeight: 350 }}>
@@ -46,36 +58,36 @@ function UsersTable() {
                 >
                     <thead>
                         <tr>
-                            <th>#</th>
-                            <th>Name</th>
-                            <th>Category</th>
-                            <th>Created By</th>
-                            <th>Date</th>
-                            <th>Manage</th>
+                            <th>id</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Role</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {data?.map(({ id, name, category, created_by_user, created_at }, index) => {
-                            const date = dayjs(created_at).format("D MMM, YYYY");
-                            return (
-                                <tr key={`products-tr-${index}`}>
-                                    <Th scope="row">{id}</Th>
-                                    <Th>{name}</Th>
-                                    <Th>{category?.name}</Th>
-                                    <Th>{created_by_user.name}</Th>
-                                    <Th>{date}</Th>
+                        {" "}
+                        {users.data?.map((user, i) => (
+                            <>
+                                <tr key={i}>
+                                    <Th scope="row" key={i}>
+                                        {user.uid}
+                                    </Th>
+                                    <Th>{user.displayName}</Th>
+                                    <Th>{user.email}</Th>
+                                    {/*  */}
+                                    <Th>{user.role}</Th>
                                     <Th>
-                                        <Button color="light" size="sm" onClick={() => handleDeleteCategory(id)}>
+                                        <Button color="light" size="sm" onClick={() =>onDelete(user)}>
                                             <i className="fas fa-trash-alt" />
                                         </Button>
                                     </Th>
                                 </tr>
-                            );
-                        })}
+                            </>
+                        ))}{" "}
                     </tbody>
                     {!data?.length && !isLoading && !isError && (
                         <caption style={{ textAlign: "center" }}>No products found</caption>
-                    )}
+                    )}{" "}
                 </Table>
             </CardBody>
         </Card>
