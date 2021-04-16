@@ -106,6 +106,7 @@ import KanbanBoard from "../pages/KanbanBoard/index";
 // App Routes
 import Feed from "pages/_/feed";
 import Users from "pages/_/users";
+import profile from "pages/_/profile";
 
 const authProtectedRoutes = [
     //Kanban Board
@@ -192,6 +193,7 @@ const authProtectedRoutes = [
     // { path: "/calendar", component: Calendar },
 
     { path: "/dashboard", icon: "fas fa-columns", title: "Feed", component: Feed },
+    { path: "/profile", icon: "fas fa-user", title: "User Profile", component: profile },
     { path: "/users", icon: "fas fa-users", title: "Users", component: Users, roles: ["admin"] }, // doesn't appear for users
 ];
 
