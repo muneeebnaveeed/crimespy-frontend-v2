@@ -77,7 +77,7 @@ function Login(props) {
                                             <div>
                                                 <div className="text-center">
                                                     <div>
-                                                        <img src={logodark} height="20" alt="logo" />
+                                                        <img src={logodark} height="60" alt="logo" />
                                                     </div>
 
                                                     <h4 className="font-size-18 mt-4">Welcome Back !</h4>

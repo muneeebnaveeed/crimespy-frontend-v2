@@ -76,10 +76,10 @@ class Header extends Component {
 
                                 <Link to="#" className="logo logo-light">
                                     <span className="logo-sm">
-                                        <img src={logosmlight} alt="" height="22" />
+                                        <img src={logosmlight} alt="" height="40" />
                                     </span>
                                     <span className="logo-lg">
-                                        <img src={logolight} alt="" height="20" />
+                                        <img src={logolight} alt="" height="40" />
                                     </span>
                                 </Link>
                             </div>
@@ -95,18 +95,14 @@ class Header extends Component {
                                 <i className="ri-menu-2-line align-middle"></i>
                             </Button>
 
-                            <Form className="app-search d-none d-lg-block">
-                                <div className="position-relative">
-                                    <Input
-                                        type="text"
-                                        className="form-control"
-                                        placeholder="Search"
-                                    />
-                                    <span className="ri-search-line"></span>
-                                </div>
-                            </Form>
+                            {/* <Form className="app-search d-none d-lg-block">
+                                    <div className="position-relative">
+                                        <Input type="text" className="form-control" placeholder="Search" />
+                                        <span className="ri-search-line"></span>
+                                    </div>
+                                </Form>
 
-                            <MegaMenu />
+                                <MegaMenu /> */}
                         </div>
 
                         <div className="d-flex">
@@ -132,11 +128,7 @@ class Header extends Component {
                                     <Form className="p-3">
                                         <FormGroup className="m-0">
                                             <InputGroup>
-                                                <Input
-                                                    type="text"
-                                                    className="form-control"
-                                                    placeholder="Search"
-                                                />
+                                                <Input type="text" className="form-control" placeholder="Search" />
                                                 <InputGroupAddon addonType="append">
                                                     <Button color="primary" type="submit">
                                                         <i className="ri-search-line"></i>
