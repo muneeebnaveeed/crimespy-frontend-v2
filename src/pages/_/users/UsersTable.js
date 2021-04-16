@@ -1,9 +1,10 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect,useState } from "react";
 import { Card, CardBody, Table } from "reactstrap";
 
 // Import Breadcrumb
 import { batch, useDispatch, useSelector } from "react-redux";
 import { fetchProducts, useModifiedQuery } from "helpers/query";
+import Select from "../../../components/Common/Select";
 
 import dayjs from "dayjs";
 import Spinner from "components/Common/Spinner";
@@ -13,9 +14,11 @@ import { setDeleteProductId, toggleDeleteProductDisclosure } from "store/routes/
 import Th from "components/Common/Th";
 import useProductsQuery from "./useUsersQuery";
 import { db, getLoggedInUser } from "helpers/auth";
+import useDisclosure from "helpers/useDisclosure";
+import Confirmation from "./Confirmation";
 
 const fetchUser = async () => {
-    const user = getLoggedInUser();
+    
     const snapshot = db.collection("users").get();
     const docs = (await snapshot).docs;
 
@@ -27,22 +30,51 @@ const fetchUser = async () => {
         resolve(users);
     });
 };
+const roles = [
+    {
+        value: "admin",
+        label: "admin",
+    },
+    {
+        value: "user",
+        label: "user",
+    },
+];
 
+const handleROLE = async(role,id) => {
+    
+    console.log(role);
+    
+    try{
+        const newRole = {
+           role:role.value
+        };
+
+        await db.collection("users").doc(id).update(newRole);
+    }catch (err) {
+        console.error(err.message);
+    }
+
+};
 function UsersTable(props) {
     const users = useModifiedQuery("users", fetchUser);
 
     const dispatch = useDispatch();
 
     // console.log(users);
+    const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subTitle: '' })
 
     const { data, isLoading, isError, refetch } = useProductsQuery();
 
     const onDelete = (user) => {
-       
-        db.collection('users').doc(user.id).delete()
-                           }
+        
+        db.collection("users").doc(user.id).delete();
+        setConfirmDialog(!confirmDialog)
+    };
+   
 
     return (
+        <>
         <Card>
             {" "}
             {isLoading && !isError && <Spinner />}
@@ -70,14 +102,29 @@ function UsersTable(props) {
                             <>
                                 <tr key={i}>
                                     <Th scope="row" key={i}>
-                                        {user.uid}
+                                        {user.uid}{" "}
                                     </Th>
                                     <Th>{user.displayName}</Th>
                                     <Th>{user.email}</Th>
                                     {/*  */}
-                                    <Th>{user.role}</Th>
                                     <Th>
-                                        <Button color="light" size="sm" onClick={() =>onDelete(user)}>
+                                        <Select
+                                            options={roles}
+                                            defaultValue={{
+                                                value: user.role,
+                                                label: user.role,
+                                            }}
+                                            onChange={(role) =>handleROLE(role,user.uid)}
+                                        />
+                                    </Th>
+                                    <Th>
+                                        <Button color="light" size="sm" onClick={()=>
+                                            setConfirmDialog({
+                                                    isOpen: true,
+                                                    title: 'Are you sure to delete this User?',
+                                                    subTitle: "You can't undo this operation",
+                                                    onConfirm: () => { onDelete(user) }
+                                                })}>
                                             <i className="fas fa-trash-alt" />
                                         </Button>
                                     </Th>
@@ -91,6 +138,12 @@ function UsersTable(props) {
                 </Table>
             </CardBody>
         </Card>
+        <Confirmation  confirmDialog={confirmDialog}
+                setConfirmDialog={setConfirmDialog}
+
+                />
+
+        </>
     );
 }
 
