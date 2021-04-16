@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Breadcrumbs from "components/Common/Breadcrumb";
 import SetuserName from "./SetName";
+import Deactivate from "./Deactivate";
 import {
     Col,
     Collapse,
@@ -33,6 +34,7 @@ const profile = () => {
                         <Col xs={12}>
                             <SetuserName />
                             <SetBio />
+                            <Deactivate />
                         </Col>
                     </Row>
                 </Container>

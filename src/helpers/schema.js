@@ -41,6 +41,36 @@ export const postSchema = Joi.object({
     }),
 });
 
+export const userSchema = Joi.object({
+    fullname: Joi.string().max(50).required().min(10).messages({
+        "string.empty": `Title is required`,
+        "any.required": `Title is required`,
+        "string.max": `Only {#limit} characters are allowed`,
+        "string.min": `Please Enter a title above the limit {#limit}`,
+    }),
+    gender: Joi.string().required().messages({
+        "string.required": "Nothing is also binary bitch!",
+    }),
+    dob: Joi.string().required().messages({
+        "any.required": `Gender is required`,
+    }),
+    job: Joi.string().required().min(10).max(255).messages({
+        "any.required": `Location is required`,
+        "string.max": `Only {#limit} characters are allowed`,
+        "string.min": `Please Enter comprehensive Description above the limit {#limit} characters`,
+    }),
+    address: Joi.string().required().min(10).max(255).messages({
+        "any.required": `Location is required`,
+        "string.max": `Only {#limit} characters are allowed`,
+        "string.min": `Please Enter comprehensive Description above the limit {#limit} characters`,
+    }),
+    qaulification: Joi.string().required().min(10).max(255).messages({
+        "any.required": `Location is required`,
+        "string.max": `Only {#limit} characters are allowed`,
+        "string.min": `Please Enter comprehensive Description above the limit {#limit} characters`,
+    }),
+});
+
 export const categorySchema = {
     name: Joi.string().max(25).required().messages({
         "string.empty": `Name is required`,
