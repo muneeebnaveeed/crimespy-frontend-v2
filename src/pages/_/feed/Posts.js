@@ -21,8 +21,12 @@ const fetchPosts = async () => {
     });
 };
 
+
+
 function Posts(props) {
     const posts = useModifiedQuery("posts", fetchPosts);
+
+//   console.log(posts)
 
     return (
         <>
