@@ -62,9 +62,9 @@ function Login(props) {
 
     return (
         <>
-            <div className="home-btn d-none d-sm-block">
+            {/* <div className="home-btn d-none d-sm-block">
                 <i className="mdi mdi-home-variant h2 text-white"></i>
-            </div>
+            </div> */}
 
             <div>
                 <Container fluid className="p-0">

@@ -106,7 +106,7 @@ class Header extends Component {
                         </div>
 
                         <div className="d-flex">
-                            <div className="dropdown d-inline-block d-lg-none ml-2">
+                            {/* <div className="dropdown d-inline-block d-lg-none ml-2">
                                 <button
                                     type="button"
                                     onClick={() => {
@@ -138,7 +138,7 @@ class Header extends Component {
                                         </FormGroup>
                                     </Form>
                                 </div>
-                            </div>
+                            </div> */}
 
                             <ProfileMenu />
                         </div>

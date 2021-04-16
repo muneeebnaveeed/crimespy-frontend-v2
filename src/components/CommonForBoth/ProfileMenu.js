@@ -43,14 +43,18 @@ class ProfileMenu extends Component {
                         className="btn header-item waves-effect"
                         id="page-header-user-dropdown"
                     >
-                        <img className="rounded-circle header-profile-user mr-1" src={this.state.user.photoURL} alt="Header Avatar" />
+                        <img
+                            className="rounded-circle header-profile-user mr-1"
+                            src={this.state.user.photoURL}
+                            alt="Header Avatar"
+                        />
                         <span className="d-none d-xl-inline-block ml-1 text-transform">
                             {this.state.user.displayName}
                         </span>
                         <i className="mdi mdi-chevron-down d-none ml-1 d-xl-inline-block"></i>
                     </DropdownToggle>
                     <DropdownMenu right>
-                        <DropdownItem href="#">
+                        {/* <DropdownItem href="#">
                             <i className="ri-user-line align-middle mr-1"></i> Profile
                         </DropdownItem>
                         <DropdownItem href="#">
@@ -62,7 +66,7 @@ class ProfileMenu extends Component {
                         </DropdownItem>
                         <DropdownItem href="#">
                             <i className="ri-lock-unlock-line align-middle mr-1"></i> Lock screen
-                        </DropdownItem>
+                        </DropdownItem> */}
                         <DropdownItem divider />
                         <DropdownItem className="text-danger" onClick={this.handleLogout}>
                             <i className="ri-shut-down-line align-middle mr-1 text-danger"></i> Logout
