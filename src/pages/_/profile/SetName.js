@@ -20,12 +20,17 @@ import { userSchema } from "helpers/schema";
 import { db, getLoggedInUser } from "helpers/auth";
 import Button from "components/Common/Button";
 import { showSuccessToast } from "helpers/showToast";
+import { useQueryClient } from "react-query";
+import Select from "components/Common/Select";
 const SetName = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const [isUpdating, setIsupdatin] = useState(false);
+    const queryClient = useQueryClient();
     const toggle = () => setIsOpen(!isOpen);
 
     const handleSubmit = async (values) => {
         const user = getLoggedInUser();
+        setIsupdatin(true);
         const info = {
             displayName: values.fullname,
             dob: values.dob,
@@ -34,13 +39,27 @@ const SetName = () => {
 
         try {
             console.log(info);
-            // await db.collection("users").doc(user.uid).update(info);
-            // console.log("updated");
-            // showSuccessToast({ message: "Post has been created" });
+            await db.collection("users").doc(user.uid).update(info);
+            queryClient.invalidateQueries("users");
+            
+            console.log("updated");
+            showSuccessToast({ message: "Post has been created" });
+            setIsupdatin(false);
         } catch (err) {
             console.error(err.message);
         }
     };
+
+    const gender = [
+        {
+            value: "Male",
+            label: "Male",
+        },
+        {
+            value: "Female",
+            label: "Female",
+        },
+    ];
 
     const formik = useFormik({
         initialValues: {
@@ -99,23 +118,10 @@ const SetName = () => {
                             </FormGroup>
                             <FormGroup>
                                 <Label>Gender</Label>
-                                <Input
-                                    type="select"
-                                    name="gender"
-                                    id="gender"
-                                    invalid={formik.errors.gender && formik.touched.gender}
-                                    onChange={formik.handleChange}
-                                    value={formik.value}
-                                >
-                                    <option value="Male" selected key="option1" for="gender">
-                                        Male
-                                    </option>
-                                    <option value="Female">Female</option>
-                                    <option value="Others">Other</option>
-                                </Input>
+                              <Select options={gender} onChange={(gender) =>console.log(gender)}/>
                                 <FormFeedback> {formik.errors.gender}</FormFeedback>
                             </FormGroup>
-                            <Button w="74px" loading={false} type="submit" color="primary">
+                            <Button w="74px" loading={false} type="submit" color="primary" loading={isUpdating}>
                                 Update
                             </Button>
                         </Form>
