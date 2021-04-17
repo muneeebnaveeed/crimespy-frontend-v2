@@ -19,6 +19,7 @@ import {
 import { userSchema } from "helpers/schema";
 import { db, getLoggedInUser } from "helpers/auth";
 import Button from "components/Common/Button";
+import { showSuccessToast } from "helpers/showToast";
 const SetName = () => {
     const [isOpen, setIsOpen] = useState(false);
     const toggle = () => setIsOpen(!isOpen);
@@ -33,8 +34,9 @@ const SetName = () => {
 
         try {
             console.log(info);
-            await db.collection("users").doc(user.uid).update(info);
-            console.log("updated");
+            // await db.collection("users").doc(user.uid).update(info);
+            // console.log("updated");
+            // showSuccessToast({ message: "Post has been created" });
         } catch (err) {
             console.error(err.message);
         }
@@ -48,16 +50,16 @@ const SetName = () => {
         },
         // onSubmit: handleSubmit,
         onSubmit: handleSubmit,
-        validate: (values) => {
-            let errors = {};
+        // validate: (values) => {
+        //     let errors = {};
 
-            const validationErrors = userSchema.validate(values, { abortEarly: false })?.error?.details;
+        //     const validationErrors = userSchema.validate(values, { abortEarly: false })?.error?.details;
 
-            if (validationErrors) validationErrors.forEach((err) => (errors[err.context.label] = err.message));
+        //     if (validationErrors) validationErrors.forEach((err) => (errors[err.context.label] = err.message));
 
-            return errors;
-        },
-        validateOnChange: false,
+        //     return errors;
+        // },
+        // validateOnChange: false,
     });
 
     return (
@@ -70,21 +72,46 @@ const SetName = () => {
                     <CardBody>
                         <Form onSubmit={formik.handleSubmit}>
                             <FormGroup>
-                                <Label>Full-Name :</Label>
-                                <Input type="text" name="fullname" id="fullname" placeholder="Enter Full Name" />
+                                <Label>Name</Label>
+                                <Input
+                                    type="text"
+                                    name="fullname"
+                                    id="fullname"
+                                    placeholder="Enter Full Name"
+                                    invalid={formik.errors.fullname && formik.touched.fullname}
+                                    onChange={formik.handleChange}
+                                    value={formik.value}
+                                />
                                 <FormFeedback> {formik.errors.fullname}</FormFeedback>
                             </FormGroup>
                             <FormGroup>
-                                <Label>Date of Birth :</Label>
-                                <Input type="date" name="dob" id="dob" placeholder="Select your date of birth" />
+                                <Label>Date of Birth</Label>
+                                <Input
+                                    type="date"
+                                    name="dob"
+                                    id="dob"
+                                    placeholder="Select your date of birth"
+                                    invalid={formik.errors.dob && formik.touched.dob}
+                                    onChange={formik.handleChange}
+                                    value={formik.value}
+                                />
                                 <FormFeedback> {formik.errors.dob}</FormFeedback>
                             </FormGroup>
                             <FormGroup>
-                                <Label>Gender:</Label>
-                                <Input type="select" name="gender" id="gender">
-                                    <option>Male</option>
-                                    <option>Female</option>
-                                    <option>Shemale</option>
+                                <Label>Gender</Label>
+                                <Input
+                                    type="select"
+                                    name="gender"
+                                    id="gender"
+                                    invalid={formik.errors.gender && formik.touched.gender}
+                                    onChange={formik.handleChange}
+                                    value={formik.value}
+                                >
+                                    <option value="Male" selected key="option1" for="gender">
+                                        Male
+                                    </option>
+                                    <option value="Female">Female</option>
+                                    <option value="Others">Other</option>
                                 </Input>
                                 <FormFeedback> {formik.errors.gender}</FormFeedback>
                             </FormGroup>

@@ -40,7 +40,7 @@ const DeactivateAccount = () => {
                     <Button color="light" size="sm" onClick={toggle}>
                         Cancel
                     </Button>
-                    <Button w="55.5px" size="sm" type="submit">
+                    <Button w="55.5px" size="sm" type="submit" loading={false}>
                         De-Activate
                     </Button>
                 </ModalFooter>

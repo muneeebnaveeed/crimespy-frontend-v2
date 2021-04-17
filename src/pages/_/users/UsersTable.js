@@ -17,6 +17,7 @@ import { db, getLoggedInUser } from "helpers/auth";
 import useDisclosure from "helpers/useDisclosure";
 import Confirmation from "./Confirmation";
 import { useQueryClient } from "react-query";
+import { showSuccessToast } from "helpers/showToast";
 
 const fetchUser = async () => {
     const snapshot = db.collection("users").get();
@@ -69,6 +70,7 @@ function UsersTable(props) {
         await db.collection("users").doc(user.id).delete();
         await queryClient.invalidateQueries("users");
         setConfirmDialog(!confirmDialog);
+        showSuccessToast({ message: "Post has been created" });
     };
 
     return (
