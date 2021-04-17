@@ -123,7 +123,7 @@ const SetBio = () => {
                                 />
                                 <FormFeedback> {formik.errors.job}</FormFeedback>
                             </FormGroup>
-                            <Button w="74px" loading={false} type="submit" color="primary" loading={isUpdating}>
+                            <Button w="74px"  type="submit" color="primary" loading={isUpdating}>
                                 Update
                             </Button>
                         </Form>

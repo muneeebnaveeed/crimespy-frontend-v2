@@ -17,8 +17,8 @@ export class MapContainer extends Component {
             selectedPlace: {},
 
             mapCenter: {
-                lat: 49.2827291,
-                lng: -123.1207375,
+                lat: 33.611527,
+                lng: 73.051884,
             },
         };
     }
@@ -49,7 +49,7 @@ export class MapContainer extends Component {
                     onSelect={this.handleSelect}
                 >
                     {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-                        <div>
+                        <div style={{zIndex:"1",position:"absolute", top:"5em", border:"none"}}>
                             <input
                                 {...getInputProps({
                                     placeholder: "Search Places ...",
@@ -92,11 +92,11 @@ export class MapContainer extends Component {
                         lng: this.state.mapCenter.lng,
                     }}
                 >
-                    {/* <Marker 
+                    <Marker 
             position={{
               lat: this.state.mapCenter.lat,
               lng: this.state.mapCenter.lng
-            }} /> */}
+            }} />
                 </Map>
             </div>
         );
