@@ -18,9 +18,34 @@ import {
     Button,
 } from "reactstrap";
 import { userSchema } from "helpers/schema";
+import { db, getLoggedInUser } from "helpers/auth";
 const SetName = () => {
     const [isOpen, setIsOpen] = useState(false);
     const toggle = () => setIsOpen(!isOpen);
+
+
+    const handleSubmit = async(values) => {
+        const user = getLoggedInUser();
+        const info = {
+            displayName:values.fullname,
+            dob: values.dob,
+            gender: values.gender,
+         };
+
+         try{
+             console.log(info)
+            await db.collection("users").doc(user.uid).update(info);
+            console.log("updated")
+         }
+         catch (err) {
+            console.error(err.message);
+        }
+
+
+
+    }
+
+
     const formik = useFormik({
         initialValues: {
             fullname: "",
@@ -28,9 +53,7 @@ const SetName = () => {
             gender: "",
         },
         // onSubmit: handleSubmit,
-        onSubmit: (values) => {
-            console.log("Form data", values);
-        },
+        onSubmit: handleSubmit,
         validate: (values) => {
             let errors = {};
 
@@ -42,6 +65,8 @@ const SetName = () => {
         },
         validateOnChange: false,
     });
+
+ 
     return (
         <div>
             <Button color="primary" onClick={toggle} style={{ marginBottom: "1rem" }} size="lg" block outline>
@@ -50,7 +75,7 @@ const SetName = () => {
             <Collapse isOpen={isOpen}>
                 <Card>
                     <CardBody>
-                        <Form onSubmit={formik.handleSubit}>
+                        <Form onSubmit={formik.handleSubmit}>
                             <FormGroup>
                                 <Label>Full-Name :</Label>
                                 <Input type="text" name="fullname" id="fullname" placeholder="Enter Full Name" />
