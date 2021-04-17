@@ -107,6 +107,7 @@ import KanbanBoard from "../pages/KanbanBoard/index";
 import Feed from "pages/_/feed";
 import Users from "pages/_/users";
 import profile from "pages/_/profile";
+import Mapcrime from "pages/_/MapCrime/MapCrime";
 
 const authProtectedRoutes = [
     //Kanban Board
@@ -190,11 +191,12 @@ const authProtectedRoutes = [
     // { path: "/apps-chat", component: Chat },
 
     // //calendar
-    // { path: "/calendar", component: Calendar },
+    // { path: "/calendar", component: Calendar },//
 
     { path: "/dashboard", icon: "fas fa-columns", title: "Feed", component: Feed },
     { path: "/profile", icon: "fas fa-user", title: "User Profile", component: profile },
     { path: "/users", icon: "fas fa-users", title: "Users", component: Users, roles: ["admin"] }, // doesn't appear for users
+    { path: "/map", icon: "fas fa-map", title: "Map", component: Mapcrime },
 ];
 
 const publicRoutes = [
