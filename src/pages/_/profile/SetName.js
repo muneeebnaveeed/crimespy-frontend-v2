@@ -29,6 +29,7 @@ const SetName = () => {
     const toggle = () => setIsOpen(!isOpen);
 
     const handleSubmit = async (values) => {
+        
         const user = getLoggedInUser();
         setIsupdatin(true);
         const info = {

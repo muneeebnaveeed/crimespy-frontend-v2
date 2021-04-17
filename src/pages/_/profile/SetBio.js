@@ -19,9 +19,39 @@ import {
 } from "reactstrap";
 import { bioSchema } from "helpers/schema";
 import { showSuccessToast } from "helpers/showToast";
+import { db, getLoggedInUser } from "helpers/auth";
+import { useQueryClient } from "react-query";
 const SetBio = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const [isUpdating, setIsupdatin] = useState(false);
     const toggle = () => setIsOpen(!isOpen);
+
+
+    const handleSubmit = async (values, e) => {
+        e.preventDefault();
+        const user = getLoggedInUser();
+        setIsupdatin(true);
+        const info = {
+           bio:{
+               qualification: values.qaulification,
+               address: values.address,
+               jon: values.job
+           }
+        };
+
+        try {
+            console.log(info);
+            await db.collection("users").doc(user.uid).update(info);
+            useQueryClient.invalidateQueries("users");
+            
+            console.log("updated");
+            showSuccessToast({ message: "User has been Updated" });
+            setIsupdatin(false);
+        } catch (err) {
+            console.error(err.message);
+        }
+    };
+
     const formik = useFormik({
         initialValues: {
             qaulification: "",
@@ -29,10 +59,7 @@ const SetBio = () => {
             job: "",
         },
         // onSubmit: handleSubmit,
-        onSubmit: (values) => {
-            console.log("Form data", values);
-            showSuccessToast({ message: "Post has been created" });
-        },
+        onSubmit: handleSubmit,
         // validate: (values) => {
         //     let errors = {};
 
@@ -96,7 +123,7 @@ const SetBio = () => {
                                 />
                                 <FormFeedback> {formik.errors.job}</FormFeedback>
                             </FormGroup>
-                            <Button w="74px" loading={false} type="submit" color="primary">
+                            <Button w="74px" loading={false} type="submit" color="primary" loading={isUpdating}>
                                 Update
                             </Button>
                         </Form>
