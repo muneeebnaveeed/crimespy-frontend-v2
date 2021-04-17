@@ -108,6 +108,7 @@ import Feed from "pages/_/feed";
 import Users from "pages/_/users";
 import profile from "pages/_/profile";
 import Mapcrime from "pages/_/MapCrime/MapCrime";
+import MapLayout from "components/VerticalLayout/MapLayout";
 
 const authProtectedRoutes = [
     //Kanban Board
@@ -196,7 +197,7 @@ const authProtectedRoutes = [
     { path: "/dashboard", icon: "fas fa-columns", title: "Feed", component: Feed },
     { path: "/profile", icon: "fas fa-user", title: "User Profile", component: profile },
     { path: "/users", icon: "fas fa-users", title: "Users", component: Users, roles: ["admin"] }, // doesn't appear for users
-    { path: "/map", icon: "fas fa-map", title: "Map", component: Mapcrime },
+    { path: "/map", icon: "fas fa-map", title: "Map", component: Mapcrime, layout: MapLayout },
 ];
 
 const publicRoutes = [

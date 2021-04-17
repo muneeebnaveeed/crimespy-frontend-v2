@@ -15,36 +15,30 @@ import {
     CardBody,
     Label,
     Row,
-    Button,
 } from "reactstrap";
 import { userSchema } from "helpers/schema";
 import { db, getLoggedInUser } from "helpers/auth";
+import Button from "components/Common/Button";
 const SetName = () => {
     const [isOpen, setIsOpen] = useState(false);
     const toggle = () => setIsOpen(!isOpen);
 
-
-    const handleSubmit = async(values) => {
+    const handleSubmit = async (values) => {
         const user = getLoggedInUser();
         const info = {
-            displayName:values.fullname,
+            displayName: values.fullname,
             dob: values.dob,
             gender: values.gender,
-         };
+        };
 
-         try{
-             console.log(info)
+        try {
+            console.log(info);
             await db.collection("users").doc(user.uid).update(info);
-            console.log("updated")
-         }
-         catch (err) {
+            console.log("updated");
+        } catch (err) {
             console.error(err.message);
         }
-
-
-
-    }
-
+    };
 
     const formik = useFormik({
         initialValues: {
@@ -66,7 +60,6 @@ const SetName = () => {
         validateOnChange: false,
     });
 
- 
     return (
         <div>
             <Button color="primary" onClick={toggle} style={{ marginBottom: "1rem" }} size="lg" block outline>
@@ -95,7 +88,9 @@ const SetName = () => {
                                 </Input>
                                 <FormFeedback> {formik.errors.gender}</FormFeedback>
                             </FormGroup>
-                            <Button type="submit">Update</Button>
+                            <Button w="74px" loading={false} type="submit" color="primary">
+                                Update
+                            </Button>
                         </Form>
                     </CardBody>
                 </Card>

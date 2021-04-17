@@ -42,7 +42,7 @@ class App extends Component {
                                         exact
                                         key={idx}
                                         path={route.path}
-                                        layout={VerticalLayout}
+                                        layout={route.layout || VerticalLayout}
                                         component={route.component}
                                         isAuthProtected
                                     />

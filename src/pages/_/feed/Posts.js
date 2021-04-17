@@ -21,16 +21,12 @@ const fetchPosts = async () => {
     });
 };
 
-
-
 function Posts(props) {
     const posts = useModifiedQuery("posts", fetchPosts);
 
-//   console.log(posts)
-
     return (
         <>
-            {posts.data?.map((post,i) => (
+            {posts.data?.map((post, i) => (
                 <Row key={i}>
                     <Col xs={12} className="d-flex justify-content-center">
                         <Post

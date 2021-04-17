@@ -1,7 +1,7 @@
 import React from "react";
 import { Dialog, DialogTitle, DialogContent, DialogActions, Typography, IconButton } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { Button } from "reactstrap";
+import Button from "components/Common/Button";
 
 // const useStyles = makeStyles((theme) => ({
 //     dialog: {
@@ -48,7 +48,9 @@ function Confirmation(props) {
             // className={classes.dialogAction}
             >
                 <Button onClick={() => setConfirmDialog({ ...confirmDialog, isOpen: false })}>No</Button>
-                <Button onClick={confirmDialog.onConfirm}>Yes</Button>
+                <Button w="48px" onClick={confirmDialog.onConfirm}>
+                    Yes
+                </Button>
             </DialogActions>
         </Dialog>
     );
