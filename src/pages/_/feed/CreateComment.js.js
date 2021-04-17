@@ -3,11 +3,14 @@ import { db ,getLoggedInUser} from "../../../helpers/auth";
 import { Form, FormGroup } from "reactstrap";
 import { Input } from "reactstrap/lib";
 import Button from "components/Common/Button";
+import { useQueryClient } from "react-query";
 
 export default function CreateComment({comments, id}) {
     const [comment, setComment] = useState("");
     const [commentMap, setcommentMap] = useState(comments ? comments : []);
     const user = getLoggedInUser();
+    const queryClient = useQueryClient();
+    
     const postRef = db
     .collection("posts")
     .doc(user.uid)
@@ -32,6 +35,7 @@ export default function CreateComment({comments, id}) {
           .catch(function (error) {
             console.error("Error writing document: ", error);
           });
+           queryClient.invalidateQueries("posts");
     
         setComment("");
       };
