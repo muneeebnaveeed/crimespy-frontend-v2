@@ -17,30 +17,32 @@ import {
     Row,
     Button,
 } from "reactstrap";
-import { userSchema } from "helpers/schema";
+import { bioSchema } from "helpers/schema";
+import { showSuccessToast } from "helpers/showToast";
 const SetBio = () => {
     const [isOpen, setIsOpen] = useState(false);
     const toggle = () => setIsOpen(!isOpen);
     const formik = useFormik({
         initialValues: {
-            qualification: "",
+            qaulification: "",
             address: "",
             job: "",
         },
         // onSubmit: handleSubmit,
         onSubmit: (values) => {
             console.log("Form data", values);
+            showSuccessToast({ message: "Post has been created" });
         },
-        validate: (values) => {
-            let errors = {};
+        // validate: (values) => {
+        //     let errors = {};
 
-            const validationErrors = userSchema.validate(values, { abortEarly: false })?.error?.details;
+        //     const validationErrors = bioSchema.validate(values, { abortEarly: false })?.error?.details;
 
-            if (validationErrors) validationErrors.forEach((err) => (errors[err.context.label] = err.message));
+        //     if (validationErrors) validationErrors.forEach((err) => (errors[err.context.label] = err.message));
 
-            return errors;
-        },
-        validateOnChange: false,
+        //     return errors;
+        // },
+        // validateOnChange: false,
     });
     return (
         <div>
@@ -50,7 +52,7 @@ const SetBio = () => {
             <Collapse isOpen={isOpen}>
                 <Card>
                     <CardBody>
-                        <Form>
+                        <Form onSubmit={formik.handleSubmit}>
                             <FormGroup>
                                 <Label>What is Your qualification :</Label>
                                 <Input
@@ -58,6 +60,9 @@ const SetBio = () => {
                                     name="qaulification"
                                     id="qaulification"
                                     placeholder="Enter Qualification Here"
+                                    invalid={formik.errors.qualification && formik.touched.qualification}
+                                    onChange={formik.handleChange}
+                                    value={formik.value}
                                     rows={4}
                                 />
                                 <FormFeedback> {formik.errors.qualification}</FormFeedback>
@@ -68,6 +73,9 @@ const SetBio = () => {
                                     type="textarea"
                                     name="address"
                                     id="address"
+                                    invalid={formik.errors.address && formik.touched.address}
+                                    onChange={formik.handleChange}
+                                    value={formik.value}
                                     placeholder="Enter your Address"
                                     rows={4}
                                 />
@@ -80,12 +88,17 @@ const SetBio = () => {
                                     type="textarea"
                                     name="job"
                                     id="job"
+                                    invalid={formik.errors.job && formik.touched.job}
+                                    onChange={formik.handleChange}
+                                    value={formik.value}
                                     placeholder="Enter what you are doing for a living "
                                     rows={4}
                                 />
                                 <FormFeedback> {formik.errors.job}</FormFeedback>
                             </FormGroup>
-                            <Button>Update</Button>
+                            <Button w="74px" loading={false} type="submit" color="primary">
+                                Update
+                            </Button>
                         </Form>
                     </CardBody>
                 </Card>
