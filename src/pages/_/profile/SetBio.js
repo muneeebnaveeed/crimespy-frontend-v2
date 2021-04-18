@@ -33,7 +33,7 @@ const SetBio = () => {
             bio: {
                 qualification: values.qualification,
                 address: values.address,
-                jon: values.job,
+                job: values.job,
             },
         };
 
@@ -125,7 +125,7 @@ const SetBio = () => {
                                 />
                                 <FormFeedback> {formik.errors.job}</FormFeedback>
                             </FormGroup>
-                            <Button w="74px"  type="submit" color="primary" loading={isUpdating}>
+                            <Button w="74px" type="submit" color="primary" loading={isUpdating}>
                                 Update
                             </Button>
                         </Form>
