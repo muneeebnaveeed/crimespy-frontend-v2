@@ -24,7 +24,8 @@ function Post({
     description,
     comments,
     id,
-    photoURL
+    photoURL,
+    Title
 }) {
     const [menu, setMenu] = useState(false);
     const user = getLoggedInUser();
@@ -75,6 +76,11 @@ function Post({
                         } </Avatar>
                         <span className="ml-2 text-capitalize">
                             {username}</span>
+                    </div>
+                    <div className="d-flex align-items-center">
+                        <p>
+                            {Title}
+                        </p>
                     </div>
 
                     <Dropdown className="d-inline-block user-dropdown"

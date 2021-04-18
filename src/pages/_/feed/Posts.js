@@ -37,6 +37,7 @@ function Posts(props) {
                             profileUrl={post.profileUrl}
                             description={post.description}
                             photoURL={post.mediaUrl}
+                            Title={post.Title}
                         />
                     </Col>
                 </Row>
