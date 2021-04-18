@@ -26,10 +26,12 @@ const SetName = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [isUpdating, setIsupdatin] = useState(false);
     const queryClient = useQueryClient();
-    const toggle = () => setIsOpen(!isOpen);
+    const toggle = () => {
+        setIsOpen(!isOpen);
+    };
 
     const handleSubmit = async (values) => {
-        
+        console.log(values);
         const user = getLoggedInUser();
         setIsupdatin(true);
         const info = {
@@ -41,10 +43,8 @@ const SetName = () => {
         try {
             console.log(info);
             await db.collection("users").doc(user.uid).update(info);
-            queryClient.invalidateQueries("users");
-            
             console.log("updated");
-            showSuccessToast({ message: "Post has been created" });
+            showSuccessToast({ message: "General Information has been updated successfully" });
             setIsupdatin(false);
         } catch (err) {
             console.error(err.message);
@@ -66,22 +66,22 @@ const SetName = () => {
         initialValues: {
             fullname: "",
             dob: "",
-            gender: "",
+            gender: gender[0].value,
         },
         // onSubmit: handleSubmit,
         onSubmit: handleSubmit,
-        // validate: (values) => {
-        //     let errors = {};
+        validate: (values) => {
+            let errors = {};
 
-        //     const validationErrors = userSchema.validate(values, { abortEarly: false })?.error?.details;
+            const validationErrors = userSchema.validate(values, { abortEarly: false })?.error?.details;
 
-        //     if (validationErrors) validationErrors.forEach((err) => (errors[err.context.label] = err.message));
+            if (validationErrors) validationErrors.forEach((err) => (errors[err.context.label] = err.message));
 
-        //     return errors;
-        // },
-        // validateOnChange: false,
+            return errors;
+        },
+        validateOnChange: false,
     });
-
+    console.log(formik.errors);
     return (
         <div>
             <Button color="primary" onClick={toggle} style={{ marginBottom: "1rem" }} size="lg" block outline>
@@ -119,7 +119,11 @@ const SetName = () => {
                             </FormGroup>
                             <FormGroup>
                                 <Label>Gender</Label>
-                              <Select options={gender} onChange={(gender) =>console.log(gender)}/>
+                                <Select
+                                    options={gender}
+                                    defaultValue={gender[0]}
+                                    onChange={(gender) => formik.setFieldValue("gender", gender.value)}
+                                />
                                 <FormFeedback> {formik.errors.gender}</FormFeedback>
                             </FormGroup>
                             <Button w="74px" loading={false} type="submit" color="primary" loading={isUpdating}>
