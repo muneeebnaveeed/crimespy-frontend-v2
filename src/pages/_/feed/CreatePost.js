@@ -35,6 +35,8 @@ const CreatePost = ({ toggle, isOpen }) => {
     const fileimageRef = useRef();
     const user = getLoggedInUser();
     const [isCreatingPost, setIsCreatingPost] = useState(false);
+    const [isGettingGeo, setIsgettingGeo] = useState(false);
+    const [getCurrentLocation, setCurrentLocation] = useState('');
     const queryClient = useQueryClient();
 
     const handleChange = (e) => {
@@ -48,6 +50,20 @@ const CreatePost = ({ toggle, isOpen }) => {
             imagepreview.style.display = "block";
         }
     };
+
+    const handleCurrentLocation =  async () =>{
+        setIsgettingGeo(true)
+     await navigator.geolocation.getCurrentPosition((position) =>{
+        console.log(position.coords);
+        setCurrentLocation(`${position.coords.latitude}/${position.coords.longitude}`);
+        console.log(getCurrentLocation)
+
+     }
+    
+     );
+     setCurrentLocation()
+       setIsgettingGeo(false);
+    }
 
     const handleSubmit = useCallback((values) => {
         var imageName = makeid(10);
@@ -164,7 +180,7 @@ const CreatePost = ({ toggle, isOpen }) => {
                                     value={formik.value}
                                 />
                                 <InputGroupAddon addonType="append">
-                                    <Button color="warning" type="button">
+                                    <Button color="warning" type="button" onClick={handleCurrentLocation} loading={isGettingGeo}>
                                         Current Location
                                     </Button>
                                 </InputGroupAddon>
