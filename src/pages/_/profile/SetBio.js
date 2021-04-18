@@ -26,26 +26,22 @@ const SetBio = () => {
     const [isUpdating, setIsupdatin] = useState(false);
     const toggle = () => setIsOpen(!isOpen);
 
-
-    const handleSubmit = async (values, e) => {
-        e.preventDefault();
+    const handleSubmit = async (values) => {
         const user = getLoggedInUser();
         setIsupdatin(true);
         const info = {
-           bio:{
-               qualification: values.qaulification,
-               address: values.address,
-               jon: values.job
-           }
+            bio: {
+                qualification: values.qualification,
+                address: values.address,
+                jon: values.job,
+            },
         };
 
         try {
             console.log(info);
             await db.collection("users").doc(user.uid).update(info);
-            useQueryClient.invalidateQueries("users");
-            
             console.log("updated");
-            showSuccessToast({ message: "User has been Updated" });
+            showSuccessToast({ message: "Your Bio has been updated successfully" });
             setIsupdatin(false);
         } catch (err) {
             console.error(err.message);
@@ -54,23 +50,24 @@ const SetBio = () => {
 
     const formik = useFormik({
         initialValues: {
-            qaulification: "",
+            qualification: "",
             address: "",
             job: "",
         },
         // onSubmit: handleSubmit,
         onSubmit: handleSubmit,
-        // validate: (values) => {
-        //     let errors = {};
+        validate: (values) => {
+            let errors = {};
 
-        //     const validationErrors = bioSchema.validate(values, { abortEarly: false })?.error?.details;
+            const validationErrors = bioSchema.validate(values, { abortEarly: false })?.error?.details;
 
-        //     if (validationErrors) validationErrors.forEach((err) => (errors[err.context.label] = err.message));
+            if (validationErrors) validationErrors.forEach((err) => (errors[err.context.label] = err.message));
 
-        //     return errors;
-        // },
-        // validateOnChange: false,
+            return errors;
+        },
+        validateOnChange: false,
     });
+    console.log(formik.errors);
     return (
         <div>
             <Button color="primary" onClick={toggle} style={{ marginBottom: "1rem" }} size="lg" block outline>
@@ -79,15 +76,20 @@ const SetBio = () => {
             <Collapse isOpen={isOpen}>
                 <Card>
                     <CardBody>
-                        <Form onSubmit={formik.handleSubmit}>
+                        <Form
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                                formik.handleSubmit();
+                            }}
+                        >
                             <FormGroup>
                                 <Label>What is Your qualification :</Label>
                                 <Input
                                     type="textarea"
-                                    name="qaulification"
-                                    id="qaulification"
+                                    name="qualification"
+                                    id="qualification"
                                     placeholder="Enter Qualification Here"
-                                    invalid={formik.errors.qualification && formik.touched.qualification}
+                                    invalid={Boolean(formik.errors.qualification)}
                                     onChange={formik.handleChange}
                                     value={formik.value}
                                     rows={4}

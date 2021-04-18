@@ -55,7 +55,7 @@ export const userSchema = Joi.object({
         "any.required": `Gender is required`,
     }),
 });
-export const bioSchema = {
+export const bioSchema = Joi.object({
     job: Joi.string().required().min(10).max(255).messages({
         "any.required": `Location is required`,
         "string.max": `Only {#limit} characters are allowed`,
@@ -66,12 +66,12 @@ export const bioSchema = {
         "string.max": `Only {#limit} characters are allowed`,
         "string.min": `Please Enter comprehensive Description above the limit {#limit} characters`,
     }),
-    qaulification: Joi.string().required().min(10).max(255).messages({
+    qualification: Joi.string().required().max(255).min(3).messages({
         "any.required": `Qualification is required`,
         "string.max": `Only {#limit} characters are allowed`,
         "string.min": `Please Enter comprehensive Description above the limit {#limit} characters`,
     }),
-};
+});
 
 export const categorySchema = {
     name: Joi.string().max(25).required().messages({
