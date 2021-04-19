@@ -1,5 +1,5 @@
 import React from "react";
-
+//
 function Comment({ username, comment }) {
     return (
         <p className="mb-1">
