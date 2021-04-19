@@ -30,7 +30,7 @@ const SetName = () => {
         setIsOpen(!isOpen);
     };
 
-    const handleSubmit = async (values) => {
+    const handleSubmit = async (values, form) => {
         console.log(values);
         const user = getLoggedInUser();
         setIsupdatin(true);
@@ -49,6 +49,8 @@ const SetName = () => {
         } catch (err) {
             console.error(err.message);
         }
+
+        form.resetForm();
     };
 
     const gender = [
@@ -81,6 +83,7 @@ const SetName = () => {
         },
         validateOnChange: false,
     });
+
     console.log(formik.errors);
     return (
         <div>
@@ -98,9 +101,9 @@ const SetName = () => {
                                     name="fullname"
                                     id="fullname"
                                     placeholder="Enter Full Name"
-                                    invalid={formik.errors.fullname && formik.touched.fullname}
+                                    invalid={Boolean(formik.errors.fullname)}
                                     onChange={formik.handleChange}
-                                    value={formik.value}
+                                    value={formik.values.fullname}
                                 />
                                 <FormFeedback> {formik.errors.fullname}</FormFeedback>
                             </FormGroup>
@@ -111,9 +114,9 @@ const SetName = () => {
                                     name="dob"
                                     id="dob"
                                     placeholder="Select your date of birth"
-                                    invalid={formik.errors.dob && formik.touched.dob}
+                                    invalid={Boolean(formik.errors.dob)}
                                     onChange={formik.handleChange}
-                                    value={formik.value}
+                                    value={formik.values.dob}
                                 />
                                 <FormFeedback> {formik.errors.dob}</FormFeedback>
                             </FormGroup>

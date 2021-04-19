@@ -42,12 +42,18 @@ export const postSchema = Joi.object({
 });
 
 export const userSchema = Joi.object({
-    fullname: Joi.string().max(50).required().min(10).messages({
-        "string.empty": `Title is required`,
-        "any.required": `Title is required`,
-        "string.max": `Only {#limit} characters are allowed`,
-        "string.min": `Please Enter a title above the limit {#limit}`,
-    }),
+    fullname: Joi.string()
+        .max(50)
+        .required()
+        .min(10)
+        .regex(/^[A-Z]+$/i)
+        .messages({
+            "string.empty": `Title is required`,
+            "any.required": `Title is required`,
+            "object.regex": `Numbers are not allowed`,
+            "string.max": `Only {#limit} characters are allowed`,
+            "string.min": `Please Enter a title above the limit {#limit}`,
+        }),
     gender: Joi.string().required().messages({
         "string.required": "Nothing is also binary bitch!",
     }),

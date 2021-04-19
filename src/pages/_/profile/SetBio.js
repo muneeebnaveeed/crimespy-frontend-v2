@@ -26,7 +26,7 @@ const SetBio = () => {
     const [isUpdating, setIsupdatin] = useState(false);
     const toggle = () => setIsOpen(!isOpen);
 
-    const handleSubmit = async (values) => {
+    const handleSubmit = async (values, form) => {
         const user = getLoggedInUser();
         setIsupdatin(true);
         const info = {
@@ -46,6 +46,7 @@ const SetBio = () => {
         } catch (err) {
             console.error(err.message);
         }
+        form.resetForm();
     };
 
     const formik = useFormik({
@@ -67,6 +68,7 @@ const SetBio = () => {
         },
         validateOnChange: false,
     });
+
     console.log(formik.errors);
     return (
         <div>
