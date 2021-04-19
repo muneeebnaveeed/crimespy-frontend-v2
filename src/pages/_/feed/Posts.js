@@ -46,7 +46,7 @@ function Posts(props) {
                 <p className="mt-4 text-center">Fetching posts...</p>
             ) : (
                 <p className="mt-4 text-center">
-                    {posts.length ? "No more posts available" : "You've reached the end of the internet"}
+                    {!posts.data?.length ? "No more posts available" : "You've reached the end of the internet"}
                 </p>
             )}
         </>

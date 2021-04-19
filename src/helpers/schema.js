@@ -17,6 +17,14 @@ export const productSchema = Joi.object({
     }),
 });
 
+export const commentSchema = Joi.object({
+    comment: Joi.string().max(255).required().messages({
+        "string.empty": `Comment is required`,
+        "any.required": `Comment is required`,
+        "string.max": `Only {#limit} characters are allowed`,
+    }),
+});
+
 export const postSchema = Joi.object({
     title: Joi.string().max(70).required().min(9).messages({
         "string.empty": `Title is required`,
