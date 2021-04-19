@@ -63,6 +63,7 @@ function UsersTable(props) {
 
     // console.log(users);
     const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: "", subTitle: "" });
+    var res;
 
     const { data, isLoading, isError, refetch } = useProductsQuery();
 
@@ -90,7 +91,7 @@ function UsersTable(props) {
                     >
                         <thead>
                             <tr>
-                                <th>id</th>
+                                <th>#</th>
                                 <th>Username</th>
                                 <th>Email</th>
                                 <th>Role</th>
@@ -102,7 +103,10 @@ function UsersTable(props) {
                                 <>
                                     <tr key={i}>
                                         <Th scope="row" key={i}>
-                                            {user.uid}{" "}
+                                        {
+                                             res = user.uid.substring(user.uid.length - 3, user.uid.length)
+                                        }
+                                            {}{" "}
                                         </Th>
                                         <Th>{user.displayName}</Th>
                                         <Th>{user.email}</Th>
