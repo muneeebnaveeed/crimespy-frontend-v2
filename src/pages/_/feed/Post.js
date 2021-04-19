@@ -25,7 +25,9 @@ function Post({
     comments,
     id,
     photoURL,
-    Title
+    Title,
+    verifiedpost,
+    notverified,
 }) {
     const [menu, setMenu] = useState(false);
     const user = getLoggedInUser();
@@ -116,7 +118,7 @@ function Post({
                     src={photoURL}/>
                 <p className="p-3 m-0">
                     {description}</p>
-                <Actions/>
+                <Actions username={username} verifiedpost={verifiedpost} notverified={notverified} id={id}/>
                 <Comments username={username}
                     comments={comments}/>
                 <CreateComment comments={comments}

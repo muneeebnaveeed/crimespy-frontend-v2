@@ -87,6 +87,8 @@ const CreatePost = ({ toggle, isOpen }) => {
                         postId: postId,
                         ownerId: user.uid,
                         Title: values.title,
+                        verifiedpost: 0,
+                        notverified:0,
                         description: values.description,
                         location: values.location,
                         mediaUrl: imageUrl,

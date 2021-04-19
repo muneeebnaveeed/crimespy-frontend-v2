@@ -38,6 +38,8 @@ function Posts(props) {
                             description={post.description}
                             photoURL={post.mediaUrl}
                             Title={post.Title}
+                            notverified={post.notverified}
+                            verifiedpost={post.verifiedpost}
                         />
                     </Col>
                 </Row>
