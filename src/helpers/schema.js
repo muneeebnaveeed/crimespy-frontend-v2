@@ -69,6 +69,11 @@ export const userSchema = Joi.object({
         "any.required": `Gender is required`,
     }),
 });
+export const userPermissionSchema = Joi.object({
+    userView: Joi.boolean(),
+    userView: Joi.boolean(),
+    userView: Joi.boolean(),
+});
 export const bioSchema = Joi.object({
     job: Joi.string().required().min(10).max(255).messages({
         "any.required": `Location is required`,
