@@ -14,11 +14,14 @@ const breadcrumbItems = [
     { title: "Edit User", link: "/users" },
 ];
 
-const removeFirstLetter = (str) => str.substr(1, str.length);
+const removeFirstLetter = (str) => {
+    if (!str) return null;
+    return str.substr(1, str.length);
+};
 
 const Permission = () => {
     const params = useLocation();
-    const [userId, setUserId] = useState(removeFirstLetter(qs.parse(params.search).user));
+    const [userId, setUserId] = useState(qs.parse(removeFirstLetter(params.search)).user);
 
     const [user, setUser] = useState({
         isLoading: true,
