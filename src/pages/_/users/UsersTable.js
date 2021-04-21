@@ -18,6 +18,7 @@ import useDisclosure from "helpers/useDisclosure";
 import Confirmation from "./Confirmation";
 import { useQueryClient } from "react-query";
 import { showSuccessToast } from "helpers/showToast";
+import { useHistory } from "react-router";
 
 const fetchUser = async () => {
     const snapshot = db.collection("users").get();
@@ -58,6 +59,7 @@ const handleROLE = async (role, id) => {
 function UsersTable(props) {
     const users = useModifiedQuery("users", fetchUser);
     const queryClient = useQueryClient();
+    const history = useHistory();
 
     const dispatch = useDispatch();
 
@@ -98,7 +100,6 @@ function UsersTable(props) {
                             </tr>
                         </thead>
                         <tbody>
-                            {" "}
                             {users.data?.map((user, i) => (
                                 <>
                                     <tr key={i}>
@@ -133,6 +134,13 @@ function UsersTable(props) {
                                                         },
                                                     })
                                                 }
+                                            >
+                                                <i className="fas fa-trash-alt" />
+                                            </Button>
+                                            <Button
+                                                color="light"
+                                                size="sm"
+                                                onClick={() => history.push(`/users/edit?user=${user.uid}`)}
                                             >
                                                 <i className="fas fa-trash-alt" />
                                             </Button>

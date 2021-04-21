@@ -10,7 +10,11 @@ class Breadcrumbs extends Component {
             <React.Fragment>
                 <Row>
                     <Col xs={12}>
-                        <div className="page-title-box d-flex align-items-center justify-content-between">
+                        <div
+                            className={`page-title-box d-flex align-items-center justify-content-between ${
+                                this.props.pageTitleClass || ""
+                            }`}
+                        >
                             <h4 className="mb-0">{this.props.title}</h4>
 
                             <div className="page-title-right">
