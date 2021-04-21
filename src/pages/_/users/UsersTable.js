@@ -80,7 +80,7 @@ function UsersTable(props) {
                 {" "}
                 {isLoading && !isError && <Spinner />}
                 {isError && !isLoading && <Error for="users" onClick={refetch} />}
-                <CardBody className="pt-0" style={{ minHeight: 350 }}>
+                <CardBody className="pt-0" style={users.data?.length ? {} : { minHeight: 350 }}>
                     <Table
                         responsive
                         size="xl"
@@ -103,9 +103,7 @@ function UsersTable(props) {
                                 <>
                                     <tr key={i}>
                                         <Th scope="row" key={i}>
-                                        {
-                                             res = user.uid.substring(user.uid.length - 3, user.uid.length)
-                                        }
+                                            {(res = user.uid.substring(user.uid.length - 3, user.uid.length))}
                                             {}{" "}
                                         </Th>
                                         <Th>{user.displayName}</Th>
