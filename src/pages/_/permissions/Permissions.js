@@ -26,8 +26,21 @@ const permissions = {
     users: [
         { key: "createUsers", label: "Create Users" },
         { key: "givePermissions", label: "Give Permissions" },
+        { key: "DeleteUser", label: "Delete User" },
     ],
-    feed: [{ key: "likePosts", label: "Like Posts" }],
+    Posts: [
+        { key: "VerifyPost", label: "Verify Posts" },
+        { key: "DeleteOthersPost", label: "Delete Others Post" },
+    ],
+    Feed: [
+        { key: "CreatePost", label: "Create Post" },
+        { key: "PostComment", label: "Comment on Post" },
+        { key: "VerifyPost", label: "up and down vote" },
+    ],
+    CrimeChart: [
+        { key: "CreateChart", label: "Create Crime Chart" },
+        { key: "DeleteChart", label: "Delete Crime Chart" },
+    ],
 };
 
 const Permissions = () => {
