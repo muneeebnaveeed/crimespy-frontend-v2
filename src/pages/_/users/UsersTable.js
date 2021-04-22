@@ -59,20 +59,26 @@ const handleROLE = async (role, id) => {
 function UsersTable(props) {
     const users = useModifiedQuery("users", fetchUser);
     const queryClient = useQueryClient();
+    const { isOpen, toggle } = useDisclosure();
+    const [confirmDialog, setConfirmDialog] = useState({ isOpen: isOpen, title: "", subTitle: "" });
+    const [isDeleting, setIsdeleting] = useState(false);
     const history = useHistory();
-
+    // const [isopen, setIsopen] = useState(false);
     const dispatch = useDispatch();
 
     // console.log(users);
-    const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: "", subTitle: "" });
+  
     var res;
 
     const { data, isLoading, isError, refetch } = useProductsQuery();
 
     const onDelete = async (user) => {
+        setIsdeleting(true);
         await db.collection("users").doc(user.id).delete();
         await queryClient.invalidateQueries("users");
-        setConfirmDialog(!confirmDialog);
+        // setIsopen(!isopen);
+        setIsdeleting(false);
+        setConfirmDialog(!confirmDialog)
         showSuccessToast({ message: "Post has been created" });
     };
 
@@ -124,15 +130,16 @@ function UsersTable(props) {
                                             <Button
                                                 color="light"
                                                 size="sm"
-                                                onClick={() =>
-                                                    setConfirmDialog({
-                                                        isOpen: true,
-                                                        title: "Are you sure to delete this User?",
-                                                        subTitle: "You can't undo this operation",
-                                                        onConfirm: () => {
+                                                onClick={() => 
+                                                setConfirmDialog(
+                                                    {
+                                                        isOpen:toggle,
+                                                        onConfirm: ()=> {
                                                             onDelete(user);
-                                                        },
-                                                    })
+                                                        }
+                                                    }
+                                                )
+                                                
                                                 }
                                             >
                                                 <i className="fas fa-trash-alt" />
@@ -155,7 +162,7 @@ function UsersTable(props) {
                     </Table>
                 </CardBody>
             </Card>
-            <Confirmation confirmDialog={confirmDialog} setConfirmDialog={setConfirmDialog} />
+            <Confirmation isOpen={isOpen} toggle={toggle} onDelete={onDelete} confirmDialog={confirmDialog} setConfirmDialog={setConfirmDialog} isDeleting={isDeleting} setIsdeleting={setIsdeleting}/>
         </>
     );
 }

@@ -24,7 +24,7 @@ const Permission = () => {
     const [userId, setUserId] = useState(qs.parse(removeFirstLetter(params.search)).user);
 
     const [user, setUser] = useState({
-        isLoading: true,
+        isLoading: false,
         isError: false,
         data: { photoURL: "...", displayName: "Muneeb Naveed" },
     });
