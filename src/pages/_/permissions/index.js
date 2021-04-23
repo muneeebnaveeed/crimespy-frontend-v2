@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Container, Card, CardBody, Row, Col, Spinner } from "reactstrap";
 
 //Import Breadcrumb
@@ -8,6 +8,8 @@ import Permissions from "./Permissions";
 import { Redirect, useLocation, useParams } from "react-router";
 import qs from "querystring";
 import { useModifiedQuery } from "helpers/query";
+import userEvent from "@testing-library/user-event";
+import { db } from "helpers/auth";
 
 const breadcrumbItems = [
     { title: "Crimespy", link: "/" },
@@ -22,18 +24,32 @@ const removeFirstLetter = (str) => {
 const Permission = () => {
     const params = useLocation();
     const [userId, setUserId] = useState(qs.parse(removeFirstLetter(params.search)).user);
+   
 
-    const [user, setUser] = useState({
-        isLoading: false,
-        isError: false,
-        data: { photoURL: "...", displayName: "Muneeb Naveed" },
-    });
+  
+  
 
-    // const user = useModifiedQuery(["user", userId], fetchUserById);
-
-    const fetchUserById = useCallback(() => {
-        //     // TODO, ADD FUNCTION --FOR WASEF
+    const fetchUserById = useCallback(async () => {
+        const userdata = await (await db.collection('users').doc(userId).get()).data();
+        
+        return userdata;
+        
     }, [userId]);
+    const user = useModifiedQuery(["user", userId], fetchUserById);
+    console.log(user.data)
+    // setDisplayName(user.data?.displayName);
+
+    // useEffect(() => {
+    //     const UserData = async () =>{
+    //       const user =  await fetchUserById();
+    //       console.log(user.displayName);
+    //     }
+     
+    //     UserData();
+    // }, [])
+    // console.log(userId)
+    // const userData = fetchUserById();
+    // console.log(userData)
 
     return (
         <div className="page-content">

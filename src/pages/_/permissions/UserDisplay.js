@@ -12,12 +12,12 @@ const UserDisplay = ({ user }) => {
                             <img
                                 className="rounded-circle header-profile-user size-lg mr-1"
                                 style={{ height: 150, width: 150 }}
-                                src={getLoggedInUser().photoURL}
+                                src={user?.photoURL}
                                 alt="Header Avatar"
                             />
                             <div className="d-flex flex-column">
-                                <h1>Muneeb Naveed</h1>
-                                <p>Male</p>
+                                <h1>{user?.displayName}</h1>
+                                <p>{user?.gender}</p>
                             </div>
                         </div>
                     </Row>
