@@ -67,7 +67,7 @@ function UsersTable(props) {
     const dispatch = useDispatch();
 
     // console.log(users);
-  
+
     var res;
 
     const { data, isLoading, isError, refetch } = useProductsQuery();
@@ -78,7 +78,7 @@ function UsersTable(props) {
         await queryClient.invalidateQueries("users");
         // setIsopen(!isopen);
         setIsdeleting(false);
-        setConfirmDialog(!confirmDialog)
+        setConfirmDialog(!confirmDialog);
         showSuccessToast({ message: "Post has been created" });
     };
 
@@ -130,16 +130,13 @@ function UsersTable(props) {
                                             <Button
                                                 color="light"
                                                 size="sm"
-                                                onClick={() => 
-                                                setConfirmDialog(
-                                                    {
-                                                        isOpen:toggle,
-                                                        onConfirm: ()=> {
+                                                onClick={() =>
+                                                    setConfirmDialog({
+                                                        isOpen: toggle,
+                                                        onConfirm: () => {
                                                             onDelete(user);
-                                                        }
-                                                    }
-                                                )
-                                                
+                                                        },
+                                                    })
                                                 }
                                             >
                                                 <i className="fas fa-trash-alt" />
@@ -162,7 +159,15 @@ function UsersTable(props) {
                     </Table>
                 </CardBody>
             </Card>
-            <Confirmation isOpen={isOpen} toggle={toggle} onDelete={onDelete} confirmDialog={confirmDialog} setConfirmDialog={setConfirmDialog} isDeleting={isDeleting} setIsdeleting={setIsdeleting}/>
+            <Confirmation
+                isOpen={isOpen}
+                toggle={toggle}
+                onDelete={onDelete}
+                confirmDialog={confirmDialog}
+                setConfirmDialog={setConfirmDialog}
+                isDeleting={isDeleting}
+                setIsdeleting={setIsdeleting}
+            />
         </>
     );
 }
