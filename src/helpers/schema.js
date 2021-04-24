@@ -70,9 +70,16 @@ export const userSchema = Joi.object({
     }),
 });
 export const userPermissionSchema = Joi.object({
-    userView: Joi.boolean(),
-    userView: Joi.boolean(),
-    userView: Joi.boolean(),
+    mapUser: Joi.boolean(),
+    CreateUser: Joi.boolean(),
+    DeleteUser: Joi.boolean(),
+    givePermission: Joi.boolean(),
+    VerifyPost: Joi.boolean(),
+    DeleteOthersPost: Joi.boolean(),
+    CreatePost: Joi.boolean(),
+    PostComment: Joi.boolean(),
+    CreateChart: Joi.boolean(),
+    DeleteChart: Joi.boolean(),
 });
 export const bioSchema = Joi.object({
     job: Joi.string().required().min(10).max(255).messages({
