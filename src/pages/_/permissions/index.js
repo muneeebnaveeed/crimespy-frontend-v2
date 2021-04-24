@@ -67,7 +67,7 @@ const Permission = () => {
                         {!user.isLoading && !user.isError && (
                             <>
                                 <UserDisplay user={user.data} />
-                                <Permissions />
+                                <Permissions user={user.data}/>
                             </>
                         )}
                     </Col>

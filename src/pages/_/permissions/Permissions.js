@@ -43,13 +43,13 @@ const permissions = {
     ],
 };
 
-const Permissions = () => {
+const Permissions = ({user}) => {
     const [isOpen, setIsOpen] = useState(false);
     const [isUpdating, setIsupdatin] = useState(false);
     const toggle = () => setIsOpen(!isOpen);
 
     const handleSubmit = async (values, form) => {
-        const user = getLoggedInUser();
+        // const user = getLoggedInUser();
         setIsupdatin(true);
         const info = {
             userPermission: {
@@ -60,10 +60,10 @@ const Permissions = () => {
         };
 
         try {
-            console.log(info);
+            console.log("values",values);
             // for permissions
-            // await db.collection("users").doc(user.uid).update(info);
-            // console.log("updated");
+            await db.collection("users").doc(user.uid).update(info);
+            console.log("updated");
             showSuccessToast({ message: "Permission updated Successfully" });
             setIsupdatin(false);
         } catch (err) {
@@ -75,6 +75,9 @@ const Permissions = () => {
     const formik = useFormik({
         initialValues: {
             mapUser: false,
+            createUser:false,
+            viewUser:false,
+            deleteUser:false
         },
         // onSubmit: handleSubmit,
         onSubmit: handleSubmit,
@@ -91,6 +94,7 @@ const Permissions = () => {
     });
 
     console.log(formik.errors);
+    console.log(formik.values)
     return (
         <Card>
             <CardBody>
@@ -110,7 +114,7 @@ const Permissions = () => {
                                     <div className="mb-2">
                                         <FormGroup check>
                                             <Label check style={{ cursor: "pointer" }}>
-                                                <Input type="checkbox" id="checkbox2" style={{ cursor: "pointer" }} />{" "}
+                                                <Input type="checkbox"  style={{ cursor: "pointer" }} />{" "}
                                                 {permission.label}
                                             </Label>
                                         </FormGroup>
