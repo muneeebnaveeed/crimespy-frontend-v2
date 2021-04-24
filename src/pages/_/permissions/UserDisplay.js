@@ -15,7 +15,7 @@ const UserDisplay = ({ user }) => {
                                 src={user?.photoURL}
                                 alt="Header Avatar"
                             />
-                            <div className="d-flex flex-column">
+                            <div className="d-flex mt-4 ml-2 flex-column">
                                 <h1>{user?.displayName}</h1>
                                 <p>{user?.gender}</p>
                             </div>

@@ -78,6 +78,7 @@ export const userPermissionSchema = Joi.object({
     DeleteOthersPost: Joi.boolean(),
     CreatePost: Joi.boolean(),
     PostComment: Joi.boolean(),
+    confirmPost: Joi.boolean(),
     CreateChart: Joi.boolean(),
     DeleteChart: Joi.boolean(),
 });

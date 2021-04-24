@@ -37,7 +37,7 @@ const permissions = {
     Feed: [
         { key: "CreatePost", label: "Create Post" },
         { key: "PostComment", label: "Comment on Post" },
-        { key: "VerifyPost", label: "up and down vote" },
+        { key: "confirmPost", label: "up and down vote" },
     ],
     CrimeChart: [
         { key: "CreateChart", label: "Create Crime Chart" },
@@ -45,7 +45,7 @@ const permissions = {
     ],
 };
 
-const Permissions = ({user}) => {
+const Permissions = ({ user }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [isUpdating, setIsupdatin] = useState(false);
     const toggle = () => setIsOpen(!isOpen);
@@ -56,20 +56,21 @@ const Permissions = ({user}) => {
         const info = {
             userPermission: {
                 mapUser: values.mapUser,
-                CreateUser: values.CreateUser,
+                CreateUsers: values.CreateUsers,
                 DeleteUser: values.DeleteUser,
-                givePermission: values.givePermission,
+                givePermissions: values.givePermissions,
                 VerifyPost: values.VerifyPost,
                 DeleteOthersPost: values.DeleteOthersPost,
                 CreatePost: values.CreatePost,
                 PostComment: values.PostComment,
+                confirmPost: values.confirmPost,
                 CreateChart: values.CreateChart,
                 DeleteChart: values.DeleteChart,
             },
         };
 
         try {
-            console.log("values",values);
+            console.log("values", values);
             // for permissions
             await db.collection("users").doc(user.uid).update(info);
             console.log("updated");
@@ -85,21 +86,16 @@ const Permissions = ({user}) => {
     const formik = useFormik({
         initialValues: {
             mapUser: false,
-<<<<<<< HEAD
-            CreateUser: false,
+            CreateUsers: false,
             DeleteUser: false,
-            givePermission: false,
+            givePermissions: false,
             VerifyPost: false,
             DeleteOthersPost: false,
             CreatePost: false,
             PostComment: false,
+            confirmPost: false,
             CreateChart: false,
             DeleteChart: false,
-=======
-            createUser:false,
-            viewUser:false,
-            deleteUser:false
->>>>>>> 72b32b0c3c7e5233d6e061d7ab936ca84da63759
         },
         // onSubmit: handleSubmit,
         onSubmit: handleSubmit,
@@ -116,7 +112,7 @@ const Permissions = ({user}) => {
     });
 
     console.log(formik.errors);
-    console.log(formik.values)
+    console.log(formik.values);
     return (
         <Card>
             <CardBody>
@@ -136,7 +132,6 @@ const Permissions = ({user}) => {
                                     <div className="mb-2">
                                         <FormGroup check>
                                             <Label check style={{ cursor: "pointer" }}>
-<<<<<<< HEAD
                                                 <Input
                                                     type="checkbox"
                                                     name={permission.key}
@@ -145,9 +140,6 @@ const Permissions = ({user}) => {
                                                     value={formik.value}
                                                     style={{ cursor: "pointer" }}
                                                 />{" "}
-=======
-                                                <Input type="checkbox"  style={{ cursor: "pointer" }} />{" "}
->>>>>>> 72b32b0c3c7e5233d6e061d7ab936ca84da63759
                                                 {permission.label}
                                             </Label>
                                         </FormGroup>
