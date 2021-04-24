@@ -17,14 +17,16 @@ import {
     Row,
     Button,
 } from "reactstrap";
-import { mapPermissionSchema } from "helpers/schema";
+
+import { userPermissionSchema } from "helpers/schema";
 import { showSuccessToast } from "helpers/showToast";
 import { db, getLoggedInUser } from "helpers/auth";
 import { useQueryClient } from "react-query";
 
 const permissions = {
+    map: [{ key: "mapUser", label: "map access" }],
     users: [
-        { key: "createUsers", label: "Create Users" },
+        { key: "CreateUsers", label: "Create Users" },
         { key: "givePermissions", label: "Give Permissions" },
         { key: "DeleteUser", label: "Delete User" },
     ],
@@ -53,9 +55,16 @@ const Permissions = () => {
         setIsupdatin(true);
         const info = {
             userPermission: {
-                viewUser: values.viewUser,
-                createUser: values.createUser,
-                deleteUser: values.deleteUser,
+                mapUser: values.mapUser,
+                CreateUser: values.CreateUser,
+                DeleteUser: values.DeleteUser,
+                givePermission: values.givePermission,
+                VerifyPost: values.VerifyPost,
+                DeleteOthersPost: values.DeleteOthersPost,
+                CreatePost: values.CreatePost,
+                PostComment: values.PostComment,
+                CreateChart: values.CreateChart,
+                DeleteChart: values.DeleteChart,
             },
         };
 
@@ -69,12 +78,22 @@ const Permissions = () => {
         } catch (err) {
             console.error(err.message);
         }
+        console.log(values);
         form.resetForm();
     };
 
     const formik = useFormik({
         initialValues: {
             mapUser: false,
+            CreateUser: false,
+            DeleteUser: false,
+            givePermission: false,
+            VerifyPost: false,
+            DeleteOthersPost: false,
+            CreatePost: false,
+            PostComment: false,
+            CreateChart: false,
+            DeleteChart: false,
         },
         // onSubmit: handleSubmit,
         onSubmit: handleSubmit,
@@ -110,7 +129,14 @@ const Permissions = () => {
                                     <div className="mb-2">
                                         <FormGroup check>
                                             <Label check style={{ cursor: "pointer" }}>
-                                                <Input type="checkbox" id="checkbox2" style={{ cursor: "pointer" }} />{" "}
+                                                <Input
+                                                    type="checkbox"
+                                                    name={permission.key}
+                                                    id={permission.key}
+                                                    onChange={formik.handleChange}
+                                                    value={formik.value}
+                                                    style={{ cursor: "pointer" }}
+                                                />{" "}
                                                 {permission.label}
                                             </Label>
                                         </FormGroup>
