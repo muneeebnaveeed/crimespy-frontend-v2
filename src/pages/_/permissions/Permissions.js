@@ -45,13 +45,13 @@ const permissions = {
     ],
 };
 
-const Permissions = () => {
+const Permissions = ({user}) => {
     const [isOpen, setIsOpen] = useState(false);
     const [isUpdating, setIsupdatin] = useState(false);
     const toggle = () => setIsOpen(!isOpen);
 
     const handleSubmit = async (values, form) => {
-        const user = getLoggedInUser();
+        // const user = getLoggedInUser();
         setIsupdatin(true);
         const info = {
             userPermission: {
@@ -69,10 +69,10 @@ const Permissions = () => {
         };
 
         try {
-            console.log(info);
+            console.log("values",values);
             // for permissions
-            // await db.collection("users").doc(user.uid).update(info);
-            // console.log("updated");
+            await db.collection("users").doc(user.uid).update(info);
+            console.log("updated");
             showSuccessToast({ message: "Permission updated Successfully" });
             setIsupdatin(false);
         } catch (err) {
@@ -85,6 +85,7 @@ const Permissions = () => {
     const formik = useFormik({
         initialValues: {
             mapUser: false,
+<<<<<<< HEAD
             CreateUser: false,
             DeleteUser: false,
             givePermission: false,
@@ -94,6 +95,11 @@ const Permissions = () => {
             PostComment: false,
             CreateChart: false,
             DeleteChart: false,
+=======
+            createUser:false,
+            viewUser:false,
+            deleteUser:false
+>>>>>>> 72b32b0c3c7e5233d6e061d7ab936ca84da63759
         },
         // onSubmit: handleSubmit,
         onSubmit: handleSubmit,
@@ -110,6 +116,7 @@ const Permissions = () => {
     });
 
     console.log(formik.errors);
+    console.log(formik.values)
     return (
         <Card>
             <CardBody>
@@ -129,6 +136,7 @@ const Permissions = () => {
                                     <div className="mb-2">
                                         <FormGroup check>
                                             <Label check style={{ cursor: "pointer" }}>
+<<<<<<< HEAD
                                                 <Input
                                                     type="checkbox"
                                                     name={permission.key}
@@ -137,6 +145,9 @@ const Permissions = () => {
                                                     value={formik.value}
                                                     style={{ cursor: "pointer" }}
                                                 />{" "}
+=======
+                                                <Input type="checkbox"  style={{ cursor: "pointer" }} />{" "}
+>>>>>>> 72b32b0c3c7e5233d6e061d7ab936ca84da63759
                                                 {permission.label}
                                             </Label>
                                         </FormGroup>
