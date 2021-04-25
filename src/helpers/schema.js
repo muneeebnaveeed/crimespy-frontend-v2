@@ -68,6 +68,9 @@ export const userSchema = Joi.object({
     dob: Joi.string().required().messages({
         "any.required": `Gender is required`,
     }),
+    category: Joi.string().required().message({
+        "any.required": `category is not defined`,
+    }),
 });
 export const userPermissionSchema = Joi.object({
     mapUser: Joi.boolean(),

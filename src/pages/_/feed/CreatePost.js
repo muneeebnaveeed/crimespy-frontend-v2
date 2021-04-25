@@ -36,7 +36,7 @@ const CreatePost = ({ toggle, isOpen }) => {
     const user = getLoggedInUser();
     const [isCreatingPost, setIsCreatingPost] = useState(false);
     const [isGettingGeo, setIsgettingGeo] = useState(false);
-    const [getCurrentLocation, setCurrentLocation] = useState('');
+    const [getCurrentLocation, setCurrentLocation] = useState("");
     const queryClient = useQueryClient();
 
     const handleChange = (e) => {
@@ -51,19 +51,16 @@ const CreatePost = ({ toggle, isOpen }) => {
         }
     };
 
-    const handleCurrentLocation =  async () =>{
-        setIsgettingGeo(true)
-     await navigator.geolocation.getCurrentPosition((position) =>{
-        console.log(position.coords);
-        setCurrentLocation(`${position.coords.latitude}/${position.coords.longitude}`);
-        console.log(getCurrentLocation)
-
-     }
-    
-     );
-     setCurrentLocation()
-       setIsgettingGeo(false);
-    }
+    const handleCurrentLocation = async () => {
+        setIsgettingGeo(true);
+        await navigator.geolocation.getCurrentPosition((position) => {
+            console.log(position.coords);
+            setCurrentLocation(`${position.coords.latitude}/${position.coords.longitude}`);
+            console.log(getCurrentLocation);
+        });
+        setCurrentLocation();
+        setIsgettingGeo(false);
+    };
 
     const category = [
         {
@@ -99,7 +96,7 @@ const CreatePost = ({ toggle, isOpen }) => {
                         ownerId: user.uid,
                         Title: values.title,
                         verifiedpost: 0,
-                        notverified:0,
+                        notverified: 0,
                         description: values.description,
                         location: values.location,
                         mediaUrl: imageUrl,
@@ -125,6 +122,7 @@ const CreatePost = ({ toggle, isOpen }) => {
             description: "",
             location: "",
             image: "",
+            category: "",
         },
         onSubmit: handleSubmit,
         validate: (values) => {
@@ -182,7 +180,13 @@ const CreatePost = ({ toggle, isOpen }) => {
                         </FormGroup>
                         <FormGroup>
                             <Label for="category">Category</Label>
-                            <Select options={category} />
+                            <Select
+                                options={category}
+                                invalid={formik.errors.category}
+                                defaultValue={category[0]}
+                                onChange={(category) => formik.setFieldValue("gender", category.value)}
+                            />
+                            <div className="invalid-feedback">{formik.errors.category}</div>
                         </FormGroup>
                         <FormGroup>
                             <Label for="location">Location</Label>
@@ -197,7 +201,12 @@ const CreatePost = ({ toggle, isOpen }) => {
                                     value={formik.value}
                                 />
                                 <InputGroupAddon addonType="append">
-                                    <Button color="warning" type="button" onClick={handleCurrentLocation} loading={isGettingGeo}>
+                                    <Button
+                                        color="warning"
+                                        type="button"
+                                        onClick={handleCurrentLocation}
+                                        loading={isGettingGeo}
+                                    >
                                         Current Location
                                     </Button>
                                 </InputGroupAddon>
