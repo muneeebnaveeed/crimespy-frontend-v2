@@ -68,52 +68,57 @@ const CreatePost = ({ toggle, isOpen }) => {
             label: "Robery",
         },
         {
-            value: "Female",
-            label: "Female",
+            value: "Snatching",
+            label: "Snatching",
+        },
+        {
+            value: "Murder",
+            label: "Murder",
         },
     ];
 
     const handleSubmit = useCallback((values) => {
         var imageName = makeid(10);
         const uploadTask = storage.ref(`images/${imageName}.jpg`).put(values.image);
-        // setIsCreatingPost(true);
-        // uploadTask.on(
-        //     "state_changed",
-        //     (snapshot) => {},
-        //     (error) => {
-        //         console.log(error);
-        //     },
-        //     async () => {
-        //         const postId = uuid();
-        //         // GET DOWNLOAD URL AND UPLOAD THE POST INFO
+        setIsCreatingPost(true);
+        uploadTask.on(
+            "state_changed",
+            (snapshot) => {},
+            (error) => {
+                console.log(error);
+            },
+            async () => {
+                const postId = uuid();
+                // GET DOWNLOAD URL AND UPLOAD THE POST INFO
 
-        //         try {
-        //             const imageUrl = await storage.ref("images").child(`${imageName}.jpg`).getDownloadURL();
+                try {
+                    const imageUrl = await storage.ref("images").child(`${imageName}.jpg`).getDownloadURL();
 
-        //             const newPost = {
-        //                 timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-        //                 postId: postId,
-        //                 ownerId: user.uid,
-        //                 Title: values.title,
-        //                 verifiedpost: 0,
-        //                 notverified: 0,
-        //                 description: values.description,
-        //                 location: values.location,
-        //                 mediaUrl: imageUrl,
-        //                 username: user.displayName.toLowerCase(),
-        //                 profileUrl: user.photoURL,
-        //             };
+                    const newPost = {
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                        postId: postId,
+                        ownerId: user.uid,
+                        Title: values.title,
+                        verifiedpost: 0,
+                        notverified: 0,
+                        description: values.description,
+                        location: values.location,
+                        mediaUrl: imageUrl,
+                        category: values.crimeCategory,
+                        username: user.displayName.toLowerCase(),
+                        profileUrl: user.photoURL,
+                    };
 
-        //             await postRef.doc(user.uid).collection("userPosts").doc(postId).set(newPost);
-        //             await queryClient.invalidateQueries("posts");
-        //             showSuccessToast({ message: "Post has been created" });
-        //             toggleModal();
-        //             setIsCreatingPost(false);
-        //         } catch (err) {
-        //             console.error(err.message);
-        //         }
-        //     }
-        // );
+                    await postRef.doc(user.uid).collection("userPosts").doc(postId).set(newPost);
+                    await queryClient.invalidateQueries("posts");
+                    showSuccessToast({ message: "Post has been created" });
+                    toggleModal();
+                    setIsCreatingPost(false);
+                } catch (err) {
+                    console.error(err.message);
+                }
+            }
+        );
         console.log(values);
     }, []);
 
