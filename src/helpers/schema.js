@@ -43,6 +43,8 @@ export const postSchema = Joi.object({
         "string.max": `Only {#limit} characters are allowed`,
         "string.min": `Please Enter comprehensive Description above the limit {#limit} characters`,
     }),
+
+    crimeCategory: Joi.string().required(),
     image: Joi.any().required().messages({
         "string.empty": `Please attach an image`,
         "any.required": `Please attach an image`,
@@ -67,9 +69,6 @@ export const userSchema = Joi.object({
     }),
     dob: Joi.string().required().messages({
         "any.required": `Gender is required`,
-    }),
-    category: Joi.string().required().message({
-        "any.required": `category is not defined`,
     }),
 });
 export const userPermissionSchema = Joi.object({

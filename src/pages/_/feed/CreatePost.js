@@ -62,7 +62,7 @@ const CreatePost = ({ toggle, isOpen }) => {
         setIsgettingGeo(false);
     };
 
-    const category = [
+    const crimeCategory = [
         {
             value: "Robery",
             label: "Robery",
@@ -76,44 +76,45 @@ const CreatePost = ({ toggle, isOpen }) => {
     const handleSubmit = useCallback((values) => {
         var imageName = makeid(10);
         const uploadTask = storage.ref(`images/${imageName}.jpg`).put(values.image);
-        setIsCreatingPost(true);
-        uploadTask.on(
-            "state_changed",
-            (snapshot) => {},
-            (error) => {
-                console.log(error);
-            },
-            async () => {
-                const postId = uuid();
-                // GET DOWNLOAD URL AND UPLOAD THE POST INFO
+        // setIsCreatingPost(true);
+        // uploadTask.on(
+        //     "state_changed",
+        //     (snapshot) => {},
+        //     (error) => {
+        //         console.log(error);
+        //     },
+        //     async () => {
+        //         const postId = uuid();
+        //         // GET DOWNLOAD URL AND UPLOAD THE POST INFO
 
-                try {
-                    const imageUrl = await storage.ref("images").child(`${imageName}.jpg`).getDownloadURL();
+        //         try {
+        //             const imageUrl = await storage.ref("images").child(`${imageName}.jpg`).getDownloadURL();
 
-                    const newPost = {
-                        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                        postId: postId,
-                        ownerId: user.uid,
-                        Title: values.title,
-                        verifiedpost: 0,
-                        notverified: 0,
-                        description: values.description,
-                        location: values.location,
-                        mediaUrl: imageUrl,
-                        username: user.displayName.toLowerCase(),
-                        profileUrl: user.photoURL,
-                    };
+        //             const newPost = {
+        //                 timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        //                 postId: postId,
+        //                 ownerId: user.uid,
+        //                 Title: values.title,
+        //                 verifiedpost: 0,
+        //                 notverified: 0,
+        //                 description: values.description,
+        //                 location: values.location,
+        //                 mediaUrl: imageUrl,
+        //                 username: user.displayName.toLowerCase(),
+        //                 profileUrl: user.photoURL,
+        //             };
 
-                    await postRef.doc(user.uid).collection("userPosts").doc(postId).set(newPost);
-                    await queryClient.invalidateQueries("posts");
-                    showSuccessToast({ message: "Post has been created" });
-                    toggleModal();
-                    setIsCreatingPost(false);
-                } catch (err) {
-                    console.error(err.message);
-                }
-            }
-        );
+        //             await postRef.doc(user.uid).collection("userPosts").doc(postId).set(newPost);
+        //             await queryClient.invalidateQueries("posts");
+        //             showSuccessToast({ message: "Post has been created" });
+        //             toggleModal();
+        //             setIsCreatingPost(false);
+        //         } catch (err) {
+        //             console.error(err.message);
+        //         }
+        //     }
+        // );
+        console.log(values);
     }, []);
 
     const formik = useFormik({
@@ -122,7 +123,7 @@ const CreatePost = ({ toggle, isOpen }) => {
             description: "",
             location: "",
             image: "",
-            category: "",
+            crimeCategory: "",
         },
         onSubmit: handleSubmit,
         validate: (values) => {
@@ -140,7 +141,7 @@ const CreatePost = ({ toggle, isOpen }) => {
     const toggleModal = useCallback(() => {
         if (!isCreatingPost) toggle();
     }, [isCreatingPost, toggle]);
-
+    console.log(formik.errors);
     return (
         <>
             <Modal isOpen={isOpen} toggle={toggleModal} centered>
@@ -179,14 +180,12 @@ const CreatePost = ({ toggle, isOpen }) => {
                             <FormFeedback> {formik.errors.description}</FormFeedback>
                         </FormGroup>
                         <FormGroup>
-                            <Label for="category">Category</Label>
+                            <Label for="crimeCategory">crimeCategory</Label>
                             <Select
-                                options={category}
-                                invalid={formik.errors.category}
-                                defaultValue={category[0]}
-                                onChange={(category) => formik.setFieldValue("gender", category.value)}
+                                options={crimeCategory}
+                                defaultValue={crimeCategory[0]}
+                                onChange={(crimeCategory) => formik.setFieldValue("crimeCategory", crimeCategory.value)}
                             />
-                            <div className="invalid-feedback">{formik.errors.category}</div>
                         </FormGroup>
                         <FormGroup>
                             <Label for="location">Location</Label>
