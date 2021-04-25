@@ -65,6 +65,17 @@ const CreatePost = ({ toggle, isOpen }) => {
        setIsgettingGeo(false);
     }
 
+    const category = [
+        {
+            value: "Robery",
+            label: "Robery",
+        },
+        {
+            value: "Female",
+            label: "Female",
+        },
+    ];
+
     const handleSubmit = useCallback((values) => {
         var imageName = makeid(10);
         const uploadTask = storage.ref(`images/${imageName}.jpg`).put(values.image);
@@ -168,6 +179,10 @@ const CreatePost = ({ toggle, isOpen }) => {
                                 value={formik.value}
                             />
                             <FormFeedback> {formik.errors.description}</FormFeedback>
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="category">Category</Label>
+                            <Select options={category} />
                         </FormGroup>
                         <FormGroup>
                             <Label for="location">Location</Label>
