@@ -16,6 +16,7 @@ import {
     Label,
     Row,
     Button,
+    ButtonGroup,
 } from "reactstrap";
 
 import { userPermissionSchema } from "helpers/schema";
@@ -67,18 +68,17 @@ const Permissions = ({ user }) => {
 
     const handleSubmit = async (values, form) => {
         // const user = getLoggedInUser();
-       
+
         setIsupdatin(true);
         // const arraysss = await getFormikInitialValues();
         try {
-                
             // const info ={
             //     permissions :
             // }
 
-           
             // for permissions
             // await db.collection("users").doc(user.uid).update(info);
+            console.log(values);
             console.log("updated");
             showSuccessToast({ message: "Permission updated Successfully" });
             setIsupdatin(false);
@@ -88,10 +88,9 @@ const Permissions = ({ user }) => {
         form.resetForm();
     };
 
-    console.log("user",user)
+    console.log("user", user);
 
     const handleChange = (checked, permissionGroup, key) => {
-        
         let updatedPermissions = formik.values[permissionGroup];
 
         if (!checked) updatedPermissions = updatedPermissions.filter((permission) => permission !== key);
@@ -102,8 +101,8 @@ const Permissions = ({ user }) => {
 
     const formik = useFormik({
         initialValues: user.permissions,
-       
-        onSubmit:handleSubmit,
+
+        onSubmit: handleSubmit,
         validateOnChange: false,
     });
 
@@ -111,10 +110,10 @@ const Permissions = ({ user }) => {
         <Card>
             <CardBody>
                 <Form
-                onSubmit={(e) => {
-                    e.preventDefault();
-                    formik.handleSubmit();
-                }}
+                    onSubmit={(e) => {
+                        e.preventDefault();
+                        formik.handleSubmit();
+                    }}
                 >
                     <div className="d-flex flex-wrap mb-4" style={{ gap: "5rem" }}>
                         {Object.keys(permissions).map((permissionGroup, i) => {
@@ -158,13 +157,14 @@ const Permissions = ({ user }) => {
                         <h4>Users</h4>
                     </div>
                     <Label>Set User Permission</Label> */}
-
-                    <Button w="118px" type="submit" color="primary" loading={isUpdating}>
-                        Save Changes
-                    </Button>
-                    <Button w="118px" type="submit">
-                        Back
-                    </Button>
+                    <ButtonGroup>
+                        <Button w="118px" type="submit" color="primary" loading={isUpdating}>
+                            Save Changes
+                        </Button>
+                        <Button w="118px" onClick={}>
+                            Back
+                        </Button>
+                    </ButtonGroup>
                 </Form>
             </CardBody>
         </Card>
