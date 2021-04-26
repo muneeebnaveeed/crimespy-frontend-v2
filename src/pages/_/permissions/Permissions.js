@@ -22,27 +22,42 @@ import { userPermissionSchema } from "helpers/schema";
 import { showSuccessToast } from "helpers/showToast";
 import { db, getLoggedInUser } from "helpers/auth";
 import { useQueryClient } from "react-query";
+import { isCompositeComponentWithType } from "react-dom/test-utils";
 
 const permissions = {
-    map: [{ key: "mapUser", label: "map access" }],
+    map: [],
     users: [
-        { key: "CreateUsers", label: "Create Users" },
-        { key: "givePermissions", label: "Give Permissions" },
-        { key: "DeleteUser", label: "Delete User" },
+        { key: "create", label: "Create Users" },
+        { key: "edit", label: "Give Permissions" },
+        { key: "delete", label: "Delete User" },
     ],
-    Posts: [
-        { key: "VerifyPost", label: "Verify Posts" },
-        { key: "DeleteOthersPost", label: "Delete Others Post" },
+    feed: [
+        { key: "verify", label: "Verify Posts" },
+        { key: "deleteAll", label: "Delete Others Post" },
+        { key: "create", label: "Create Post" },
+        { key: "createComment", label: "Comment on Post" },
+        { key: "createVote", label: "up and down vote" },
     ],
-    Feed: [
-        { key: "CreatePost", label: "Create Post" },
-        { key: "PostComment", label: "Comment on Post" },
-        { key: "confirmPost", label: "up and down vote" },
+    chart: [
+        { key: "create", label: "Create Crime Chart" },
+        { key: "delete", label: "Delete Crime Chart" },
     ],
-    CrimeChart: [
-        { key: "CreateChart", label: "Create Crime Chart" },
-        { key: "DeleteChart", label: "Delete Crime Chart" },
-    ],
+};
+
+const getFormikInitialValues = () => {
+    const permissionGroups = Object.keys(permissions);
+    const perm = permissionGroups.map((permissionGroup) =>
+        permissions[permissionGroup].map((permission) => permission.key)
+    );
+    let computedPermissions = {};
+
+    permissionGroups.forEach((permissionGroup, index) => {
+        computedPermissions[permissionGroup] = perm[index];
+    });
+
+    // console.log(computedPermissions);
+
+    return computedPermissions;
 };
 
 const Permissions = ({ user }) => {
@@ -50,55 +65,35 @@ const Permissions = ({ user }) => {
     const [isUpdating, setIsupdatin] = useState(false);
     const toggle = () => setIsOpen(!isOpen);
 
-    const handleSubmit = async (values, form) => {
-        // const user = getLoggedInUser();
-        setIsupdatin(true);
-        const info = {
-            userPermission: {
-                mapUser: values.mapUser,
-                CreateUsers: values.CreateUsers,
-                DeleteUser: values.DeleteUser,
-                givePermissions: values.givePermissions,
-                VerifyPost: values.VerifyPost,
-                DeleteOthersPost: values.DeleteOthersPost,
-                CreatePost: values.CreatePost,
-                PostComment: values.PostComment,
-                confirmPost: values.confirmPost,
-                CreateChart: values.CreateChart,
-                DeleteChart: values.DeleteChart,
-            },
-        };
+    // const handleSubmit = async (values, form) => {
+    //     // const user = getLoggedInUser();
+    //     setIsupdatin(true);
 
-        try {
-            console.log("values", values);
-            // for permissions
-            await db.collection("users").doc(user.uid).update(info);
-            console.log("updated");
-            showSuccessToast({ message: "Permission updated Successfully" });
-            setIsupdatin(false);
-        } catch (err) {
-            console.error(err.message);
-        }
-        console.log(values);
-        form.resetForm();
+    //     try {
+    //         console.log("values", values);
+    //         // for permissions
+    //         await db.collection("users").doc(user.uid).update(info);
+    //         console.log("updated");
+    //         showSuccessToast({ message: "Permission updated Successfully" });
+    //         setIsupdatin(false);
+    //     } catch (err) {
+    //         console.error(err.message);
+    //     }
+    //     form.resetForm();
+    // };
+
+    const handleChange = (checked, permissionGroup, key) => {
+        let updatedPermissions = formik.values[permissionGroup];
+
+        if (!checked) updatedPermissions = updatedPermissions.filter((permission) => permission !== key);
+        else updatedPermissions.push(key);
+
+        console.log(updatedPermissions);
     };
 
     const formik = useFormik({
-        initialValues: {
-            mapUser: false,
-            CreateUsers: false,
-            DeleteUser: false,
-            givePermissions: false,
-            VerifyPost: false,
-            DeleteOthersPost: false,
-            CreatePost: false,
-            PostComment: false,
-            confirmPost: false,
-            CreateChart: false,
-            DeleteChart: false,
-        },
-
-        onSubmit: handleSubmit,
+        initialValues: getFormikInitialValues(),
+        // onSubmit: handleSubmit,
         validate: (values) => {
             let errors = {};
 
@@ -111,42 +106,48 @@ const Permissions = ({ user }) => {
         validateOnChange: false,
     });
 
-    console.log(formik.errors);
-    console.log(formik.values);
     return (
         <Card>
             <CardBody>
                 <Form
-                    onSubmit={(e) => {
-                        e.preventDefault();
-                        formik.handleSubmit();
-                    }}
+                // onSubmit={(e) => {
+                //     e.preventDefault();
+                //     formik.handleSubmit();
+                // }}
                 >
                     <div className="d-flex flex-wrap mb-4" style={{ gap: "5rem" }}>
-                        {Object.keys(permissions).map((permissionGroup) => (
-                            <div>
-                                <div className="page-title-box pb-0">
-                                    <h4>{permissionGroup}</h4>
-                                </div>
-                                {permissions[permissionGroup].map((permission, index) => (
-                                    <div className="mb-2">
-                                        <FormGroup check>
-                                            <Label check style={{ cursor: "pointer" }}>
-                                                <Input
-                                                    type="checkbox"
-                                                    name={permission.key}
-                                                    id={permission.key}
-                                                    onChange={formik.handleChange}
-                                                    value={formik.value}
-                                                    style={{ cursor: "pointer" }}
-                                                />{" "}
-                                                {permission.label}
-                                            </Label>
-                                        </FormGroup>
+                        {Object.keys(permissions).map((permissionGroup, i) => {
+                            if (permissions[permissionGroup].length)
+                                return (
+                                    <div key={`permission-${i}`}>
+                                        <div className="page-title-box pb-0">
+                                            <h4>{permissionGroup}</h4>
+                                        </div>
+                                        {permissions[permissionGroup].map((permission, j) => (
+                                            <div className="mb-2" key={`permissions-group-${i * j}`}>
+                                                <FormGroup check>
+                                                    <Label check style={{ cursor: "pointer" }}>
+                                                        <Input
+                                                            type="checkbox"
+                                                            name={permission.key}
+                                                            id={permission.key}
+                                                            onChange={(e) =>
+                                                                handleChange(
+                                                                    e.target.checked,
+                                                                    permissionGroup,
+                                                                    permission.key
+                                                                )
+                                                            }
+                                                            style={{ cursor: "pointer" }}
+                                                        />{" "}
+                                                        {permission.label}
+                                                    </Label>
+                                                </FormGroup>
+                                            </div>
+                                        ))}
                                     </div>
-                                ))}
-                            </div>
-                        ))}
+                                );
+                        })}
                     </div>
 
                     {/* <div className="page-title-box pb-0">
