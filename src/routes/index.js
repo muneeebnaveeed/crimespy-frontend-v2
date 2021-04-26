@@ -195,11 +195,17 @@ const authProtectedRoutes = [
     // //calendar
     // { path: "/calendar", component: Calendar },//
 
-    { path: "/dashboard", icon: "fas fa-columns", title: "Feed", component: Feed },
-    { path: "/profile", icon: "fas fa-user", title: "User Profile", component: profile },
-    { path: "/users", icon: "fas fa-users", title: "Users", component: Users, roles: ["admin"] }, // doesn't appear for users
-    { path: "/map", icon: "fas fa-map", title: "Map", component: Mapcrime, layout: MapLayout },
-    { path: "/users/edit", icon: "fas fa-users", title: "User Permissions", component: UserPermissions }, // doesn't appear for users
+    { path: "/dashboard", icon: "fas fa-columns", title: "Feed", key: "feed", component: Feed },
+    { path: "/profile", icon: "fas fa-user", title: "User Profile", key: "profile", component: profile },
+    { path: "/users", icon: "fas fa-users", title: "Users", key: "users", component: Users, roles: ["admin"] }, // doesn't appear for users
+    { path: "/map", icon: "fas fa-map", title: "Map", key: "map", component: Mapcrime, layout: MapLayout },
+    {
+        path: "/users/edit",
+        icon: "fas fa-users",
+        title: "User Permissions",
+        key: "editPermissions",
+        component: UserPermissions,
+    }, // doesn't appear for users
 ];
 
 const publicRoutes = [

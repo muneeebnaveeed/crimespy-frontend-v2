@@ -17,12 +17,11 @@ import {
     Row,
 } from "reactstrap";
 import useDisclosure from "helpers/useDisclosure";
-import RoleModel from "./roleModel";
+import CreatePreset from "./CreatePreset";
 import { userPermissionSchema } from "helpers/schema";
 import { showSuccessToast } from "helpers/showToast";
-import { db, getLoggedInUser } from "helpers/auth";
+import { db, setSession } from "helpers/auth";
 import { useQueryClient } from "react-query";
-import { isCompositeComponentWithType } from "react-dom/test-utils";
 import Button from "components/Common/Button";
 import { useHistory } from "react-router";
 import { ButtonGroup } from "reactstrap/lib";
@@ -47,34 +46,37 @@ const permissions = {
     ],
 };
 
-const getFormikInitialValues = () => {
-    const permissionGroups = Object.keys(permissions);
-    const perm = permissionGroups.map((permissionGroup) =>
-        permissions[permissionGroup].map((permission) => permission.key)
-    );
-    let computedPermissions = {};
+// const getFormikInitialValues = () => {
+//     const permissionGroups = Object.keys(permissions);
+//     const perm = permissionGroups.map((permissionGroup) =>
+//         permissions[permissionGroup].map((permission) => permission.key)
+//     );
+//     let computedPermissions = {};
 
-    permissionGroups.forEach((permissionGroup, index) => {
-        computedPermissions[permissionGroup] = perm[index];
-    });
+//     permissionGroups.forEach((permissionGroup, index) => {
+//         computedPermissions[permissionGroup] = perm[index];
+//     });
 
-    console.log(computedPermissions);
+//     console.log(computedPermissions);
 
-    return computedPermissions;
-};
+//     return computedPermissions;
+// };
 
-const Permissions = ({ user, userId }) => {
+const Permissions = ({ user }) => {
     const [isUpdatingUser, setIsUpdatingUser] = useState(false);
 
     const queryClient = useQueryClient();
     const history = useHistory();
 
-    const handleSubmit = async (values, form) => {
+    const handleSubmit = async (values) => {
         setIsUpdatingUser(true);
 
         try {
-            await db.collection("users").doc(user.uid).update({ permissions: values });
-            await queryClient.invalidateQueries(["user", userId]);
+            const userRef = db.collection("users").doc(user.uid);
+            await userRef.update({ permissions: values });
+            const updatedUser = await (await userRef.get()).data();
+            setSession(updatedUser);
+            await queryClient.invalidateQueries(["user", user.uid]);
             showSuccessToast({ message: "Permission updated Successfully" });
         } catch (err) {
             console.error(err.message);
@@ -149,11 +151,11 @@ const Permissions = ({ user, userId }) => {
                         </div>
 
                         <div className="d-flex justify-content-between">
-                            <Button color="success" type="button" onClick={toggle}>
+                            <Button color="success" type="button" onClick={() => (isUpdatingUser ? toggle : null)}>
                                 <i class="fas fa-save" /> Save Preset
                             </Button>
                             <ButtonGroup>
-                                <Button color="light" onClick={() => history.push("/users")}>
+                                <Button color="light" onClick={() => (!isUpdatingUser ? history.push("/users") : null)}>
                                     Go Back
                                 </Button>
                                 <Button w="118px" loading={isUpdatingUser} type="submit" color="primary">
@@ -164,7 +166,7 @@ const Permissions = ({ user, userId }) => {
                     </Form>
                 </CardBody>
             </Card>
-            <RoleModel isOpen={isOpen} toggle={toggle} permissions={formik.values} />
+            <CreatePreset isOpen={isOpen} toggle={toggle} permissions={formik.values} />
         </>
     );
 };

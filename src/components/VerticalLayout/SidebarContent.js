@@ -97,7 +97,7 @@ class SidebarContent extends Component {
                         </li> */}
 
                         {authProtectedRoutes.map((route, index) => {
-                            if (isUserAuthorized(route.roles, this.state.user))
+                            if (isUserAuthorized(route.key, this.state.user))
                                 return (
                                     <li key={`sidebar-list-item-${index}`}>
                                         <Link to={route.path} className="waves-effect">

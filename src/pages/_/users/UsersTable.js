@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { ButtonGroup, Card, CardBody, Label, Modal, ModalBody, ModalFooter, ModalHeader, Table } from "reactstrap";
 
 // Import Breadcrumb
@@ -12,14 +12,14 @@ import Error from "components/Common/Error";
 import Button from "components/Common/Button";
 import { setDeleteProductId, toggleDeleteProductDisclosure } from "store/routes/products/actions";
 import Th from "components/Common/Th";
-import useProductsQuery from "./useUsersQuery";
+import useUsersQuery from "./useUsersQuery";
 import { db, getLoggedInUser } from "helpers/auth";
 import useDisclosure from "helpers/useDisclosure";
 import { useQueryClient } from "react-query";
 import { showSuccessToast } from "helpers/showToast";
 import { useHistory } from "react-router";
 
-const fetchUser = async () => {
+const fetchUsers = async () => {
     const snapshot = db.collection("users").get();
     const docs = (await snapshot).docs;
 
@@ -31,38 +31,49 @@ const fetchUser = async () => {
         resolve(users);
     });
 };
-//
-const roles = [
-    {
-        value: "admin",
-        label: "admin",
-    },
-    {
-        value: "user",
-        label: "user",
-    },
-];
 
-const handleROLE = async (role, id) => {
+const fetchPresets = async () => {
+    const snapshot = db.collection("presets").get();
+    const docs = (await snapshot).docs;
+
+    return new Promise((resolve, reject) => {
+        const presets = docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+        }));
+        const modifiedPresets = presets.map((preset) => ({
+            value: preset,
+            label: preset.title,
+        }));
+        resolve(modifiedPresets);
+    });
+};
+
+const handleChangeRole = async (role, id) => {
     console.log(role);
 
     try {
-        const newRole = {
-            role: role.value,
-        };
-
-        await db.collection("users").doc(id).update(newRole);
+        await db.collection("users").doc(id).update({
+            role: role.value.title,
+            permissions: role.value.permissions,
+        });
     } catch (err) {
         console.error(err.message);
     }
 };
+
 function UsersTable(props) {
-    const users = useModifiedQuery("users", fetchUser);
+    const users = useModifiedQuery("users", fetchUsers);
+    const presets = useModifiedQuery("presets", fetchPresets);
     const queryClient = useQueryClient();
     const { isOpen, toggle, onOpen } = useDisclosure();
     const [confirmDialog, setConfirmDialog] = useState({ isOpen: isOpen, title: "", subTitle: "" });
     const [isDeletingUser, setIsDeletingUser] = useState(false);
     const history = useHistory();
+
+    const loggedInUser = useMemo(() => getLoggedInUser(), []);
+    // const user = getLoggedInUser();
+
     // const [isopen, setIsopen] = useState(false);
     const dispatch = useDispatch();
 
@@ -70,28 +81,16 @@ function UsersTable(props) {
         if (!isDeletingUser) toggle();
     }, [isDeletingUser, toggle]);
 
-    // console.log(users);
-
-    var res;
-
-    const { data, isLoading, isError, refetch } = useProductsQuery();
-
-    const onDelete = async (user) => {
-        setIsDeletingUser(true);
-        await db.collection("users").doc(user.id).delete();
-        await queryClient.invalidateQueries("users");
-        // setIsopen(!isopen);
-        setIsDeletingUser(false);
-        setConfirmDialog(!confirmDialog);
-        showSuccessToast({ message: "Post has been created" });
-    };
-
     return (
         <>
             <Card>
-                {" "}
-                {isLoading && !isError && <Spinner />}
-                {isError && !isLoading && <Error for="users" onClick={refetch} />}
+                {((users.isLoading && !users.isError) || (presets.isLoading && !presets.isError)) && <Spinner />}
+                {((users.isError && !users.isLoading) || (presets.isError && !presets.isLoading)) && (
+                    <Error
+                        for={users.isError ? "users" : "roles"}
+                        onClick={users.isError ? users.refetch : presets.refetch}
+                    />
+                )}
                 <CardBody className="pt-0" style={users.data?.length ? {} : { minHeight: 350 }}>
                     <Table
                         responsive
@@ -106,7 +105,7 @@ function UsersTable(props) {
                                 <th>#</th>
                                 <th>Username</th>
                                 <th>Email</th>
-                                <th>Role</th>
+                                <th>Role Presets</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -114,43 +113,46 @@ function UsersTable(props) {
                                 <>
                                     <tr key={i}>
                                         <Th scope="row" key={i}>
-                                            {(res = user.uid.substring(user.uid.length - 3, user.uid.length))}
-                                            {}{" "}
+                                            {user.uid.substring(user.uid.length - 3, user.uid.length)}
                                         </Th>
                                         <Th>{user.displayName}</Th>
                                         <Th>{user.email}</Th>
-                                        {/*  */}
                                         <Th>
                                             <Select
-                                                options={roles}
+                                                // as={AsyncSelect}
+                                                options={presets.data}
                                                 defaultValue={{
                                                     value: user.role,
-                                                    label: user.role,
+                                                    label: user.role.title,
                                                 }}
-                                                onChange={(role) => handleROLE(role, user.uid)}
+                                                onChange={(role) => handleChangeRole(role, user.uid)}
                                             />
                                         </Th>
                                         <Th>
                                             <ButtonGroup>
-                                                <Button color="light" size="sm" onClick={onOpen}>
-                                                    <i className="fas fa-trash-alt" />
-                                                </Button>
-                                                <Button
-                                                    color="light"
-                                                    size="sm"
-                                                    onClick={() => history.push(`/users/edit?user=${user.uid}`)}
-                                                >
-                                                    <i class="fas fa-user-edit" />
-                                                </Button>
+                                                {loggedInUser.permissions?.users?.includes?.("delete") && (
+                                                    <Button color="light" size="sm" onClick={onOpen}>
+                                                        <i className="fas fa-trash-alt" />
+                                                    </Button>
+                                                )}
+                                                {loggedInUser.permissions?.users?.includes?.("edit") && (
+                                                    <Button
+                                                        color="light"
+                                                        size="sm"
+                                                        onClick={() => history.push(`/users/edit?user=${user.uid}`)}
+                                                    >
+                                                        <i class="fas fa-user-edit" />
+                                                    </Button>
+                                                )}
                                             </ButtonGroup>
                                         </Th>
                                     </tr>
                                 </>
-                            ))}{" "}
+                            ))}
                         </tbody>
-                        {!data?.length && !isLoading && !isError && (
+                        {!users.data?.length && !users.isLoading && !users.isError && (
                             <caption style={{ textAlign: "center" }}>No products found</caption>
-                        )}{" "}
+                        )}
                     </Table>
                 </CardBody>
             </Card>

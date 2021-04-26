@@ -35,9 +35,9 @@ export const setSession = (user) => {
     else cookies.remove("user", { path: "/" });
 };
 
-export const isUserAuthorized = (roles, user) => {
-    if (!roles) return true;
-    if (roles.includes(user.role)) return true;
+export const isUserAuthorized = (routeKey, user) => {
+    if (!routeKey) return true;
+    if (user.permissions[routeKey]?.length) return true;
     return false;
 };
 
