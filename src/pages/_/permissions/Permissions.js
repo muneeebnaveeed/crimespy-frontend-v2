@@ -15,7 +15,6 @@ import {
     CardBody,
     Label,
     Row,
-    Button,
 } from "reactstrap";
 
 import { userPermissionSchema } from "helpers/schema";
@@ -23,6 +22,9 @@ import { showSuccessToast } from "helpers/showToast";
 import { db, getLoggedInUser } from "helpers/auth";
 import { useQueryClient } from "react-query";
 import { isCompositeComponentWithType } from "react-dom/test-utils";
+import Button from "components/Common/Button";
+import { useHistory } from "react-router";
+import { ButtonGroup } from "reactstrap/lib";
 
 const permissions = {
     map: [],
@@ -60,38 +62,27 @@ const getFormikInitialValues = () => {
     return computedPermissions;
 };
 
-const Permissions = ({ user }) => {
-    const [isOpen, setIsOpen] = useState(false);
-    const [isUpdating, setIsupdatin] = useState(false);
-    const toggle = () => setIsOpen(!isOpen);
+const Permissions = ({ user, userId }) => {
+    const [isUpdatingUser, setIsUpdatingUser] = useState(false);
+
+    const queryClient = useQueryClient();
+    const history = useHistory();
 
     const handleSubmit = async (values, form) => {
-        // const user = getLoggedInUser();
-       
-        setIsupdatin(true);
-        // const arraysss = await getFormikInitialValues();
-        try {
-                
-            // const info ={
-            //     permissions :
-            // }
+        setIsUpdatingUser(true);
 
-           
-            // for permissions
-            // await db.collection("users").doc(user.uid).update(info);
-            console.log("updated");
+        try {
+            await db.collection("users").doc(user.uid).update({ permissions: values });
+            await queryClient.invalidateQueries(["user", userId]);
             showSuccessToast({ message: "Permission updated Successfully" });
-            setIsupdatin(false);
         } catch (err) {
             console.error(err.message);
         }
-        form.resetForm();
+
+        setIsUpdatingUser(false);
     };
 
-    console.log("user",user)
-
     const handleChange = (checked, permissionGroup, key) => {
-        
         let updatedPermissions = formik.values[permissionGroup];
 
         if (!checked) updatedPermissions = updatedPermissions.filter((permission) => permission !== key);
@@ -102,19 +93,20 @@ const Permissions = ({ user }) => {
 
     const formik = useFormik({
         initialValues: user.permissions,
-       
-        onSubmit:handleSubmit,
+        onSubmit: handleSubmit,
         validateOnChange: false,
     });
+
+    useEffect(() => console.log(user.permissions), []);
 
     return (
         <Card>
             <CardBody>
                 <Form
-                onSubmit={(e) => {
-                    e.preventDefault();
-                    formik.handleSubmit();
-                }}
+                    onSubmit={(e) => {
+                        e.preventDefault();
+                        formik.handleSubmit();
+                    }}
                 >
                     <div className="d-flex flex-wrap mb-4" style={{ gap: "5rem" }}>
                         {Object.keys(permissions).map((permissionGroup, i) => {
@@ -154,14 +146,19 @@ const Permissions = ({ user }) => {
                         })}
                     </div>
 
-                    {/* <div className="page-title-box pb-0">
-                        <h4>Users</h4>
+                    <div className="d-flex justify-content-between">
+                        <Button color="success" type="button">
+                            <i class="fas fa-save" /> Save Preset
+                        </Button>
+                        <ButtonGroup>
+                            <Button color="light" onClick={() => history.push("/users")}>
+                                Go Back
+                            </Button>
+                            <Button w="118px" loading={isUpdatingUser} type="submit" color="primary">
+                                Save Changes
+                            </Button>
+                        </ButtonGroup>
                     </div>
-                    <Label>Set User Permission</Label> */}
-
-                    <Button w="118px" type="submit" color="primary" loading={isUpdating}>
-                        Save Changes
-                    </Button>
                 </Form>
             </CardBody>
         </Card>

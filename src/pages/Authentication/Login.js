@@ -44,6 +44,12 @@ function Login(props) {
                 gender: "",
                 bio: "",
                 dob: "",
+                permissions: {
+                    users: ["review"],
+                    feed: [],
+                    map: ["review"],
+                    chart: ["review"],
+                },
                 timestamp: firebase.firestore.FieldValue.serverTimestamp(),
             };
 
