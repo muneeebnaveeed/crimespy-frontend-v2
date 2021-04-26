@@ -55,7 +55,7 @@ const getFormikInitialValues = () => {
         computedPermissions[permissionGroup] = perm[index];
     });
 
-    // console.log(computedPermissions);
+    console.log(computedPermissions);
 
     return computedPermissions;
 };
@@ -86,23 +86,13 @@ const Permissions = ({ user }) => {
         let updatedPermissions = formik.values[permissionGroup];
 
         if (!checked) updatedPermissions = updatedPermissions.filter((permission) => permission !== key);
-        else updatedPermissions.push(key);
+        else if (checked && !updatedPermissions.includes(key)) updatedPermissions.push(key);
 
-        console.log(updatedPermissions);
+        formik.setFieldValue(permissionGroup, updatedPermissions);
     };
 
     const formik = useFormik({
         initialValues: getFormikInitialValues(),
-        // onSubmit: handleSubmit,
-        validate: (values) => {
-            let errors = {};
-
-            // const validationErrors = mapPermissionSchema.validate(values, { abortEarly: false })?.error?.details;
-
-            // if (validationErrors) validationErrors.forEach((err) => (errors[err.context.label] = err.message));
-
-            return errors;
-        },
         validateOnChange: false,
     });
 
@@ -138,6 +128,9 @@ const Permissions = ({ user }) => {
                                                                     permission.key
                                                                 )
                                                             }
+                                                            checked={formik.values[permissionGroup].includes(
+                                                                permission.key
+                                                            )}
                                                             style={{ cursor: "pointer" }}
                                                         />{" "}
                                                         {permission.label}
