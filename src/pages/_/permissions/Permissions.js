@@ -65,24 +65,33 @@ const Permissions = ({ user }) => {
     const [isUpdating, setIsupdatin] = useState(false);
     const toggle = () => setIsOpen(!isOpen);
 
-    // const handleSubmit = async (values, form) => {
-    //     // const user = getLoggedInUser();
-    //     setIsupdatin(true);
+    const handleSubmit = async (values, form) => {
+        // const user = getLoggedInUser();
+       
+        setIsupdatin(true);
+        // const arraysss = await getFormikInitialValues();
+        try {
+                
+            // const info ={
+            //     permissions :
+            // }
 
-    //     try {
-    //         console.log("values", values);
-    //         // for permissions
-    //         await db.collection("users").doc(user.uid).update(info);
-    //         console.log("updated");
-    //         showSuccessToast({ message: "Permission updated Successfully" });
-    //         setIsupdatin(false);
-    //     } catch (err) {
-    //         console.error(err.message);
-    //     }
-    //     form.resetForm();
-    // };
+           
+            // for permissions
+            // await db.collection("users").doc(user.uid).update(info);
+            console.log("updated");
+            showSuccessToast({ message: "Permission updated Successfully" });
+            setIsupdatin(false);
+        } catch (err) {
+            console.error(err.message);
+        }
+        form.resetForm();
+    };
+
+    console.log("user",user)
 
     const handleChange = (checked, permissionGroup, key) => {
+        
         let updatedPermissions = formik.values[permissionGroup];
 
         if (!checked) updatedPermissions = updatedPermissions.filter((permission) => permission !== key);
@@ -92,7 +101,9 @@ const Permissions = ({ user }) => {
     };
 
     const formik = useFormik({
-        initialValues: getFormikInitialValues(),
+        initialValues: user.permissions,
+       
+        onSubmit:handleSubmit,
         validateOnChange: false,
     });
 
@@ -100,10 +111,10 @@ const Permissions = ({ user }) => {
         <Card>
             <CardBody>
                 <Form
-                // onSubmit={(e) => {
-                //     e.preventDefault();
-                //     formik.handleSubmit();
-                // }}
+                onSubmit={(e) => {
+                    e.preventDefault();
+                    formik.handleSubmit();
+                }}
                 >
                     <div className="d-flex flex-wrap mb-4" style={{ gap: "5rem" }}>
                         {Object.keys(permissions).map((permissionGroup, i) => {
