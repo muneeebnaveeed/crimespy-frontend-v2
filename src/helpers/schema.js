@@ -56,7 +56,7 @@ export const userSchema = Joi.object({
         .max(50)
         .required()
         .min(10)
-        .regex(/^[A-Z]+$/i)
+        .regex(/^[a-zA-Z ]+$/)
         .messages({
             "string.empty": `Title is required`,
             "any.required": `Title is required`,

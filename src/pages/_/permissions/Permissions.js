@@ -161,9 +161,7 @@ const Permissions = ({ user }) => {
                         <Button w="118px" type="submit" color="primary" loading={isUpdating}>
                             Save Changes
                         </Button>
-                        <Button w="118px" onClick={}>
-                            Back
-                        </Button>
+                        <Button w="118px">Back</Button>
                     </ButtonGroup>
                 </Form>
             </CardBody>
