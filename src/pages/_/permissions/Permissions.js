@@ -97,7 +97,7 @@ const Permissions = ({ user }) => {
             CreateChart: false,
             DeleteChart: false,
         },
-        // onSubmit: handleSubmit,
+
         onSubmit: handleSubmit,
         validate: (values) => {
             let errors = {};
@@ -156,6 +156,9 @@ const Permissions = ({ user }) => {
 
                     <Button w="118px" type="submit" color="primary" loading={isUpdating}>
                         Save Changes
+                    </Button>
+                    <Button w="118px" type="submit">
+                        Back
                     </Button>
                 </Form>
             </CardBody>
