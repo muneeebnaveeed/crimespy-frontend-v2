@@ -55,7 +55,7 @@ const getFormikInitialValues = () => {
         computedPermissions[permissionGroup] = perm[index];
     });
 
-    // console.log(computedPermissions);
+    console.log("hello",computedPermissions);
 
     return computedPermissions;
 };
@@ -65,22 +65,27 @@ const Permissions = ({ user }) => {
     const [isUpdating, setIsupdatin] = useState(false);
     const toggle = () => setIsOpen(!isOpen);
 
-    // const handleSubmit = async (values, form) => {
-    //     // const user = getLoggedInUser();
-    //     setIsupdatin(true);
+    const handleSubmit = async (values, form) => {
+        // const user = getLoggedInUser();
+        setIsupdatin(true);
+        // const arraysss = await getFormikInitialValues();
+        try {
+                
+            const info ={
+                permissions : await getFormikInitialValues()
+            }
 
-    //     try {
-    //         console.log("values", values);
-    //         // for permissions
-    //         await db.collection("users").doc(user.uid).update(info);
-    //         console.log("updated");
-    //         showSuccessToast({ message: "Permission updated Successfully" });
-    //         setIsupdatin(false);
-    //     } catch (err) {
-    //         console.error(err.message);
-    //     }
-    //     form.resetForm();
-    // };
+           
+            // for permissions
+            await db.collection("users").doc(user.uid).update(info);
+            console.log("updated");
+            showSuccessToast({ message: "Permission updated Successfully" });
+            setIsupdatin(false);
+        } catch (err) {
+            console.error(err.message);
+        }
+        form.resetForm();
+    };
 
     const handleChange = (checked, permissionGroup, key) => {
         let updatedPermissions = formik.values[permissionGroup];
@@ -92,8 +97,8 @@ const Permissions = ({ user }) => {
     };
 
     const formik = useFormik({
-        initialValues: getFormikInitialValues(),
-        // onSubmit: handleSubmit,
+        initialValues: user.permissions,
+        onSubmit: handleSubmit,
         validate: (values) => {
             let errors = {};
 
@@ -110,10 +115,10 @@ const Permissions = ({ user }) => {
         <Card>
             <CardBody>
                 <Form
-                // onSubmit={(e) => {
-                //     e.preventDefault();
-                //     formik.handleSubmit();
-                // }}
+                onSubmit={(e) => {
+                    e.preventDefault();
+                    formik.handleSubmit();
+                }}
                 >
                     <div className="d-flex flex-wrap mb-4" style={{ gap: "5rem" }}>
                         {Object.keys(permissions).map((permissionGroup, i) => {
