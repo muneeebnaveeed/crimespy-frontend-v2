@@ -16,7 +16,8 @@ import {
     Label,
     Row,
 } from "reactstrap";
-
+import useDisclosure from "helpers/useDisclosure";
+import RoleModel from "./roleModel";
 import { userPermissionSchema } from "helpers/schema";
 import { showSuccessToast } from "helpers/showToast";
 import { db, getLoggedInUser } from "helpers/auth";
@@ -98,70 +99,73 @@ const Permissions = ({ user, userId }) => {
     });
 
     useEffect(() => console.log(user.permissions), []);
-
+    const { isOpen, toggle } = useDisclosure();
     return (
-        <Card>
-            <CardBody>
-                <Form
-                    onSubmit={(e) => {
-                        e.preventDefault();
-                        formik.handleSubmit();
-                    }}
-                >
-                    <div className="d-flex flex-wrap mb-4" style={{ gap: "5rem" }}>
-                        {Object.keys(permissions).map((permissionGroup, i) => {
-                            if (permissions[permissionGroup].length)
-                                return (
-                                    <div key={`permission-${i}`}>
-                                        <div className="page-title-box pb-0">
-                                            <h4>{permissionGroup}</h4>
-                                        </div>
-                                        {permissions[permissionGroup].map((permission, j) => (
-                                            <div className="mb-2" key={`permissions-group-${i * j}`}>
-                                                <FormGroup check>
-                                                    <Label check style={{ cursor: "pointer" }}>
-                                                        <Input
-                                                            type="checkbox"
-                                                            name={permission.key}
-                                                            id={permission.key}
-                                                            onChange={(e) =>
-                                                                handleChange(
-                                                                    e.target.checked,
-                                                                    permissionGroup,
-                                                                    permission.key
-                                                                )
-                                                            }
-                                                            checked={formik.values[permissionGroup].includes(
-                                                                permission.key
-                                                            )}
-                                                            style={{ cursor: "pointer" }}
-                                                        />{" "}
-                                                        {permission.label}
-                                                    </Label>
-                                                </FormGroup>
+        <>
+            <Card>
+                <CardBody>
+                    <Form
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            formik.handleSubmit();
+                        }}
+                    >
+                        <div className="d-flex flex-wrap mb-4" style={{ gap: "5rem" }}>
+                            {Object.keys(permissions).map((permissionGroup, i) => {
+                                if (permissions[permissionGroup].length)
+                                    return (
+                                        <div key={`permission-${i}`}>
+                                            <div className="page-title-box pb-0">
+                                                <h4>{permissionGroup}</h4>
                                             </div>
-                                        ))}
-                                    </div>
-                                );
-                        })}
-                    </div>
+                                            {permissions[permissionGroup].map((permission, j) => (
+                                                <div className="mb-2" key={`permissions-group-${i * j}`}>
+                                                    <FormGroup check>
+                                                        <Label check style={{ cursor: "pointer" }}>
+                                                            <Input
+                                                                type="checkbox"
+                                                                name={permission.key}
+                                                                id={permission.key}
+                                                                onChange={(e) =>
+                                                                    handleChange(
+                                                                        e.target.checked,
+                                                                        permissionGroup,
+                                                                        permission.key
+                                                                    )
+                                                                }
+                                                                checked={formik.values[permissionGroup].includes(
+                                                                    permission.key
+                                                                )}
+                                                                style={{ cursor: "pointer" }}
+                                                            />{" "}
+                                                            {permission.label}
+                                                        </Label>
+                                                    </FormGroup>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    );
+                            })}
+                        </div>
 
-                    <div className="d-flex justify-content-between">
-                        <Button color="success" type="button">
-                            <i class="fas fa-save" /> Save Preset
-                        </Button>
-                        <ButtonGroup>
-                            <Button color="light" onClick={() => history.push("/users")}>
-                                Go Back
+                        <div className="d-flex justify-content-between">
+                            <Button color="success" type="button" onClick={toggle}>
+                                <i class="fas fa-save" /> Save Preset
                             </Button>
-                            <Button w="118px" loading={isUpdatingUser} type="submit" color="primary">
-                                Save Changes
-                            </Button>
-                        </ButtonGroup>
-                    </div>
-                </Form>
-            </CardBody>
-        </Card>
+                            <ButtonGroup>
+                                <Button color="light" onClick={() => history.push("/users")}>
+                                    Go Back
+                                </Button>
+                                <Button w="118px" loading={isUpdatingUser} type="submit" color="primary">
+                                    Save Changes
+                                </Button>
+                            </ButtonGroup>
+                        </div>
+                    </Form>
+                </CardBody>
+            </Card>
+            <RoleModel isOpen={isOpen} toggle={toggle} permissions={formik.values} />
+        </>
     );
 };
 export default Permissions;
