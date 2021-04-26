@@ -67,17 +67,18 @@ const Permissions = ({ user }) => {
 
     const handleSubmit = async (values, form) => {
         // const user = getLoggedInUser();
+       
         setIsupdatin(true);
         // const arraysss = await getFormikInitialValues();
         try {
                 
-            const info ={
-                permissions : await getFormikInitialValues()
-            }
+            // const info ={
+            //     permissions :
+            // }
 
            
             // for permissions
-            await db.collection("users").doc(user.uid).update(info);
+            // await db.collection("users").doc(user.uid).update(info);
             console.log("updated");
             showSuccessToast({ message: "Permission updated Successfully" });
             setIsupdatin(false);
@@ -87,7 +88,10 @@ const Permissions = ({ user }) => {
         form.resetForm();
     };
 
+    console.log("user",user)
+
     const handleChange = (checked, permissionGroup, key) => {
+        
         let updatedPermissions = formik.values[permissionGroup];
 
         if (!checked) updatedPermissions = updatedPermissions.filter((permission) => permission !== key);
@@ -97,7 +101,9 @@ const Permissions = ({ user }) => {
     };
 
     const formik = useFormik({
-        initialValues: getFormikInitialValues(),
+        initialValues: user.permissions,
+       
+        onSubmit:handleSubmit,
         validateOnChange: false,
     });
 
