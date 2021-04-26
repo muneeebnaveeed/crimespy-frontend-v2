@@ -24,19 +24,14 @@ const removeFirstLetter = (str) => {
 const Permission = () => {
     const params = useLocation();
     const [userId, setUserId] = useState(qs.parse(removeFirstLetter(params.search)).user);
-   
-
-  
-  
 
     const fetchUserById = useCallback(async () => {
-        const userdata = await (await db.collection('users').doc(userId).get()).data();
-        
+        const userdata = await (await db.collection("users").doc(userId).get()).data();
         return userdata;
-        
     }, [userId]);
+
     const user = useModifiedQuery(["user", userId], fetchUserById);
-    console.log(user.data)
+
     // setDisplayName(user.data?.displayName);
 
     // useEffect(() => {
@@ -44,7 +39,7 @@ const Permission = () => {
     //       const user =  await fetchUserById();
     //       console.log(user.displayName);
     //     }
-     
+
     //     UserData();
     // }, [])
     // console.log(userId)
@@ -67,7 +62,7 @@ const Permission = () => {
                         {!user.isLoading && !user.isError && (
                             <>
                                 <UserDisplay user={user.data} />
-                                <Permissions user={user.data}/>
+                                <Permissions user={user.data} />
                             </>
                         )}
                     </Col>
