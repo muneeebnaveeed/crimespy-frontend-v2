@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Card, CardBody, Table } from "reactstrap";
+import { ButtonGroup, Card, CardBody, Label, Modal, ModalBody, ModalFooter, ModalHeader, Table } from "reactstrap";
 
 // Import Breadcrumb
 import { batch, useDispatch, useSelector } from "react-redux";
@@ -15,7 +15,6 @@ import Th from "components/Common/Th";
 import useProductsQuery from "./useUsersQuery";
 import { db, getLoggedInUser } from "helpers/auth";
 import useDisclosure from "helpers/useDisclosure";
-import Confirmation from "./Confirmation";
 import { useQueryClient } from "react-query";
 import { showSuccessToast } from "helpers/showToast";
 import { useHistory } from "react-router";
@@ -60,12 +59,16 @@ const handleROLE = async (role, id) => {
 function UsersTable(props) {
     const users = useModifiedQuery("users", fetchUser);
     const queryClient = useQueryClient();
-    const { isOpen, toggle } = useDisclosure();
+    const { isOpen, toggle, onOpen } = useDisclosure();
     const [confirmDialog, setConfirmDialog] = useState({ isOpen: isOpen, title: "", subTitle: "" });
-    const [isDeleting, setIsdeleting] = useState(false);
+    const [isDeletingUser, setIsDeletingUser] = useState(false);
     const history = useHistory();
     // const [isopen, setIsopen] = useState(false);
     const dispatch = useDispatch();
+
+    const toggleModal = useCallback(() => {
+        if (!isDeletingUser) toggle();
+    }, [isDeletingUser, toggle]);
 
     // console.log(users);
 
@@ -74,11 +77,11 @@ function UsersTable(props) {
     const { data, isLoading, isError, refetch } = useProductsQuery();
 
     const onDelete = async (user) => {
-        setIsdeleting(true);
+        setIsDeletingUser(true);
         await db.collection("users").doc(user.id).delete();
         await queryClient.invalidateQueries("users");
         // setIsopen(!isopen);
-        setIsdeleting(false);
+        setIsDeletingUser(false);
         setConfirmDialog(!confirmDialog);
         showSuccessToast({ message: "Post has been created" });
     };
@@ -128,27 +131,18 @@ function UsersTable(props) {
                                             />
                                         </Th>
                                         <Th>
-                                            <Button
-                                                color="light"
-                                                size="sm"
-                                                onClick={() =>
-                                                    setConfirmDialog({
-                                                        isOpen: toggle,
-                                                        onConfirm: () => {
-                                                            onDelete(user);
-                                                        },
-                                                    })
-                                                }
-                                            >
-                                                <i className="fas fa-trash-alt" />
-                                            </Button>
-                                            <Button
-                                                color="light"
-                                                size="sm"
-                                                onClick={() => history.push(`/users/edit?user=${user.uid}`)}
-                                            >
-                                                <i className="fas fa-trash-alt" />
-                                            </Button>
+                                            <ButtonGroup>
+                                                <Button color="light" size="sm" onClick={onOpen}>
+                                                    <i className="fas fa-trash-alt" />
+                                                </Button>
+                                                <Button
+                                                    color="light"
+                                                    size="sm"
+                                                    onClick={() => history.push(`/users/edit?user=${user.uid}`)}
+                                                >
+                                                    <i class="fas fa-user-edit" />
+                                                </Button>
+                                            </ButtonGroup>
                                         </Th>
                                     </tr>
                                 </>
@@ -160,15 +154,20 @@ function UsersTable(props) {
                     </Table>
                 </CardBody>
             </Card>
-            <Confirmation
-                isOpen={isOpen}
-                toggle={toggle}
-                onDelete={onDelete}
-                confirmDialog={confirmDialog}
-                setConfirmDialog={setConfirmDialog}
-                isDeleting={isDeleting}
-                setIsdeleting={setIsdeleting}
-            />
+            <Modal isOpen={isOpen} toggle={toggleModal} centered>
+                <ModalHeader>Delete User</ModalHeader>
+                <ModalBody>
+                    <Label>Are you sure you want to delete this user?</Label>
+                </ModalBody>
+                <ModalFooter>
+                    <Button color="light" w="55.5px" size="sm" onClick={toggle}>
+                        No
+                    </Button>
+                    <Button w="55.5px" color="primary" size="sm" onClick={toggle} loading={isDeletingUser}>
+                        Yes
+                    </Button>
+                </ModalFooter>
+            </Modal>
         </>
     );
 }

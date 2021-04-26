@@ -15,8 +15,6 @@ import {
     CardBody,
     Label,
     Row,
-    Button,
-    ButtonGroup,
 } from "reactstrap";
 
 import { userPermissionSchema } from "helpers/schema";
@@ -24,6 +22,9 @@ import { showSuccessToast } from "helpers/showToast";
 import { db, getLoggedInUser } from "helpers/auth";
 import { useQueryClient } from "react-query";
 import { isCompositeComponentWithType } from "react-dom/test-utils";
+import Button from "components/Common/Button";
+import { useHistory } from "react-router";
+import { ButtonGroup } from "reactstrap/lib";
 
 const permissions = {
     map: [],
@@ -61,34 +62,25 @@ const getFormikInitialValues = () => {
     return computedPermissions;
 };
 
-const Permissions = ({ user }) => {
-    const [isOpen, setIsOpen] = useState(false);
-    const [isUpdating, setIsupdatin] = useState(false);
-    const toggle = () => setIsOpen(!isOpen);
+const Permissions = ({ user, userId }) => {
+    const [isUpdatingUser, setIsUpdatingUser] = useState(false);
+
+    const queryClient = useQueryClient();
+    const history = useHistory();
 
     const handleSubmit = async (values, form) => {
-        // const user = getLoggedInUser();
+        setIsUpdatingUser(true);
 
-        setIsupdatin(true);
-        // const arraysss = await getFormikInitialValues();
         try {
-            // const info ={
-            //     permissions :
-            // }
-
-            // for permissions
-            // await db.collection("users").doc(user.uid).update(info);
-            console.log(values);
-            console.log("updated");
+            await db.collection("users").doc(user.uid).update({ permissions: values });
+            await queryClient.invalidateQueries(["user", userId]);
             showSuccessToast({ message: "Permission updated Successfully" });
-            setIsupdatin(false);
         } catch (err) {
             console.error(err.message);
         }
-        form.resetForm();
-    };
 
-    console.log("user", user);
+        setIsUpdatingUser(false);
+    };
 
     const handleChange = (checked, permissionGroup, key) => {
         let updatedPermissions = formik.values[permissionGroup];
@@ -101,10 +93,11 @@ const Permissions = ({ user }) => {
 
     const formik = useFormik({
         initialValues: user.permissions,
-
         onSubmit: handleSubmit,
         validateOnChange: false,
     });
+
+    useEffect(() => console.log(user.permissions), []);
 
     return (
         <Card>
@@ -153,16 +146,19 @@ const Permissions = ({ user }) => {
                         })}
                     </div>
 
-                    {/* <div className="page-title-box pb-0">
-                        <h4>Users</h4>
-                    </div>
-                    <Label>Set User Permission</Label> */}
-                    <ButtonGroup>
-                        <Button w="118px" type="submit" color="primary" loading={isUpdating}>
-                            Save Changes
+                    <div className="d-flex justify-content-between">
+                        <Button color="success" type="button">
+                            <i class="fas fa-save" /> Save Preset
                         </Button>
-                        <Button w="118px">Back</Button>
-                    </ButtonGroup>
+                        <ButtonGroup>
+                            <Button color="light" onClick={() => history.push("/users")}>
+                                Go Back
+                            </Button>
+                            <Button w="118px" loading={isUpdatingUser} type="submit" color="primary">
+                                Save Changes
+                            </Button>
+                        </ButtonGroup>
+                    </div>
                 </Form>
             </CardBody>
         </Card>
