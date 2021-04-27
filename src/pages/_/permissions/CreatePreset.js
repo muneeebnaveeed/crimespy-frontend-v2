@@ -54,10 +54,10 @@ const CreatePreset = ({ permissions, toggle, isOpen }) => {
             title: "",
         },
         onSubmit: handleSubmit,
-        validate: ({ title }) => {
+        validate: (values) => {
             let errors = {};
 
-            const validationErrors = preSetSchema.validate(title, { abortEarly: false })?.error?.details;
+            const validationErrors = preSetSchema.validate(values, { abortEarly: false })?.error?.details;
 
             if (validationErrors) validationErrors.forEach((err) => (errors[err.context.label] = err.message));
 
