@@ -20,7 +20,7 @@ import useDisclosure from "helpers/useDisclosure";
 import CreatePreset from "./CreatePreset";
 import { userPermissionSchema } from "helpers/schema";
 import { showSuccessToast } from "helpers/showToast";
-import { db, setSession } from "helpers/auth";
+import { db, setSession, getLoggedInUser } from "helpers/auth";
 import { useQueryClient } from "react-query";
 import Button from "components/Common/Button";
 import { useHistory } from "react-router";
@@ -155,7 +155,7 @@ const Permissions = ({ user }) => {
                         </div>
 
                         <div className="d-flex justify-content-between">
-                            <Button color="success" type="button" onClick={() => (isUpdatingUser ? toggle : null)}>
+                            <Button color="success" type="button" onClick={!isUpdatingUser ? toggle : null}>
                                 <i class="fas fa-save" /> Save Preset
                             </Button>
                             <ButtonGroup>
