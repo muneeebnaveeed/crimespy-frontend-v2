@@ -151,7 +151,7 @@ const Permissions = ({ user }) => {
                         </div>
 
                         <div className="d-flex justify-content-between">
-                            <Button color="success" type="button" onClick={() => (isUpdatingUser ? toggle : null)}>
+                            <Button color="success" type="button" onClick={() => (!isUpdatingUser ? toggle : null)}>
                                 <i class="fas fa-save" /> Save Preset
                             </Button>
                             <ButtonGroup>

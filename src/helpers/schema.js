@@ -50,6 +50,14 @@ export const postSchema = Joi.object({
         "any.required": `Please attach an image`,
     }),
 });
+export const preSetSchema = Joi.object({
+    title: Joi.string().min(3).max(255).required().alphanum().message({
+        "any.required": "Please Enter Title",
+        "string.min": "Characters below {#limit} limit",
+        "string.max": "Characters above {#limit} limit",
+        "string.alphanum": "Special Characters not allowed",
+    }),
+});
 
 export const userSchema = Joi.object({
     fullname: Joi.string()

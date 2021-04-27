@@ -20,6 +20,7 @@ import { showSuccessToast } from "helpers/showToast";
 import { useControllableProp } from "@chakra-ui/hooks";
 import { db } from "helpers/auth";
 import Button from "components/Common/Button";
+import { preSetSchema } from "helpers/schema";
 
 const CreatePreset = ({ permissions, toggle, isOpen }) => {
     const [isCreatingPreset, setIsCreatingPreset] = useState(false);
@@ -56,9 +57,9 @@ const CreatePreset = ({ permissions, toggle, isOpen }) => {
         validate: ({ title }) => {
             let errors = {};
 
-            // const validationErrors = commentSchema.validate(values, { abortEarly: false })?.error?.details;
+            const validationErrors = preSetSchema.validate(title, { abortEarly: false })?.error?.details;
 
-            // if (validationErrors) validationErrors.forEach((err) => (errors[err.context.label] = err.message));
+            if (validationErrors) validationErrors.forEach((err) => (errors[err.context.label] = err.message));
 
             return errors;
         },
