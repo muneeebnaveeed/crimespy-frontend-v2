@@ -1,4 +1,4 @@
-import React, {useCallback, useRef, useState} from "react";
+import React, {useCallback, useRef, useState, useMemo} from "react";
 import {
     Card,
     CardBody,
@@ -33,6 +33,7 @@ function Post({
     const user = getLoggedInUser();
     const queryClient = useQueryClient();
     const postRef = db.collection("posts").doc(user.uid).collection("userPosts");
+    const loggedInUser = useMemo(() => getLoggedInUser(), []);
     const deletePost = async () => {
         var imageRef = storage.refFromURL(photoURL);
 
@@ -121,9 +122,14 @@ function Post({
                 <Actions username={username} verifiedpost={verifiedpost} notverified={notverified} id={id}/>
                 <Comments username={username}
                     comments={comments}/>
-                <CreateComment comments={comments}
+                    {
+                        loggedInUser.permissions?.feed?.includes?.("createComment") && (
+                            <CreateComment comments={comments}
                     id={id}
                     user="Wasef"/>
+                        )
+                    }
+                
             </CardBody>
         </Card>
     );
