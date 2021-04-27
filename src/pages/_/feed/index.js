@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import Post from "./Post";
 import Breadcrumbs from "components/Common/Breadcrumb";
 import { Col, Container, Row } from "reactstrap";
@@ -6,6 +6,7 @@ import { Col, Container, Row } from "reactstrap";
 import CreatePost from "./CreatePost";
 import useDisclosure from "helpers/useDisclosure";
 import Posts from "./Posts";
+import { getLoggedInUser } from "helpers/auth";
 
 const breadcrumbItems = [
     {
@@ -20,6 +21,7 @@ const breadcrumbItems = [
 
 function Feed() {
     const { isOpen, toggle } = useDisclosure();
+    const loggedInUser = useMemo(() => getLoggedInUser(), []);
     const whatsOnYourMindRef = useRef();
 
     return (
@@ -53,7 +55,12 @@ function Feed() {
                     <Posts />
                 </Container>
             </div>
-            <CreatePost isOpen={isOpen} toggle={toggle} />
+            {
+                loggedInUser.permissions?.feed?.includes?.("create") && (
+                    <CreatePost isOpen={isOpen} toggle={toggle} />
+                )
+            }
+            
         </>
     );
 }
