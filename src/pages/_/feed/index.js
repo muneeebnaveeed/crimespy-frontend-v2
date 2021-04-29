@@ -24,6 +24,8 @@ function Feed() {
     const loggedInUser = useMemo(() => getLoggedInUser(), []);
     const whatsOnYourMindRef = useRef();
 
+    
+
     return (
         <>
             <div className="page-content">

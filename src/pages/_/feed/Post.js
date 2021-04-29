@@ -50,7 +50,7 @@ function Post({
         });
         await queryClient.invalidateQueries("posts");
     }
-   
+
 
 
     const toggle = () => {
@@ -85,8 +85,9 @@ function Post({
                             {Title}
                         </p>
                     </div>
-
-                    <Dropdown className="d-inline-block user-dropdown"
+                        {
+                            loggedInUser.permissions?.feed?.includes?.("deleteAll") && (
+                                <Dropdown className="d-inline-block user-dropdown"
                         isOpen={menu}
                         toggle={toggle}>
                         <DropdownToggle tag="button" className="btn header-item waves-effect" id="page-header-user-dropdown">
@@ -114,6 +115,10 @@ function Post({
                             <i className="ri-lock-unlock-line align-middle mr-1"></i> Lock screen
                         </DropdownItem> */} </DropdownMenu>
                     </Dropdown>
+
+                            )
+                        }
+                   
                 </div>
                 <img className="post__image d-block mx-auto" width="500px" height="400px"
                     src={photoURL}/>
