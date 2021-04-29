@@ -20,7 +20,7 @@ import useDisclosure from "helpers/useDisclosure";
 import CreatePreset from "./CreatePreset";
 import { userPermissionSchema } from "helpers/schema";
 import { showSuccessToast } from "helpers/showToast";
-import { db, setSession, getLoggedInUser } from "helpers/auth";
+import { db, getLoggedInUser, setSession } from "helpers/auth";
 import { useQueryClient } from "react-query";
 import Button from "components/Common/Button";
 import { useHistory } from "react-router";
