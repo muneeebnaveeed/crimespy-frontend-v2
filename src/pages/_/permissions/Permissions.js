@@ -17,6 +17,7 @@ import {
     Row,
 } from "reactstrap";
 import useDisclosure from "helpers/useDisclosure";
+import PreSetManagement from "./PreSetManage";
 import CreatePreset from "./CreatePreset";
 import { userPermissionSchema } from "helpers/schema";
 import { showSuccessToast } from "helpers/showToast";
@@ -170,6 +171,7 @@ const Permissions = ({ user }) => {
                     </Form>
                 </CardBody>
             </Card>
+            <PreSetManagement></PreSetManagement>
             <CreatePreset isOpen={isOpen} toggle={toggle} permissions={formik.values} />
         </>
     );
