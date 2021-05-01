@@ -17,7 +17,6 @@ import {
     Row,
 } from "reactstrap";
 import useDisclosure from "helpers/useDisclosure";
-import PreSetManagement from "./PreSetManage";
 import CreatePreset from "./CreatePreset";
 import { userPermissionSchema } from "helpers/schema";
 import { showSuccessToast } from "helpers/showToast";
@@ -27,22 +26,6 @@ import Button from "components/Common/Button";
 import { useHistory } from "react-router";
 import { ButtonGroup } from "reactstrap/lib";
 import { permissions } from "config";
-
-// const getFormikInitialValues = () => {
-//     const permissionGroups = Object.keys(permissions);
-//     const perm = permissionGroups.map((permissionGroup) =>
-//         permissions[permissionGroup].map((permission) => permission.key)
-//     );
-//     let computedPermissions = {};
-
-//     permissionGroups.forEach((permissionGroup, index) => {
-//         computedPermissions[permissionGroup] = perm[index];
-//     });
-
-//     console.log(computedPermissions);
-
-//     return computedPermissions;
-// };
 
 const Permissions = ({ user }) => {
     const [isUpdatingUser, setIsUpdatingUser] = useState(false);
@@ -88,7 +71,6 @@ const Permissions = ({ user }) => {
 
     useEffect(() => console.log(user.permissions), []);
     const { isOpen, toggle } = useDisclosure();
-    console.log(permissions);
     return (
         <>
             <Card>
@@ -153,8 +135,7 @@ const Permissions = ({ user }) => {
                     </Form>
                 </CardBody>
             </Card>
-            <PreSetManagement></PreSetManagement>
-            <CreatePreset isOpen={isOpen} toggle={toggle} permissions={formik.values} />
+            <CreatePreset user={user} isOpen={isOpen} toggle={toggle} permissions={formik.values} />
         </>
     );
 };

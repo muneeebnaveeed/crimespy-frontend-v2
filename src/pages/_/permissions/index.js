@@ -10,6 +10,7 @@ import qs from "querystring";
 import { useModifiedQuery } from "helpers/query";
 import userEvent from "@testing-library/user-event";
 import { db } from "helpers/auth";
+import Presets from "./Presets";
 
 const breadcrumbItems = [
     { title: "Crimespy", link: "/" },
@@ -32,20 +33,6 @@ const Permission = () => {
 
     const user = useModifiedQuery(["user", userId], fetchUserById);
 
-    // setDisplayName(user.data?.displayName);
-
-    // useEffect(() => {
-    //     const UserData = async () =>{
-    //       const user =  await fetchUserById();
-    //       console.log(user.displayName);
-    //     }
-
-    //     UserData();
-    // }, [])
-    // console.log(userId)
-    // const userData = fetchUserById();
-    // console.log(userData)
-
     return (
         <div className="page-content">
             <Container fluid>
@@ -63,6 +50,7 @@ const Permission = () => {
                             <>
                                 <UserDisplay user={user.data} />
                                 <Permissions userId={userId} user={user.data} />
+                                <Presets />
                             </>
                         )}
                     </Col>

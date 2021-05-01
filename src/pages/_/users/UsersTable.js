@@ -18,6 +18,7 @@ import useDisclosure from "helpers/useDisclosure";
 import { useQueryClient } from "react-query";
 import { showSuccessToast } from "helpers/showToast";
 import { useHistory } from "react-router";
+import usePermissions from "helpers/usePermissions";
 
 const fetchUsers = async () => {
     const snapshot = db.collection("users").get();
@@ -49,33 +50,33 @@ const fetchPresets = async () => {
     });
 };
 
-const handleChangeRole = async (role, id) => {
-    console.log(role);
-
-    try {
-        await db.collection("users").doc(id).update({
-            role: role.value.title,
-            permissions: role.value.permissions,
-        });
-    } catch (err) {
-        console.error(err.message);
-    }
-};
-
 function UsersTable(props) {
     const users = useModifiedQuery("users", fetchUsers);
     const presets = useModifiedQuery("presets", fetchPresets);
     const queryClient = useQueryClient();
     const { isOpen, toggle, onOpen } = useDisclosure();
-    const [confirmDialog, setConfirmDialog] = useState({ isOpen: isOpen, title: "", subTitle: "" });
     const [isDeletingUser, setIsDeletingUser] = useState(false);
+    const [changingRole, setChangingRole] = useState(null);
     const history = useHistory();
 
     const loggedInUser = useMemo(() => getLoggedInUser(), []);
-    // const user = getLoggedInUser();
-
-    // const [isopen, setIsopen] = useState(false);
     const dispatch = useDispatch();
+
+    const isAuthorized = usePermissions("users");
+
+    const handleChangeRole = useCallback(async (role, id) => {
+        setChangingRole(id);
+        try {
+            await db.collection("users").doc(id).update({
+                role: role.value.title,
+                permissions: role.value.permissions,
+            });
+            await queryClient.invalidateQueries("users");
+        } catch (err) {
+            console.error(err.message);
+        }
+        setChangingRole(null);
+    }, []);
 
     const toggleModal = useCallback(() => {
         if (!isDeletingUser) toggle();
@@ -109,49 +110,58 @@ function UsersTable(props) {
                             </tr>
                         </thead>
                         <tbody>
-                            {users.data?.map((user, i) => (
-                                <>
-                                    <tr key={i}>
-                                        <Th scope="row" key={i}>
-                                            {user.uid.substring(user.uid.length - 3, user.uid.length)}
-                                        </Th>
-                                        <Th>{user.displayName}</Th>
-                                        <Th>{user.email}</Th>
-                                        <Th>
-                                            <Select
-                                                // as={AsyncSelect}
-                                                options={presets.data}
-                                                defaultValue={{
-                                                    value: user.role,
-                                                    label: user.role.title,
-                                                }}
-                                                onChange={(role) => handleChangeRole(role, user.uid)}
-                                            />
-                                        </Th>
-                                        <Th>
-                                            <ButtonGroup>
-                                                {loggedInUser.permissions?.users?.includes?.("delete") && (
-                                                    <Button color="light" size="sm" onClick={onOpen}>
-                                                        <i className="fas fa-trash-alt" />
-                                                    </Button>
-                                                )}
-                                                {loggedInUser.permissions?.users?.includes?.("edit") && (
-                                                    <Button
-                                                        color="light"
-                                                        size="sm"
-                                                        onClick={() => history.push(`/users/edit?user=${user.uid}`)}
-                                                    >
-                                                        <i class="fas fa-user-edit" />
-                                                    </Button>
-                                                )}
-                                            </ButtonGroup>
-                                        </Th>
-                                    </tr>
-                                </>
-                            ))}
+                            {users.data?.map((user, i) => {
+                                const isSelectBusy = changingRole === user.uid;
+                                return (
+                                    <>
+                                        <tr key={i}>
+                                            <Th scope="row" key={i}>
+                                                {user.uid.substring(user.uid.length - 3, user.uid.length)}
+                                            </Th>
+                                            <Th>{user.displayName}</Th>
+                                            <Th>{user.email}</Th>
+                                            <Th>
+                                                <Select
+                                                    // as={AsyncSelect}
+                                                    options={presets.data}
+                                                    defaultValue={{
+                                                        value: user.permissions,
+                                                        label: user.role,
+                                                    }}
+                                                    onChange={(role) =>
+                                                        role.label !== user.role
+                                                            ? handleChangeRole(role, user.uid)
+                                                            : null
+                                                    }
+                                                    isLoading={isSelectBusy}
+                                                    isDisabled={isSelectBusy}
+                                                />
+                                            </Th>
+                                            <Th>
+                                                <ButtonGroup>
+                                                    {isAuthorized("edit") && (
+                                                        <Button
+                                                            color="light"
+                                                            size="sm"
+                                                            onClick={() => history.push(`/users/edit?user=${user.uid}`)}
+                                                        >
+                                                            <i class="fas fa-user-edit" />
+                                                        </Button>
+                                                    )}
+                                                    {isAuthorized("delete") && (
+                                                        <Button color="light" size="sm" onClick={onOpen}>
+                                                            <i className="fas fa-trash-alt" />
+                                                        </Button>
+                                                    )}
+                                                </ButtonGroup>
+                                            </Th>
+                                        </tr>
+                                    </>
+                                );
+                            })}
                         </tbody>
                         {!users.data?.length && !users.isLoading && !users.isError && (
-                            <caption style={{ textAlign: "center" }}>No products found</caption>
+                            <caption style={{ textAlign: "center" }}>No users found</caption>
                         )}
                     </Table>
                 </CardBody>

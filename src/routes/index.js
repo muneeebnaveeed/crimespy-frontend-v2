@@ -111,102 +111,24 @@ import Mapcrime from "pages/_/MapCrime/MapCrime";
 import MapLayout from "components/VerticalLayout/MapLayout";
 import UserPermissions from "pages/_/permissions";
 
-const authProtectedRoutes = [
-    //Kanban Board
-    // { path: "/apps-kanban-board", component: KanbanBoard },
-
-    // Tables
-    // { path: "/tables-basic", component: BasicTables },
-    // { path: "/tables-datatable", component: DatatableTables },
-    // { path: "/tables-responsive", component: ResponsiveTables },
-    // { path: "/tables-editable", component: EditableTables },
-
-    // // Ui
-    // { path: "/ui-alerts", component: UiAlert },
-    // { path: "/ui-buttons", component: UiButtons },
-    // { path: "/ui-cards", component: UiCards },
-    // { path: "/ui-carousel", component: UiCarousel },
-    // { path: "/ui-dropdowns", component: UiDropdown },
-    // { path: "/ui-general", component: UiGeneral },
-    // { path: "/ui-grid", component: UiGrid },
-    // { path: "/ui-images", component: UiImages },
-    // { path: "/ui-lightbox", component: UiLightbox },
-    // { path: "/ui-modals", component: UiModal },
-    // { path: "/ui-progressbars", component: UiProgressbar },
-    // { path: "/ui-sweet-alert", component: UiSweetAlert },
-    // { path: "/ui-tabs-accordions", component: UiTabsAccordions },
-    // { path: "/ui-typography", component: UiTypography },
-    // { path: "/ui-video", component: UiVideo },
-    // { path: "/ui-session-timeout", component: UiSessionTimeout },
-    // { path: "/ui-rating", component: UiRating },
-    // { path: "/ui-rangeslider", component: UiRangeSlider },
-    // { path: "/ui-notifications", component: UiNotifications },
-    // { path: "/ui-roundslider", component: UIRoundSlider },
-
-    // // Forms
-    // { path: "/form-elements", component: FormElements },
-    // { path: "/form-advanced", component: FormAdvanced },
-    // { path: "/form-editors", component: FormEditors },
-    // { path: "/form-mask", component: FormMask },
-    // { path: "/form-uploads", component: FormUpload },
-    // { path: "/form-wizard", component: FormWizard },
-    // { path: "/form-validation", component: FormValidations },
-    // { path: "/form-xeditable", component: FormXeditable },
-
-    // //Utility
-    // { path: "/pages-starter", component: StarterPage },
-    // { path: "/pages-timeline", component: Timeline },
-    // { path: "/pages-faqs", component: FAQs },
-    // { path: "/pages-pricing", component: Pricing },
-
-    // //Icons
-    // { path: "/icons-remix", component: RemixIcons },
-    // { path: "/icons-materialdesign", component: MaterialDesign },
-    // { path: "/icons-dripicons", component: DripiIcons },
-    // { path: "/icons-fontawesome", component: FontAwesome },
-
-    // // Maps
-    // { path: "/maps-google", component: MapsGoogle },
-    // { path: "/maps-vector", component: MapsVector },
-
-    // //Charts
-    // { path: "/charts-apex", component: ChartApex },
-    // { path: "/charts-chartjs", component: ChartjsChart },
-    // { path: "/charts-sparkline", component: SparklineChart },
-    // { path: "/charts-knob", component: ChartsKnob },
-
-    // //Email
-    // { path: "/email-inbox", component: EmailInbox },
-    // { path: "/email-read", component: EmailRead },
-
-    // //Ecommerce
-    // // { path: "/ecommerce-products", component: Products },
-    // { path: "/ecommerce-product-detail", component: ProductDetail },
-    // { path: "/ecommerce-orders", component: Orders },
-    // { path: "/ecommerce-customers", component: Customers },
-    // { path: "/ecommerce-cart", component: Cart },
-    // { path: "/ecommerce-checkout", component: CheckOut },
-    // { path: "/ecommerce-shops", component: Shops },
-    // { path: "/ecommerce-add-product", component: AddProduct },
-
-    // //chat
-    // { path: "/apps-chat", component: Chat },
-
-    // //calendar
-    // { path: "/calendar", component: Calendar },//
-
-    { path: "/dashboard", icon: "fas fa-columns", title: "Feed", key: "feed", component: Feed },
+const hiddenRoutes = [
     { path: "/profile", icon: "fas fa-user", title: "User Profile", key: "profile", component: profile },
-    { path: "/users", icon: "fas fa-users", title: "Users", key: "users", component: Users, roles: ["admin"] }, // doesn't appear for users
-    { path: "/map", icon: "fas fa-map", title: "Map", key: "map", component: Mapcrime, layout: MapLayout },
     {
         path: "/users/edit",
         icon: "fas fa-users",
         title: "User Permissions",
         key: "editPermissions",
         component: UserPermissions,
-    }, // doesn't appear for users
+    },
 ];
+
+const sideBarRoutes = [
+    { path: "/dashboard", icon: "fas fa-columns", title: "Feed", key: "feed", component: Feed },
+    { path: "/users", icon: "fas fa-users", title: "Users", key: "users", component: Users, roles: ["admin"] }, // doesn't appear for users
+    { path: "/map", icon: "fas fa-map", title: "Map", key: "map", component: Mapcrime, layout: MapLayout },
+];
+
+const authProtectedRoutes = [...hiddenRoutes, ...sideBarRoutes];
 
 const publicRoutes = [
     // this route should be at the end of all other routes
@@ -228,4 +150,4 @@ const publicRoutes = [
     { path: "/pages-500", component: Error500 },
 ];
 
-export { authProtectedRoutes, publicRoutes };
+export { sideBarRoutes, authProtectedRoutes, publicRoutes };

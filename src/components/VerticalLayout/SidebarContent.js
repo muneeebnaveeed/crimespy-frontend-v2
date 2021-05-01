@@ -13,7 +13,7 @@ import {
     changeSidebarType,
     changePreloader,
 } from "../../store/actions";
-import { authProtectedRoutes } from "routes";
+import { sideBarRoutes } from "routes";
 
 import { getLoggedInUser, isUserAuthorized } from "helpers/auth";
 
@@ -96,7 +96,7 @@ class SidebarContent extends Component {
                             </Link>
                         </li> */}
 
-                        {authProtectedRoutes.map((route, index) => {
+                        {sideBarRoutes.map((route, index) => {
                             if (isUserAuthorized(route.key, this.state.user))
                                 return (
                                     <li key={`sidebar-list-item-${index}`}>
