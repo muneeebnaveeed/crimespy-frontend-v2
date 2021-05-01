@@ -22,6 +22,7 @@ import {
 import Th from "components/Common/Th";
 import { db } from "helpers/auth";
 import { useModifiedQuery } from "helpers/query";
+import EditPreset from "./EditPreset";
 
 const PreSetManagement = () => {
     const fetchPresets = async () => {
@@ -69,7 +70,11 @@ const PreSetManagement = () => {
                                     <tr key={i}>
                                         <Th>{preSet.value.id}</Th>
                                         <Th>{preSet.value.title}</Th>
-                                        <Th>{}</Th>
+                                        <Th>
+                                            <Button color="link" className="p-0">
+                                                View Permissions
+                                            </Button>
+                                        </Th>
                                         <Th>
                                             <ButtonGroup>
                                                 <Button color="light" size="sm">
@@ -87,6 +92,7 @@ const PreSetManagement = () => {
                     </Table>
                 </CardBody>
             </Card>
+            <EditPreset />
         </>
     );
 };

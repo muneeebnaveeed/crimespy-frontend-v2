@@ -26,26 +26,7 @@ import { useQueryClient } from "react-query";
 import Button from "components/Common/Button";
 import { useHistory } from "react-router";
 import { ButtonGroup } from "reactstrap/lib";
-
-const permissions = {
-    map: [],
-    users: [
-        { key: "create", label: "Create Users" },
-        { key: "edit", label: "Give Permissions" },
-        { key: "delete", label: "Delete User" },
-    ],
-    feed: [
-        { key: "verify", label: "Verify Posts" },
-        { key: "deleteAll", label: "Delete Others Post" },
-        { key: "create", label: "Create Post" },
-        { key: "createComment", label: "Comment on Post" },
-        { key: "createVote", label: "up and down vote" },
-    ],
-    chart: [
-        { key: "create", label: "Create Crime Chart" },
-        { key: "delete", label: "Delete Crime Chart" },
-    ],
-};
+import { permissions } from "config";
 
 // const getFormikInitialValues = () => {
 //     const permissionGroups = Object.keys(permissions);
@@ -107,6 +88,7 @@ const Permissions = ({ user }) => {
 
     useEffect(() => console.log(user.permissions), []);
     const { isOpen, toggle } = useDisclosure();
+    console.log(permissions);
     return (
         <>
             <Card>
