@@ -41,12 +41,12 @@ const Permissions = ({ user }) => {
         try {
             const userRef = db.collection("users").doc(user.uid);
             await userRef.update({ permissions: values });
-            if (user.id === loggedInUser) {
+            if (user.uid === loggedInUser.uid) {
                 const updatedUser = await (await userRef.get()).data();
                 setSession(updatedUser);
             }
             await queryClient.invalidateQueries(["user", user.uid]);
-            showSuccessToast({ message: "Permission updated Successfully" });
+            showSuccessToast({ message: "Permission updated successfully" });
         } catch (err) {
             console.error(err.message);
         }

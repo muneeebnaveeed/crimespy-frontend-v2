@@ -103,10 +103,11 @@ function UsersTable(props) {
                     >
                         <thead>
                             <tr>
-                                <th>#</th>
-                                <th>Username</th>
-                                <th>Email</th>
-                                <th>Role Presets</th>
+                                <th className="bold-text">#</th>
+                                <th className="bold-text">Username</th>
+                                <th className="bold-text">Email</th>
+                                <th className="bold-text">Role Presets</th>
+                                <th className="bold-text">Manage</th>
                             </tr>
                         </thead>
                         <tbody>

@@ -100,10 +100,10 @@ const Presets = () => {
                                             >
                                                 <thead>
                                                     <tr>
-                                                        <th>#</th>
-                                                        <th>Role/PreSet</th>
-                                                        <th>Permission</th>
-                                                        <th></th>
+                                                        <th className="bold-text">#</th>
+                                                        <th className="bold-text">Role/PreSet</th>
+                                                        <th className="bold-text">Permission</th>
+                                                        <th className="bold-text">Manage</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>

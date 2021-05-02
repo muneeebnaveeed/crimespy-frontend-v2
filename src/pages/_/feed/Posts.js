@@ -4,6 +4,7 @@ import { db, getLoggedInUser } from "helpers/auth";
 import { useModifiedQuery } from "helpers/query";
 import { Col } from "reactstrap";
 import { Row } from "reactstrap/lib";
+import { Else, If, Then } from "react-if";
 
 const fetchPosts = async () => {
     const user = getLoggedInUser();
@@ -44,13 +45,16 @@ function Posts(props) {
                     </Col>
                 </Row>
             ))}
-            {posts.isLoading ? (
-                <p className="mt-4 text-center">Fetching posts...</p>
-            ) : (
-                <p className="mt-4 text-center">
-                    {!posts.data?.length ? "No more posts available" : "You've reached the end of the internet"}
-                </p>
-            )}
+            <If condition={posts.isLoading}>
+                <Then>
+                    <p className="mt-4 text-center">Fetching posts...</p>
+                </Then>
+                <Else>
+                    <p className="mt-4 text-center">
+                        {!posts.data?.length ? "No posts available" : "You've reached the end of the internet"}
+                    </p>
+                </Else>
+            </If>
         </>
     );
 }
