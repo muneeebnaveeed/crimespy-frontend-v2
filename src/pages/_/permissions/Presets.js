@@ -50,7 +50,6 @@ const Presets = () => {
     const editDisclosure = useDisclosure();
     const viewDisclosure = useDisclosure();
     const [selectedPreset, setSelectedPreset] = useState(null);
-    const [selectedViewPreset, setSelectedViewPreset] = useState(null);
 
     const handleEditPreset = useCallback(
         (preset) => {
@@ -62,10 +61,10 @@ const Presets = () => {
     );
     const handleViewPreset = useCallback(
         (preset) => {
-            setSelectedViewPreset(preset);
+            setSelectedPreset(preset);
             viewDisclosure.toggle();
         },
-        [viewDisclosure.toggle, setSelectedViewPreset]
+        [viewDisclosure.toggle, setSelectedPreset]
     );
 
     return (
@@ -154,21 +153,19 @@ const Presets = () => {
             <When condition={selectedPreset}>
                 <EditPreset
                     isOpen={editDisclosure.isOpen}
+                    preset={selectedPreset}
                     toggle={() => {
                         setSelectedPreset(null);
                         editDisclosure.toggle();
                     }}
-                    preset={selectedPreset}
                 />
-            </When>
-            <When condition={selectedViewPreset}>
                 <ViewPreset
                     isOpen={viewDisclosure.isOpen}
+                    preset={selectedPreset}
                     toggle={() => {
-                        setSelectedViewPreset(null);
-                        editDisclosure.toggle();
+                        setSelectedPreset(null);
+                        viewDisclosure.toggle();
                     }}
-                    preset={selectedViewPreset}
                 />
             </When>
         </>
