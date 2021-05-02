@@ -133,7 +133,14 @@ const EditPreset = ({ isOpen, toggle, preset, user }) => {
                             </div>
                         </FormGroup>
                     </ModalBody>
-                    <ModalFooter></ModalFooter>
+                    <ModalFooter>
+                        <Button color="light" onClick={toggle}>
+                            Cancel
+                        </Button>
+                        <Button type="submit" color="primary">
+                            Submit
+                        </Button>
+                    </ModalFooter>
                 </Form>
             </Modal>
         </>

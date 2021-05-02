@@ -26,6 +26,7 @@ import { useModifiedQuery } from "helpers/query";
 import EditPreset from "./EditPreset";
 import { If, Then, Else, When } from "react-if";
 import useDisclosure from "helpers/useDisclosure";
+import ViewPreset from "./ViewPreset";
 
 const fetchPresets = async () => {
     const snapshot = db.collection("presets").get();
@@ -47,7 +48,9 @@ const fetchPresets = async () => {
 const Presets = () => {
     const presets = useModifiedQuery("presets", fetchPresets);
     const editDisclosure = useDisclosure();
+    const viewDisclosure = useDisclosure();
     const [selectedPreset, setSelectedPreset] = useState(null);
+    const [selectedViewPreset, setSelectedViewPreset] = useState(null);
 
     const handleEditPreset = useCallback(
         (preset) => {
@@ -56,6 +59,13 @@ const Presets = () => {
             editDisclosure.toggle();
         },
         [editDisclosure.toggle, setSelectedPreset]
+    );
+    const handleViewPreset = useCallback(
+        (preset) => {
+            setSelectedViewPreset(preset);
+            viewDisclosure.toggle();
+        },
+        [viewDisclosure.toggle, setSelectedViewPreset]
     );
 
     return (
@@ -104,7 +114,11 @@ const Presets = () => {
                                                                 <Th>{preset.value.id}</Th>
                                                                 <Th>{preset.value.title}</Th>
                                                                 <Th>
-                                                                    <Button color="link" className="p-0">
+                                                                    <Button
+                                                                        color="link"
+                                                                        className="p-0"
+                                                                        onClick={() => handleViewPreset(preset.value)}
+                                                                    >
                                                                         View Permissions
                                                                     </Button>
                                                                 </Th>
@@ -138,7 +152,24 @@ const Presets = () => {
                 </CardBody>
             </Card>
             <When condition={selectedPreset}>
-                <EditPreset isOpen={editDisclosure.isOpen} toggle={editDisclosure.toggle} preset={selectedPreset} />
+                <EditPreset
+                    isOpen={editDisclosure.isOpen}
+                    toggle={() => {
+                        setSelectedPreset(null);
+                        editDisclosure.toggle();
+                    }}
+                    preset={selectedPreset}
+                />
+            </When>
+            <When condition={selectedViewPreset}>
+                <ViewPreset
+                    isOpen={viewDisclosure.isOpen}
+                    toggle={() => {
+                        setSelectedViewPreset(null);
+                        editDisclosure.toggle();
+                    }}
+                    preset={selectedViewPreset}
+                />
             </When>
         </>
     );
