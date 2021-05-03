@@ -32,15 +32,16 @@ const EditPreset = ({ isOpen, toggle, preset, user }) => {
 
     const handleSubmit = async (values) => {
         setIsUpdatingUser(true);
+        console.log(values.permissions)
 
         try {
-            const userRef = db.collection("users").doc(user.uid);
-            await userRef.update({ permissions: values });
-            if (user.id === loggedInUser) {
-                const updatedUser = await (await userRef.get()).data();
-                setSession(updatedUser);
-            }
-            await queryClient.invalidateQueries(["user", user.uid]);
+            const presets = db.collection("presets").doc(values.title.toLowerCase());
+            await presets.update({ permissions: values.permissions });
+            // if (user.id === loggedInUser) {
+            //     const updatedUser = await (await userRef.get()).data();
+            //     setSession(updatedUser);
+            // }
+            // await queryClient.invalidateQueries(["user", user.uid]);
             showSuccessToast({ message: "Permission updated Successfully" });
         } catch (err) {
             console.error(err.message);
@@ -137,7 +138,7 @@ const EditPreset = ({ isOpen, toggle, preset, user }) => {
                         <Button color="light" onClick={toggle}>
                             Cancel
                         </Button>
-                        <Button type="submit" color="primary">
+                        <Button type="submit" color="primary" loading={isUpdatingUser}>
                             Submit
                         </Button>
                     </ModalFooter>

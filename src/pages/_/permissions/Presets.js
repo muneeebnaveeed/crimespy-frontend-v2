@@ -27,6 +27,7 @@ import EditPreset from "./EditPreset";
 import { If, Then, Else, When } from "react-if";
 import useDisclosure from "helpers/useDisclosure";
 import ViewPreset from "./ViewPreset";
+import { useQueryClient } from "react-query";
 
 const fetchPresets = async () => {
     const snapshot = db.collection("presets").get();
@@ -49,6 +50,7 @@ const Presets = () => {
     const presets = useModifiedQuery("presets", fetchPresets);
     const editDisclosure = useDisclosure();
     const viewDisclosure = useDisclosure();
+    const queryClient = useQueryClient();
     const [selectedPreset, setSelectedPreset] = useState(null);
 
     const handleEditPreset = useCallback(
@@ -66,6 +68,22 @@ const Presets = () => {
         },
         [viewDisclosure.toggle, setSelectedPreset]
     );
+
+    const deletePreset = async (title) =>{
+        const presetRef =  db.collection("presets")
+        await presetRef
+            .doc(title)
+            .delete()
+            .then(function () {
+                console.log("delete Presets info successfully");
+            })
+            .catch(function (error) {
+                console.log(`Errors post info ${error}`);
+            });
+        await queryClient.invalidateQueries("presets");
+    }
+
+
 
     return (
         <>
@@ -132,7 +150,7 @@ const Presets = () => {
                                                                         >
                                                                             <i className="fas fa-edit" />
                                                                         </Button>
-                                                                        <Button color="light" size="sm">
+                                                                        <Button color="light" size="sm" onClick={() => deletePreset(preset.value.title)}>
                                                                             <i className="fas fa-trash-alt" />
                                                                         </Button>
                                                                     </ButtonGroup>
