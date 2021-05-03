@@ -1,110 +1,86 @@
-import React, {useCallback, useRef, useState, useMemo} from "react";
-import {
-    Card,
-    CardBody,
-    Col,
-    Container,
-    Row,
-    Table
-} from "reactstrap";
+import React, { useCallback, useRef, useState, useMemo } from "react";
+import { Card, CardBody, Col, Container, Row, Table } from "reactstrap";
 import Avatar from "@material-ui/core/Avatar";
 
 import CreateComment from "./CreateComment.js.js";
 import Comments from "./Comments";
 import Actions from "./Actions";
 // import './Dropdown.css'
-import {Dropdown, DropdownToggle, DropdownMenu, DropdownItem} from "reactstrap";
-import {db, getLoggedInUser, storage} from "helpers/auth.js";
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from "reactstrap";
+import { db, getLoggedInUser, storage } from "helpers/auth.js";
 import { useQueryClient } from "react-query";
+import usePermissions from "helpers/usePermissions.js";
+import { When } from "react-if";
 
-
-function Post({
-    username,
-    profileUrl,
-    description,
-    comments,
-    id,
-    photoURL,
-    Title,
-    verifiedpost,
-    notverified,
-}) {
+function Post({ username, profileUrl, description, comments, id, photoURL, Title, verifiedpost, notverified }) {
     const [menu, setMenu] = useState(false);
     const user = getLoggedInUser();
     const queryClient = useQueryClient();
     const postRef = db.collection("posts").doc(user.uid).collection("userPosts");
-    const loggedInUser = useMemo(() => getLoggedInUser(), []);
+    const isAuthorized = usePermissions("feed");
     const deletePost = async () => {
         var imageRef = storage.refFromURL(photoURL);
 
-        imageRef.delete().then(function () {
-            console.log("delete successfully");
-        }).catch(function (error) {
-            console.log(`Errors ${error}`);
-        });
+        imageRef
+            .delete()
+            .then(function () {
+                console.log("delete successfully");
+            })
+            .catch(function (error) {
+                console.log(`Errors ${error}`);
+            });
 
-       await postRef.doc(id).delete().then(function () {
-            console.log("delete Post info successfully");
-        }).catch(function (error) {
-            console.log(`Errors post info ${error}`);
-        });
+        await postRef
+            .doc(id)
+            .delete()
+            .then(function () {
+                console.log("delete Post info successfully");
+            })
+            .catch(function (error) {
+                console.log(`Errors post info ${error}`);
+            });
         await queryClient.invalidateQueries("posts");
-    }
-
-
+    };
 
     const toggle = () => {
-        setMenu(!menu)
-    }
+        setMenu(!menu);
+    };
     return (
-        <Card className="m-0 mt-4"
-            style={
-                {maxWidth: 840}
-        }>
+        <Card className="m-0 mt-4" style={{ maxWidth: 840 }}>
             <CardBody className="p-0">
                 <div className="d-flex p-3 justify-content-between">
                     <div className="d-flex align-items-center">
-                        <Avatar alt={
-                                username.toLowerCase()
-                            }
+                        <Avatar
+                            alt={username.toLowerCase()}
                             src={profileUrl}
-                            style={
-                                {
-                                    width: 35,
-                                    height: 35
-                                }
-                        }>
-                            {
-                            username.charAt(0)
-                        } </Avatar>
-                        <span className="ml-2 text-capitalize">
-                            {username}</span>
+                            style={{
+                                width: 35,
+                                height: 35,
+                            }}
+                        >
+                            {username.charAt(0)}{" "}
+                        </Avatar>
+                        <span className="ml-2 text-capitalize">{username}</span>
                     </div>
                     <div className="d-flex align-items-center">
-                        <p>
-                            {Title}
-                        </p>
+                        <p>{Title}</p>
                     </div>
-                        {
-                            loggedInUser.permissions?.feed?.includes?.("deleteAll") && (
-                                <Dropdown className="d-inline-block user-dropdown"
-                        isOpen={menu}
-                        toggle={toggle}>
-                        <DropdownToggle tag="button" className="btn header-item waves-effect" id="page-header-user-dropdown">
-
-
-                            <i className="fas fa-ellipsis-h"
-                                style={
-                                    {color: 'black'}
-                            }></i>
-
-                            {/* <i className="mdi mdi-chevron-down d-none ml-1 d-xl-inline-block"></i> */} </DropdownToggle>
-                        <DropdownMenu right>
-                            <DropdownItem onClick={deletePost}>
-                                <i className="fas fa-trash-alt mr-1"/>
-                                Delete
-                            </DropdownItem>
-                            {/* <DropdownItem href="#">
+                    <When condition={isAuthorized("deleteAll")}>
+                        <Dropdown className="d-inline-block user-dropdown" isOpen={menu} toggle={toggle}>
+                            <DropdownToggle
+                                tag="button"
+                                className="btn header-item waves-effect"
+                                id="page-header-user-dropdown"
+                            >
+                                <i className="fas fa-ellipsis-h" style={{ color: "black" }}></i>
+                                {/* <i className="mdi mdi-chevron-down d-none ml-1 d-xl-inline-block"></i> */}{" "}
+                            </DropdownToggle>
+                            <DropdownMenu right>
+                                <DropdownItem onClick={deletePost}>
+                                    <i className="fas fa-trash-alt mr-1" />
+                                    Delete
+                                </DropdownItem>
+                                {/* <DropdownItem href="#">
                             <i className="ri-wallet-2-line align-middle mr-1"></i> My Wallet
                         </DropdownItem>
                         <DropdownItem className="d-block" href="#">
@@ -113,33 +89,22 @@ function Post({
                         </DropdownItem>
                         <DropdownItem href="#">
                             <i className="ri-lock-unlock-line align-middle mr-1"></i> Lock screen
-                        </DropdownItem> */} </DropdownMenu>
-                    </Dropdown>
-
-                            )
-                        }
-                   
+                        </DropdownItem> */}
+                            </DropdownMenu>
+                        </Dropdown>
+                    </When>
                 </div>
-                <img className="post__image d-block mx-auto" width="500px" height="400px"
-                    src={photoURL}/>
-                <p className="p-3 m-0">
-                    {description}</p>
-                <Actions username={username} verifiedpost={verifiedpost} notverified={notverified} id={id}/>
-                <Comments username={username}
-                    comments={comments}/>
-                    {
-                        loggedInUser.permissions?.feed?.includes?.("createComment") && (
-                            <CreateComment comments={comments}
-                    id={id}
-                    user="Wasef"/>
-                        )
-                    }
-                
+                <img className="post__image d-block mx-auto" width="500px" height="400px" src={photoURL} />
+                <p className="p-3 m-0">{description}</p>
+                <Actions username={username} verifiedpost={verifiedpost} notverified={notverified} id={id} />
+                <Comments username={username} comments={comments} />
+                <When condition={isAuthorized("createComment")}>
+                    <CreateComment id={id} />
+                </When>
             </CardBody>
         </Card>
     );
 }
-
 
 // const DropdownMenu = ({profileUrl}) => {
 //     const dropdownRef = useRef(null);
