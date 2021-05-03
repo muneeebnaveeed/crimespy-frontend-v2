@@ -71,28 +71,9 @@ const EditPreset = ({ isOpen, toggle, preset, user }) => {
     return (
         <>
             <Modal isOpen={isOpen} toggle={toggle} centered>
-                <ModalHeader>Edit Preset</ModalHeader>
+                <ModalHeader>{formik.values.title} permissions</ModalHeader>
                 <Form onSubmit={formik.handleSubmit}>
                     <ModalBody>
-                        <FormGroup>
-                            <Label>Title</Label>
-                            <InputGroup>
-                                <InputGroupAddon addonType="prepend">
-                                    <div className="input-group-text">
-                                        <i className="fas fa-tags " />
-                                    </div>
-                                </InputGroupAddon>
-                                <Input
-                                    id="title"
-                                    name="title"
-                                    type="text"
-                                    onChange={formik.handleChange}
-                                    value={formik.values.title}
-                                    invalid={Boolean(formik.errors.title)}
-                                />
-                                <FormFeedback>{formik.errors.title}</FormFeedback>
-                            </InputGroup>
-                        </FormGroup>
                         <FormGroup>
                             <div className="mx-2" style={{ maxHeight: 240, overflowY: "scroll" }}>
                                 {Object.keys(permissions).map((permissionGroup, i) => {
@@ -128,11 +109,8 @@ const EditPreset = ({ isOpen, toggle, preset, user }) => {
                         </FormGroup>
                     </ModalBody>
                     <ModalFooter>
-                        <Button color="light" onClick={toggle}>
+                        <Button color="primary" onClick={toggle}>
                             Cancel
-                        </Button>
-                        <Button type="submit" color="primary">
-                            Submit
                         </Button>
                     </ModalFooter>
                 </Form>
