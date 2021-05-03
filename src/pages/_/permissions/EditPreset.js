@@ -36,7 +36,12 @@ const EditPreset = ({ isOpen, toggle, preset, user }) => {
 
         try {
             const presets = db.collection("presets").doc(values.title.toLowerCase());
-            await presets.update({ permissions: values.permissions });
+            await presets.update({ permissions: values.permissions }).then(function () {
+                console.log("updated Presets info successfully");
+            })
+            .catch(function (error) {
+                console.log(`Errors post info ${error}`);
+            });;
             // if (user.id === loggedInUser) {
             //     const updatedUser = await (await userRef.get()).data();
             //     setSession(updatedUser);
