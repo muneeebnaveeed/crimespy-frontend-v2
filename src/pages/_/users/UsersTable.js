@@ -19,6 +19,7 @@ import { useQueryClient } from "react-query";
 import { showSuccessToast } from "helpers/showToast";
 import { useHistory } from "react-router";
 import usePermissions from "helpers/usePermissions";
+import { FastField } from "formik";
 
 const fetchUsers = async () => {
     const snapshot = db.collection("users").get();
@@ -53,14 +54,22 @@ const fetchPresets = async () => {
 function UsersTable(props) {
     const users = useModifiedQuery("users", fetchUsers);
     const presets = useModifiedQuery("presets", fetchPresets);
+    const [show, setShow] = useState(false);
     const queryClient = useQueryClient();
     const { isOpen, toggle, onOpen } = useDisclosure();
     const [isDeletingUser, setIsDeletingUser] = useState(false);
     const [changingRole, setChangingRole] = useState(null);
+    const [userid, setId] = useState('');
     const history = useHistory();
 
     const loggedInUser = useMemo(() => getLoggedInUser(), []);
     const dispatch = useDispatch();
+
+    const handlePassInfoShow = async (id)=>{
+        setShow(true);
+        console.log(id);
+        setId(id);
+       }
 
     const isAuthorized = usePermissions("users");
 
@@ -77,6 +86,23 @@ function UsersTable(props) {
         }
         setChangingRole(null);
     }, []);
+
+
+    const deleteUser = async (id) =>{
+        setIsDeletingUser(true);
+        const useRef =  db.collection("users")
+        await useRef
+            .doc(id)
+            .delete()
+            .then(function () {
+                console.log("delete Users info successfully");
+            })
+            .catch(function (error) {
+                console.log(`Errors post info ${error}`);
+            });
+            setIsDeletingUser(false);
+        await queryClient.invalidateQueries("users");
+    }
 
     const toggleModal = useCallback(() => {
         if (!isDeletingUser) toggle();
@@ -150,7 +176,7 @@ function UsersTable(props) {
                                                         </Button>
                                                     )}
                                                     {isAuthorized("delete") && (
-                                                        <Button color="light" size="sm" onClick={onOpen}>
+                                                        <Button color="light" size="sm" onClick={() => handlePassInfoShow(user.uid)}>
                                                             <i className="fas fa-trash-alt" />
                                                         </Button>
                                                     )}
@@ -167,16 +193,16 @@ function UsersTable(props) {
                     </Table>
                 </CardBody>
             </Card>
-            <Modal isOpen={isOpen} toggle={toggleModal} centered>
+            <Modal isOpen={show} toggle={toggleModal} centered>
                 <ModalHeader>Delete User</ModalHeader>
                 <ModalBody>
                     <Label>Are you sure you want to delete this user?</Label>
                 </ModalBody>
                 <ModalFooter>
-                    <Button color="light" w="55.5px" size="sm" onClick={toggle}>
+                    <Button color="light" w="55.5px" size="sm" onClick={() =>setShow(!show)}>
                         No
                     </Button>
-                    <Button w="55.5px" color="primary" size="sm" onClick={toggle} loading={isDeletingUser}>
+                    <Button w="55.5px" color="primary" size="sm" onClick={()=>deleteUser(userid)} loading={isDeletingUser}>
                         Yes
                     </Button>
                 </ModalFooter>
