@@ -25,6 +25,7 @@ function Action({
 function Actions({username, verified, id ,user}) {
     const [isVoting, setVoting] = useState(false);
     const [votedPosts, setVotedPosts] = useState([]);
+    const [votingii, setVotingii] = useState(null);
     const queryClient = useQueryClient();
     const postRef = db.collection("posts").doc(user.uid).collection("userPosts").doc(id);
 
@@ -32,6 +33,7 @@ function Actions({username, verified, id ,user}) {
 
 
     const handleClick = async (type) => { // Do calculation to save the vote.
+        setVoting(true);
         let updatedverificationStatus;
 
         const loggeduser = getLoggedInUser();
@@ -61,8 +63,11 @@ function Actions({username, verified, id ,user}) {
         await postRef.update({
             verified:{...oldverified,[user.uid]:updatedverificationStatus}
         })
+
         
         await queryClient.invalidateQueries("posts");
+        setVotingii(updatedverificationStatus)
+        setVoting(false);
     
      
 
@@ -74,6 +79,7 @@ function Actions({username, verified, id ,user}) {
 
     // let upVotesCount = verifiedpost;
     // let downVotesCount = notverified;
+    const isSelectBusy = votingii === verified[user.uid];
     return (
         <div className="d-flex px-3">
             <div className="d-flex mr-4">
@@ -94,7 +100,7 @@ function Actions({username, verified, id ,user}) {
                         onClick={
                             () => handleClick("downvote")
                         }
-                        isLoading={isVoting}
+                        isLoading ={isVoting}
                        />
                 </Action>
                 <p></p>
