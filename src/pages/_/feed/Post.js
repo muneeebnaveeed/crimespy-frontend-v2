@@ -12,7 +12,7 @@ import { useQueryClient } from "react-query";
 import usePermissions from "helpers/usePermissions.js";
 import { When } from "react-if";
 
-function Post({ username, profileUrl, description, comments, id, photoURL, Title, verifiedpost, notverified }) {
+function Post({ username, profileUrl, description, comments, id, photoURL, Title,verified }) {
     const [menu, setMenu] = useState(false);
     const user = getLoggedInUser();
     const queryClient = useQueryClient();
@@ -96,7 +96,7 @@ function Post({ username, profileUrl, description, comments, id, photoURL, Title
                 </div>
                 <img className="post__image d-block mx-auto" width="500px" height="400px" src={photoURL} />
                 <p className="p-3 m-0">{description}</p>
-                <Actions username={username} verifiedpost={verifiedpost} notverified={notverified} id={id} />
+                <Actions username={username} verified={verified} user={user} id={id} />
                 <Comments username={username} comments={comments} />
                 <When condition={isAuthorized("createComment")}>
                     <CreateComment id={id} />
