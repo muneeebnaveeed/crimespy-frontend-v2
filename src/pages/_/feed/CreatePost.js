@@ -37,7 +37,11 @@ const CreatePost = ({ toggle, isOpen }) => {
     const [isCreatingPost, setIsCreatingPost] = useState(false);
     const [isGettingGeo, setIsgettingGeo] = useState(false);
     const [getCurrentLocation, setCurrentLocation] = useState("");
+    const [latitude, setLatitude] = useState("");
+    const [longitude, setLongitude] = useState("");
     const queryClient = useQueryClient();
+    let lat;
+    let lon;
 
     const handleChange = (e) => {
         e.preventDefault();
@@ -55,8 +59,17 @@ const CreatePost = ({ toggle, isOpen }) => {
         setIsgettingGeo(true);
         await navigator.geolocation.getCurrentPosition((position) => {
             console.log(position.coords);
+
             setCurrentLocation(`${position.coords.latitude}/${position.coords.longitude}`);
-            console.log(getCurrentLocation);
+            
+            // setLongitude(position.coords.longitude);
+            lat = position.coords.latitude;
+            lon = position.coords.longitude;
+            // setLatitude(lat);
+            // setLongitude(lon)
+            
+            console.log("LOcation",getCurrentLocation);
+            console.log("loc", lat,lon)
         });
         setCurrentLocation();
         setIsgettingGeo(false);
@@ -78,6 +91,8 @@ const CreatePost = ({ toggle, isOpen }) => {
     ];
 
     const handleSubmit = useCallback((values) => {
+        console.log("loc2",latitude, longitude);
+
         var imageName = makeid(10);
         const uploadTask = storage.ref(`images/${imageName}.jpg`).put(values.image);
         setIsCreatingPost(true);
@@ -98,6 +113,8 @@ const CreatePost = ({ toggle, isOpen }) => {
                         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                         postId: postId,
                         ownerId: user.uid,
+                        // longitude:lon,
+                        // latitude: lat,
                         Title: values.title,
                         verified:{},
                         description: values.description,
