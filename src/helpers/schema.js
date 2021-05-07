@@ -49,6 +49,8 @@ export const postSchema = Joi.object({
         "string.empty": `Please attach an image`,
         "any.required": `Please attach an image`,
     }),
+    longitude: Joi.string(),
+    latitude: Joi.string(),
 });
 export const preSetSchema = Joi.object({
     title: Joi.string().min(3).max(255).required().alphanum().message({

@@ -40,8 +40,6 @@ const CreatePost = ({ toggle, isOpen }) => {
     const [latitude, setLatitude] = useState("");
     const [longitude, setLongitude] = useState("");
     const queryClient = useQueryClient();
-    let lat;
-    let lon;
 
     const handleChange = (e) => {
         e.preventDefault();
@@ -61,15 +59,24 @@ const CreatePost = ({ toggle, isOpen }) => {
             console.log(position.coords);
 
             setCurrentLocation(`${position.coords.latitude}/${position.coords.longitude}`);
-            
+
             // setLongitude(position.coords.longitude);
-            lat = position.coords.latitude;
-            lon = position.coords.longitude;
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            formik.values.longitude = lon.toString();
+            formik.values.latitude = lat.toString();
+
             // setLatitude(lat);
             // setLongitude(lon)
-            
-            console.log("LOcation",getCurrentLocation);
-            console.log("loc", lat,lon)
+
+            console.log("LOcation", getCurrentLocation);
+            console.log(
+                "loc",
+                lat,
+                lon,
+                "formik longitude : " + formik.values.longitude,
+                "formik latitude " + formik.values.latitude
+            );
         });
         setCurrentLocation();
         setIsgettingGeo(false);
@@ -91,7 +98,7 @@ const CreatePost = ({ toggle, isOpen }) => {
     ];
 
     const handleSubmit = useCallback((values) => {
-        console.log("loc2",latitude, longitude);
+        console.log("loc2", values.latitude, values.longitude);
 
         var imageName = makeid(10);
         const uploadTask = storage.ref(`images/${imageName}.jpg`).put(values.image);
@@ -113,10 +120,10 @@ const CreatePost = ({ toggle, isOpen }) => {
                         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                         postId: postId,
                         ownerId: user.uid,
-                        // longitude:lon,
-                        // latitude: lat,
+                        longitude: values.longitude,
+                        latitude: values.latitude,
                         Title: values.title,
-                        verified:{},
+                        verified: {},
                         description: values.description,
                         location: values.location,
                         mediaUrl: imageUrl,
@@ -145,6 +152,8 @@ const CreatePost = ({ toggle, isOpen }) => {
             location: "",
             image: "",
             crimeCategory: "",
+            longitude: "",
+            latitude: "",
         },
         onSubmit: handleSubmit,
         validate: (values) => {
