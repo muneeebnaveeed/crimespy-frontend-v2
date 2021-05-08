@@ -29,36 +29,46 @@ function Login(props) {
     }, []);
 
     const handleLogin = async () => {
+        let lon;
+        let lat;
         try {
             const res = await signInWithFacebook();
-
-            navigator.geolocation.getCurrentPosition((position) => console.log(position.coords));
-
+  
             const fbUser = _.pick(res.user, ["uid", "displayName", "email", "photoURL"]);
 
             const dbUser = (await db.collection("users").doc(fbUser.uid).get()).data();
+            // console.log("location", location)
+            // console.log(`DATA FROM DB ${dbUser}`);
+            await navigator.geolocation.getCurrentPosition((position) => {
+                console.log("1")
+                lon = position.coords.longitude;
+                lat = position.coords.latitude;
+                console.log(lon,lat)
+                let user = {
+                    ...fbUser,
+                    role: "user",
+                    gender: "",
+                    longitude: lon,
+                    latitude: lat,
+                    bio: "",
+                    dob: "",
+                    permissions: {
+                        users: ["review"],
+                        feed: [],
+                        map: ["review"],
+                        chart: ["review"],
+                    },
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                };
+                if (!dbUser) db.collection("users").doc(user.uid).set(user);
+                else user = dbUser;
+                dispatch(setUser(user));
+                setSession(user);
+                history.push("/");
 
-            let user = {
-                ...fbUser,
-                role: "user",
-                gender: "",
-                bio: "",
-                dob: "",
-                permissions: {
-                    users: ["review"],
-                    feed: [],
-                    map: ["review"],
-                    chart: ["review"],
-                },
-                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-            };
-
-            if (!dbUser) await db.collection("users").doc(user.uid).set(user);
-            else user = dbUser;
-
-            dispatch(setUser(user));
-            setSession(user);
-            history.push("/");
+            });
+            
+           
         } catch (err) {
             console.error(err.message);
         }
