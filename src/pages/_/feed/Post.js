@@ -44,7 +44,7 @@ function Post({
         //     console.log(`Errors ${error}`);
         // });
 
-        await axios.delete(`http://localhost:5000/posts/id/${
+        await axios.delete(`https://crimespy.herokuapp.com/posts/id/${
             user.uid
         }/${id}`).then(res => {
             console.log("Hello", res)

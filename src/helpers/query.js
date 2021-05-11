@@ -3,7 +3,7 @@ import {QueryClient, QueryClientProvider, useQuery} from "react-query";
 import React, {useMemo} from "react";
 
 export const api = axios.create({
-    baseURL: "http://localhost:5000"
+    baseURL: "https://crimespy.herokuapp.com"
     // headers: {
     //     Authorization:
     //         "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjE2NTc0NzIwLCJleHAiOjE2MTkxNjY3MjB9.R2CiSnJnOE2SMLQUnRHyXE-FBjZMRj8_eWCCKPdzpfY",

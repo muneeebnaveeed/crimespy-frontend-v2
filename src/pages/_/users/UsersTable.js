@@ -35,7 +35,7 @@ import axios from 'axios'
 const fetchUsers = async () => {
 
 
-    return axios.get(`http://localhost:5000/users`).then(res => res.data)
+    return axios.get(`https://crimespy.herokuapp.com/users`).then(res => res.data)
 
     // const snapshot = db.collection("users").get();
     // const docs = (await snapshot).docs;
@@ -99,7 +99,7 @@ function UsersTable(props) {
 
     const deleteUser = async (id) => {
         setIsDeletingUser(true);
-        axios.delete(`http://localhost:5000/users/id/${
+        axios.delete(`https://crimespy.herokuapp.com/users/id/${
             id
         }`).then(res => {
             console.log(res)

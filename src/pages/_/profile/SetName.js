@@ -43,7 +43,7 @@ const SetName = () => {
 
         try {
             console.log(info);
-            axios.put(`http://localhost:5000/users/id/${
+            axios.put(`https://crimespy.herokuapp.com/users/id/${
                 user.uid
             }`, info).then(res => {
                 console.log(res)
