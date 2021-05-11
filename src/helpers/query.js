@@ -1,48 +1,50 @@
 import axios from "axios";
-import { QueryClient, QueryClientProvider, useQuery } from "react-query";
-import React, { useMemo } from "react";
+import {QueryClient, QueryClientProvider, useQuery} from "react-query";
+import React, {useMemo} from "react";
 
-const api = axios.create({
-    baseURL: "http://localhost:1337",
-    headers: {
-        Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjE2NTc0NzIwLCJleHAiOjE2MTkxNjY3MjB9.R2CiSnJnOE2SMLQUnRHyXE-FBjZMRj8_eWCCKPdzpfY",
-    },
+export const api = axios.create({
+    baseURL: "http://localhost:5000"
+    // headers: {
+    //     Authorization:
+    //         "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjE2NTc0NzIwLCJleHAiOjE2MTkxNjY3MjB9.R2CiSnJnOE2SMLQUnRHyXE-FBjZMRj8_eWCCKPdzpfY",
+    // },
 });
 
 const queryClient = new QueryClient();
 
 export const useModifiedQuery = (queryKey, queryFn, options = {}) => {
-    const query = useQuery(queryKey, queryFn, { retry: false, ...options });
+    const query = useQuery(queryKey, queryFn, {
+        retry: false,
+        ...options
+    });
 
-    const isLoading = useMemo(() => query.isLoading || (!query.isFetched && query.data), [
-        query.data,
-        query.isFetched,
-        query.isLoading,
-    ]);
+    const isLoading = useMemo(() => query.isLoading || (! query.isFetched && query.data), [query.data, query.isFetched, query.isLoading,]);
 
-    const data = useMemo(() => ({ ...query, isLoading }), [isLoading, query]);
+    const data = useMemo(() => ({
+        ... query,
+        isLoading
+    }), [isLoading, query]);
 
     return data;
 };
 
 export const QueryProvider = (props) => {
-    return <QueryClientProvider client={queryClient}>{props.children}</QueryClientProvider>;
+    return <QueryClientProvider client={queryClient}>
+        {
+        props.children
+    }</QueryClientProvider>;
 };
 
 export const generateErrorMessage = (err) => {
     let message,
-        error = err?.response?.status;
+        error = err ?. response ?. status;
 
     switch (error) {
-        case 500:
-            message = "Category already exists";
+        case 500: message = "Category already exists";
             break;
-        case 405:
-            message = "Method not allowed";
+        case 405: message = "Method not allowed";
             break;
-        default:
-            message = err.message;
+        default: message = err.message;
             break;
     }
 
