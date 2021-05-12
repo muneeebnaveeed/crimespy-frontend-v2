@@ -1,7 +1,7 @@
 import { getLoggedInUser, setSession, signOutFireabse } from "helpers/auth";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
+import { useHistory, withRouter } from "react-router-dom";
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from "reactstrap";
 import { setUser } from "store/auth/actions";
 
@@ -33,6 +33,9 @@ class ProfileMenu extends Component {
             console.error(err.message);
         }
     };
+    handlePermissions = () => {
+        this.props.history.push("/profile");
+    };
 
     render() {
         return (
@@ -54,7 +57,7 @@ class ProfileMenu extends Component {
                         <i className="mdi mdi-chevron-down d-none ml-1 d-xl-inline-block"></i>
                     </DropdownToggle>
                     <DropdownMenu right>
-                        <DropdownItem href="#">
+                        <DropdownItem onClick={this.handlePermissions}>
                             <i className="ri-user-line align-middle mr-1"></i> Profile
                         </DropdownItem>
                         {/* <DropdownItem href="#">
