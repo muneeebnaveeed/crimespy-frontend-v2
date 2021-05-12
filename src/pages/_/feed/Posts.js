@@ -5,52 +5,21 @@ import { useModifiedQuery } from "helpers/query";
 import { Col } from "reactstrap";
 import { Row } from "reactstrap/lib";
 import { Else, If, Then } from "react-if";
-
-// const fetchUsers = async () => {
-//     const snapshot = db.collection("users").get();
-//     const docs = (await snapshot).docs;
-
-//     return new Promise((resolve, reject) => {
-//         const users = docs.map((doc) => ({
-//             id: doc.id,
-//             ...doc.data(),
-//         }));
-//         resolve(users);
-//     });
-// };
-
-
+import axios from "axios";
 
 const fetchPosts = async () => {
+    // const posts = [];
     const user = getLoggedInUser();
-    const snapshot = await db
-        .collection("posts")
-        .doc(user.uid)
-        .collection("userPosts")
-        .orderBy("timestamp", "desc")
-        .get();
-    const docs = await snapshot.docs;
 
-    return new Promise((resolve, reject) => {
-        const posts = docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-        resolve(posts);
-    });
+    return axios.get(`https://crimespy.herokuapp.com/posts/id/${user.uid}`).then((res) => res.data);
 };
 
 function Posts(props) {
     const posts = useModifiedQuery("posts", fetchPosts);
-    const users = useModifiedQuery("users",fetchUsers);
-
+    console.log("weasdadas", posts);
     return (
         <>
-
-            {user.
-
-            }
-
-
-
-
+            {" "}
             {posts.data?.map((post, i) => (
                 <Row key={i}>
                     <Col xs={12} className="d-flex justify-content-center">
@@ -74,7 +43,7 @@ function Posts(props) {
                 </Then>
                 <Else>
                     <p className="mt-4 text-center">
-                        {!posts.data?.length ? "No posts available" : "You've reached the end of the internet"}
+                        {!posts.data?.length ? "No posts available" : "You've reached the end of the internet"}{" "}
                     </p>
                 </Else>
             </If>

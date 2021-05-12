@@ -1,19 +1,29 @@
-import React, { useEffect } from "react";
+import React, {useEffect} from "react";
 
-import { Row, Col, Input, Button, Alert, Container, Label, FormGroup } from "reactstrap";
-import { db } from "../../helpers/auth";
+import {
+    Row,
+    Col,
+    Input,
+    Button,
+    Alert,
+    Container,
+    Label,
+    FormGroup
+} from "reactstrap";
+import {db} from "../../helpers/auth";
 import firebase from "firebase/app";
 
 // Redux
-import { useDispatch, useSelector } from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 
 import _ from "lodash";
 
 // import images
 import logodark from "../../assets/images/logo-dark.png";
-import { auth, getLoggedInUser, setSession, signInWithFacebook } from "helpers/auth";
-import { setUser } from "store/auth/actions";
-import { Redirect, useHistory } from "react-router";
+import {auth, getLoggedInUser, setSession, signInWithFacebook} from "helpers/auth";
+import {setUser} from "store/auth/actions";
+import {Redirect, useHistory} from "react-router";
+import axios from 'axios'
 
 function Login(props) {
     const dispatch = useDispatch();
@@ -23,7 +33,7 @@ function Login(props) {
 
     useEffect(() => {
         document.body.classList.add("auth-body-bg");
-        return () => {
+        return() => {
             document.body.classList.remove("auth-body-bg");
         };
     }, []);
@@ -33,8 +43,14 @@ function Login(props) {
         let lat;
         try {
             const res = await signInWithFacebook();
-  
+
             const fbUser = _.pick(res.user, ["uid", "displayName", "email", "photoURL"]);
+
+            // const data = {
+            //     firstName: 'Finn',
+            //     lastName: 'Williams'
+            // }
+
 
             const dbUser = (await db.collection("users").doc(fbUser.uid).get()).data();
             // console.log("location", location)
@@ -43,9 +59,9 @@ function Login(props) {
                 console.log("1")
                 lon = position.coords.longitude;
                 lat = position.coords.latitude;
-                console.log(lon,lat)
+                console.log(lon, lat)
                 let user = {
-                    ...fbUser,
+                    ... fbUser,
                     role: "user",
                     gender: "",
                     longitude: lon,
@@ -56,29 +72,50 @@ function Login(props) {
                         users: ["review"],
                         feed: [],
                         map: ["review"],
-                        chart: ["review"],
+                        chart: ["review"]
                     },
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 };
-                if (!dbUser) db.collection("users").doc(user.uid).set(user);
-                else user = dbUser;
-                dispatch(setUser(user));
+
+
+                // axios.post(`https://crimespy.herokuapp.com/users/id/${
+                //     user.uid
+                // }`, user).then(res => {
+                //     console.log(res)
+                // })
+                if (! dbUser) 
+
+                    axios.post(`https://crimespy.herokuapp.com/users/id/${
+                        user.uid
+                    }`, user).then(res => {
+                        console.log(res)
+                    })
+                 else 
+                    user = dbUser;
+                 dispatch(setUser(user));
                 setSession(user);
                 history.push("/");
 
             });
-            
-           
+
+
         } catch (err) {
             console.error(err.message);
         }
     };
 
-    if (getLoggedInUser()) return <Redirect to={{ pathname: "/", from: "/login" }} />;
+    if (getLoggedInUser()) 
+        return <Redirect to={
+            {
+                pathname: "/",
+                from: "/login"
+            }
+        }/>;
+    
+
 
     return (
-        <>
-            {/* <div className="home-btn d-none d-sm-block">
+        <> {/* <div className="home-btn d-none d-sm-block">
                 <i className="mdi mdi-home-variant h2 text-white"></i>
             </div> */}
 
@@ -93,7 +130,9 @@ function Login(props) {
                                             <div>
                                                 <div className="text-center">
                                                     <div>
-                                                        <img src={logodark} height="60" alt="logo" />
+                                                        <img src={logodark}
+                                                            height="60"
+                                                            alt="logo"/>
                                                     </div>
 
                                                     <h4 className="font-size-18 mt-4">Welcome Back !</h4>
@@ -101,8 +140,10 @@ function Login(props) {
                                                 </div>
 
                                                 <div className="p-2 mt-5 d-flex justify-content-center">
-                                                    <Button color="primary" onClick={handleLogin}>
-                                                        <i className="fab fa-facebook-f mr-1" /> Login with Facebook
+                                                    <Button color="primary"
+                                                        onClick={handleLogin}>
+                                                        <i className="fab fa-facebook-f mr-1"/>
+                                                        Login with Facebook
                                                     </Button>
                                                 </div>
 
