@@ -6,6 +6,21 @@ import { Col } from "reactstrap";
 import { Row } from "reactstrap/lib";
 import { Else, If, Then } from "react-if";
 
+// const fetchUsers = async () => {
+//     const snapshot = db.collection("users").get();
+//     const docs = (await snapshot).docs;
+
+//     return new Promise((resolve, reject) => {
+//         const users = docs.map((doc) => ({
+//             id: doc.id,
+//             ...doc.data(),
+//         }));
+//         resolve(users);
+//     });
+// };
+
+
+
 const fetchPosts = async () => {
     const user = getLoggedInUser();
     const snapshot = await db
@@ -24,9 +39,18 @@ const fetchPosts = async () => {
 
 function Posts(props) {
     const posts = useModifiedQuery("posts", fetchPosts);
+    const users = useModifiedQuery("users",fetchUsers);
 
     return (
         <>
+
+            {user.
+
+            }
+
+
+
+
             {posts.data?.map((post, i) => (
                 <Row key={i}>
                     <Col xs={12} className="d-flex justify-content-center">
@@ -40,7 +64,6 @@ function Posts(props) {
                             photoURL={post.mediaUrl}
                             Title={post.Title}
                             verified={post.verified}
-                          
                         />
                     </Col>
                 </Row>
