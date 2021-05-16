@@ -7,6 +7,19 @@ import { Row } from "reactstrap/lib";
 import { Else, If, Then } from "react-if";
 import axios from "axios";
 
+const fetchUsers = async () => {
+    const snapshot = db.collection("users").get();
+    const docs = (await snapshot).docs;
+
+    return new Promise((resolve, reject) => {
+        const users = docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+        }));
+        resolve(users);
+    });
+};
+
 const fetchPosts = async () => {
     // const posts = [];
     const user = getLoggedInUser();
@@ -16,7 +29,10 @@ const fetchPosts = async () => {
 
 function Posts(props) {
     const posts = useModifiedQuery("posts", fetchPosts);
+    const users = useModifiedQuery("users", fetchUsers);
     console.log("weasdadas", posts);
+    console.log("pendahoe", users);
+
     return (
         <>
             {" "}
