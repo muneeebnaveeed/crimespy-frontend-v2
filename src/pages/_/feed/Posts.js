@@ -10,9 +10,8 @@ import axios from 'axios'
 const fetchPosts = async () => { // const posts = [];
     const user = getLoggedInUser();
 
-    return axios.get(`https://crimespy.herokuapp.com/posts/id/${
-        user.uid
-    }`).then(res => res.data)
+    return axios.get(`https://crimespy.herokuapp.com/posts`).then(res => res.data)
+
 
 };
 

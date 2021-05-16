@@ -122,9 +122,7 @@ const CreatePost = ({toggle, isOpen}) => {
                     username: user.displayName.toLowerCase(),
                     profileUrl: user.photoURL
                 };
-                axios.post(`https://crimespy.herokuapp.com/posts/id/${
-                    user.uid
-                }`, newPost).then(res => {
+                axios.post(`https://crimespy.herokuapp.com/posts`, newPost).then(res => {
                     console.log(res)
                 })
                 // await postRef.doc(user.uid).collection("userPosts").doc(postId).set(newPost);
