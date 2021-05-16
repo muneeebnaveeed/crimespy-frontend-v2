@@ -7,31 +7,31 @@ import { Row } from "reactstrap/lib";
 import { Else, If, Then } from "react-if";
 import axios from "axios";
 
-const fetchUsers = async () => {
-    const snapshot = db.collection("users").get();
-    const docs = (await snapshot).docs;
+// const fetchUsers = async () => {
+//     const snapshot = db.collection("users").get();
+//     const docs = (await snapshot).docs;
 
-    return new Promise((resolve, reject) => {
-        const users = docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-        }));
-        resolve(users);
-    });
-};
+//     return new Promise((resolve, reject) => {
+//         const users = docs.map((doc) => ({
+//             id: doc.id,
+//             ...doc.data(),
+//         }));
+//         resolve(users);
+//     });
+// };
 
 const fetchPosts = async () => {
     // const posts = [];
     const user = getLoggedInUser();
 
-    return axios.get(`https://crimespy.herokuapp.com/posts/id/${user.uid}`).then((res) => res.data);
+    return axios.get(`https://crimespy.herokuapp.com/posts`).then((res) => res.data);
 };
 
 function Posts(props) {
     const posts = useModifiedQuery("posts", fetchPosts);
-    const users = useModifiedQuery("users", fetchUsers);
+    // const users = useModifiedQuery("users", fetchUsers);
     console.log("weasdadas", posts);
-    console.log("pendahoe", users);
+    // console.log("pendahoe", users);
 
     return (
         <>
