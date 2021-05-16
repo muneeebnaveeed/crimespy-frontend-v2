@@ -50,6 +50,8 @@ const fetchUsers = async () => {
 };
 
 const fetchPresets = async () => {
+
+
     const snapshot = db.collection("presets").get();
     const docs = (await snapshot).docs;
 
@@ -99,11 +101,9 @@ function UsersTable(props) {
 
     const deleteUser = async (id) => {
         setIsDeletingUser(true);
-        axios.delete(`https://crimespy.herokuapp.com/users/id/${
+        await axios.delete(`https://crimespy.herokuapp.com/users/id/${
             id
-        }`).then(res => {
-            console.log(res)
-        })
+        }`).then(res => res.data)
         // const useRef = db.collection("users")
         // await useRef.doc(id).delete().then(function () {
         //     console.log("delete Users info successfully");

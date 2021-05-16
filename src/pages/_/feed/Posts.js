@@ -19,7 +19,6 @@ import axios from "axios";
 //         resolve(users);
 //     });
 // };
-
 const fetchPosts = async () => {
     // const posts = [];
     const user = getLoggedInUser();
