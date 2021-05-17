@@ -16,4 +16,5 @@ export default {
         { key: "create", label: "Create Crime Chart" },
         { key: "delete", label: "Delete Crime Chart" },
     ],
+    timeline: [],
 };

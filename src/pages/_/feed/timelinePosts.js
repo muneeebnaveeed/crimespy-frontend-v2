@@ -5,24 +5,32 @@ import { useModifiedQuery } from "helpers/query";
 import { Col } from "reactstrap";
 import { Row } from "reactstrap/lib";
 import { Else, If, Then } from "react-if";
+import Axios from "axios";
+
+// const fetchPosts = async () => {
+//     const user = getLoggedInUser();
+//     const snapshot = await db
+//         .collection("posts")
+//         .doc(user.uid)
+//         .collection("userPosts")
+//         .orderBy("timestamp", "desc")
+//         .get();
+//     const docs = await snapshot.docs;
+
+//     return new Promise((resolve, reject) => {
+//         const posts = docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+//         resolve(posts);
+//     });
+// };
 
 const fetchPosts = async () => {
+    // const posts = [];
     const user = getLoggedInUser();
-    const snapshot = await db
-        .collection("posts")
-        .doc(user.uid)
-        .collection("userPosts")
-        .orderBy("timestamp", "desc")
-        .get();
-    const docs = await snapshot.docs;
 
-    return new Promise((resolve, reject) => {
-        const posts = docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-        resolve(posts);
-    });
+    return Axios.get(`https://crimespy.herokuapp.com/posts/id/${user.id}`).then((res) => res.data);
 };
 
-function Posts(props) {
+function TimeLinePosts(props) {
     const posts = useModifiedQuery("posts", fetchPosts);
 
     return (
@@ -58,4 +66,4 @@ function Posts(props) {
     );
 }
 
-export default Posts;
+export default TimeLinePosts;

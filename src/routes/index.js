@@ -110,6 +110,7 @@ import profile from "pages/_/profile";
 import Mapcrime from "pages/_/MapCrime/MapCrime";
 import MapLayout from "components/VerticalLayout/MapLayout";
 import UserPermissions from "pages/_/permissions";
+import TimeLinePosts from "pages/_/feed/TimelinePosts";
 
 const hiddenRoutes = [
     { path: "/profile", icon: "fas fa-user", title: "User Profile", key: "profile", component: profile },
@@ -124,6 +125,7 @@ const hiddenRoutes = [
 
 const sideBarRoutes = [
     { path: "/dashboard", icon: "fas fa-columns", title: "Feed", key: "feed", component: Feed },
+    { path: "/timeline", icon: "fas fa-columns", title: "Time Line", key: "timeline", component: TimeLinePosts },
     { path: "/users", icon: "fas fa-users", title: "Users", key: "users", component: Users, roles: ["admin"] }, // doesn't appear for users
     { path: "/map", icon: "fas fa-map", title: "Map", key: "map", component: Mapcrime, layout: MapLayout },
 ];
