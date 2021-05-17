@@ -110,7 +110,7 @@ import profile from "pages/_/profile";
 import Mapcrime from "pages/_/MapCrime/MapCrime";
 import MapLayout from "components/VerticalLayout/MapLayout";
 import UserPermissions from "pages/_/permissions";
-import TimeLinePosts from "pages/_/feed/TimelinePosts";
+import TimeLinePosts from "pages/_/feed/timelinePosts";
 
 const hiddenRoutes = [
     { path: "/profile", icon: "fas fa-user", title: "User Profile", key: "profile", component: profile },

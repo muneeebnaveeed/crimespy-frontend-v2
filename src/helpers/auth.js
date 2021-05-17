@@ -37,7 +37,8 @@ export const setSession = (user) => {
 
 export const isUserAuthorized = (routeKey, user) => {
     if (!routeKey) return true;
-    if (user.permissions[routeKey]?.length) return true;
+    if (routeKey == "timeline") console.log("userPermissions() [permissions:%o]", user.permissions);
+    if (user.permissions[routeKey]) return true;
     return false;
 };
 

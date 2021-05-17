@@ -55,7 +55,7 @@ const Permissions = ({ user }) => {
     };
 
     const handleChange = (checked, permissionGroup, key) => {
-        let updatedPermissions = formik.values[permissionGroup];
+        let updatedPermissions = formik.values?.[permissionGroup] ?? [];
 
         if (!checked) updatedPermissions = updatedPermissions.filter((permission) => permission !== key);
         else if (checked && !updatedPermissions.includes(key)) updatedPermissions.push(key);
@@ -69,8 +69,11 @@ const Permissions = ({ user }) => {
         validateOnChange: false,
     });
 
-    useEffect(() => console.log(user.permissions), []);
+    // useEffect(() => console.log("formikValues() [values:%o]", formik.values), []);
     const { isOpen, toggle } = useDisclosure();
+
+    console.log("formikValues() [values:%o]", formik.values);
+
     return (
         <>
             <Card>
@@ -104,7 +107,7 @@ const Permissions = ({ user }) => {
                                                                         permission.key
                                                                     )
                                                                 }
-                                                                checked={formik.values[permissionGroup].includes(
+                                                                checked={formik.values[permissionGroup]?.includes?.(
                                                                     permission.key
                                                                 )}
                                                                 style={{ cursor: "pointer" }}
