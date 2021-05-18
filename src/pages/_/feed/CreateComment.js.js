@@ -38,12 +38,14 @@ export default function CreateComment({
 
             await postRef.doc(id).update({comments: updatedComments});
         } catch (err) {
-            showErrorToast({message: `Unable to create comment: ${
+            showErrorToast({
+                    message: `Unable to create comment: ${
                     err.message
-                }`});
+                }`
+            });
         }
 
-        await queryClient.invalidateQueries("posts");
+        await queryClient.invalidateQueries("feeds");
         form.resetForm();
         setIsCreatingComment(false);
     };
@@ -61,6 +63,7 @@ export default function CreateComment({
             if (validationErrors) 
                 validationErrors.forEach((err) => (errors[err.context.label] = err.message));
             
+
 
             return errors;
         },

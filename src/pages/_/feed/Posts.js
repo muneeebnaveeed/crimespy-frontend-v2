@@ -27,7 +27,7 @@ const fetchPosts = async () => {
 };
 
 function Posts(props) {
-    const posts = useModifiedQuery("posts", fetchPosts);
+    const posts = useModifiedQuery("feeds", fetchPosts);
     // const users = useModifiedQuery("users", fetchUsers);
     console.log("weasdadas", posts);
     // console.log("pendahoe", users);

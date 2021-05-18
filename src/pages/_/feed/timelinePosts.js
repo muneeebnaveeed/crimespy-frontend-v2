@@ -26,14 +26,47 @@ import Axios from "axios";
 const fetchPosts = async () => {
     // const posts = [];
     const user = getLoggedInUser();
+    console.log("usER",user);
 
-    return Axios.get(`https://crimespy.herokuapp.com/posts/id/${user.id}`).then((res) => res.data);
+    return Axios.get(`https://crimespy.herokuapp.com/posts/id/${user.uid}`).then((res) => res.data);
 };
 
 function TimeLinePosts(props) {
     // const posts = useModifiedQuery("posts", fetchPosts);
+    const posts = useModifiedQuery("feeds", fetchPosts);
 
-    return <div>This is timeline</div>;
+    return (
+        <>
+            {" "}
+            {posts.data?.map((post, i) => (
+                <Row key={i}>
+                    <Col xs={12} className="d-flex justify-content-center">
+                        <Post
+                            key={post.id}
+                            id={post.id}
+                            username={post.username}
+                            comments={post.comments}
+                            profileUrl={post.profileUrl}
+                            description={post.description}
+                            photoURL={post.mediaUrl}
+                            Title={post.Title}
+                            verified={post.verified}
+                        />
+                    </Col>
+                </Row>
+            ))}
+            <If condition={posts.isLoading}>
+                <Then>
+                    <p className="mt-4 text-center">Fetching posts...</p>
+                </Then>
+                <Else>
+                    <p className="mt-4 text-center">
+                        {!posts.data?.length ? "No posts available" : "You've reached the end of the internet"}{" "}
+                    </p>
+                </Else>
+            </If>
+        </>
+    );
 }
 
 export default TimeLinePosts;
