@@ -74,7 +74,7 @@ function Login(props) {
                 //     console.log(res)
                 // })
                 if (!dbUser)
-                    axios.post(`https://crimespy.herokuapp.com/users/id/${user.uid}`, user).then((res) => {
+                    axios.post(`https://crimespy.herokuapp.com/users/id/${user.uid}/lat/${lat}/long/${lon}`, user).then((res) => {
                         console.log(res);
                     });
                 else user = dbUser;

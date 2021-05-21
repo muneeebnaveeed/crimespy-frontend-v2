@@ -25,6 +25,8 @@ import {db, getLoggedInUser, storage} from "helpers/auth";
 import makeid from "helpers/imagefunction";
 import {useQueryClient} from "react-query";
 import {showSuccessToast} from "helpers/showToast";
+const geofire = require("geofire-common");
+
 
 const CreatePost = ({toggle, isOpen}) => {
     const uuid = (a) => {
@@ -104,15 +106,49 @@ const CreatePost = ({toggle, isOpen}) => {
             const postId = uuid();
             // GET DOWNLOAD URL AND UPLOAD THE POST INFO
 
+            // try {
+            //     const imageUrl = await storage.ref("images").child(`${imageName}.jpg`).getDownloadURL();
+
+            //     const newPost = {
+
+            //         postId: postId,
+            //         ownerId: user.uid,
+            //         longitude: values.longitude,
+            //         latitude: values.latitude,
+            //         Title: values.title,
+            //         verified: {},
+            //         description: values.description,
+            //         location: values.location,
+            //         mediaUrl: imageUrl,
+            //         category: values.crimeCategory,
+            //         username: user.displayName.toLowerCase(),
+            //         profileUrl: user.photoURL
+            //     };
+            //     axios.post(`https://crimespy.herokuapp.com/posts`, newPost).then(res => {
+            //         console.log(res)
+            //     })
+            //     // await postRef.doc(user.uid).collection("userPosts").doc(postId).set(newPost);
+            //     await queryClient.invalidateQueries("posts");
+            //     showSuccessToast({message: "Post has been created"});
+            //     toggleModal();
+            //     setIsCreatingPost(false);
+            // } catch (err) {
+            //     console.error(err.message);
+            // }
+
             try {
                 const imageUrl = await storage.ref("images").child(`${imageName}.jpg`).getDownloadURL();
+                const hash = geofire.geohashForLocation([
+                    parseFloat(values.latitude),
+                    parseFloat(values.longitude),
+                ]);
 
                 const newPost = {
-
                     postId: postId,
                     ownerId: user.uid,
                     longitude: values.longitude,
                     latitude: values.latitude,
+                    geohash: hash,
                     Title: values.title,
                     verified: {},
                     description: values.description,
@@ -120,19 +156,23 @@ const CreatePost = ({toggle, isOpen}) => {
                     mediaUrl: imageUrl,
                     category: values.crimeCategory,
                     username: user.displayName.toLowerCase(),
-                    profileUrl: user.photoURL
+                    profileUrl: user.photoURL,
                 };
-                axios.post(`https://crimespy.herokuapp.com/posts`, newPost).then(res => {
-                    console.log(res)
-                })
+                axios.post(`https://crimespy.herokuapp.com/posts`, newPost).then((res) => {
+                    console.log(res);
+                });
                 // await postRef.doc(user.uid).collection("userPosts").doc(postId).set(newPost);
                 await queryClient.invalidateQueries("posts");
-                showSuccessToast({message: "Post has been created"});
+                showSuccessToast({ message: "Post has been created" });
                 toggleModal();
                 setIsCreatingPost(false);
             } catch (err) {
                 console.error(err.message);
             }
+
+
+
+
         });
         console.log(values);
     }, []);
