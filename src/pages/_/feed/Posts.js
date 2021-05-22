@@ -28,9 +28,16 @@ const fetchPosts = async () => {
 
 function Posts(props) {
     const posts = useModifiedQuery("feeds", fetchPosts);
+    // const [hook, setHook] = useState();
     // const users = useModifiedQuery("users", fetchUsers);
     console.log("weasdadas", posts);
     // console.log("pendahoe", users);
+    // console.log('hook',hook)
+    // useEffect(() => {
+    //    for(const obj of posts.data()){
+    //  console.log(Object.values(obj.verified).filter(Boolean).length)
+    //    }
+    // }, [])
 
     return (
         <>
@@ -48,9 +55,19 @@ function Posts(props) {
                             photoURL={post.mediaUrl}
                             Title={post.Title}
                             verified={post.verified}
+                            postVerified={post.postVerified}
                         />
                     </Col>
+                  {/* {console.log("object lenght",Object.keys(post.verified).length)} */}
+
+                  {/* {console.log("truee",Object.values(post.verified).filter(Boolean).length)
+                  } */}
+                    {/* {setHook(Object.values(post.verified).filter(Boolean).length)} */}
+
+                    {/* To count False */}
+                  {/* {console.log("truee",Object.values(post.verified).filter(status => !status).length)} */}
                 </Row>
+                
             ))}
             <If condition={posts.isLoading}>
                 <Then>

@@ -154,6 +154,7 @@ const CreatePost = ({toggle, isOpen}) => {
                     description: values.description,
                     location: values.location,
                     mediaUrl: imageUrl,
+                    postVerified:false,
                     category: values.crimeCategory,
                     username: user.displayName.toLowerCase(),
                     profileUrl: user.photoURL,
