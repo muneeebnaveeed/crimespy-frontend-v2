@@ -22,13 +22,24 @@ function Action({
     );
 }
 
-function Actions({username, verified, id, user}) {
+function Actions({username, verified, id, user, postVerified}) {
     const [isVoting, setVoting] = useState(false);
     const [votedPosts, setVotedPosts] = useState([]);
     const [votingii, setVotingii] = useState(null);
     const queryClient = useQueryClient();
     // const postRef = db.collection("posts").doc(user.uid).collection("userPosts").doc(id);
     const postRef = db.collection("feeds").doc(id);
+
+    useEffect(() => {
+      console.log(Object.values(verified).filter(Boolean).length)
+      const value = Object.values(verified).filter(Boolean).length
+      let verifiedPost
+      if(value === 2){
+        postRef.update({postVerified:true})
+      }else{
+        postRef.update({postVerified:false})
+      }
+    }, [verified])
 
 
     const handleClick = async (type) => { // Do calculation to save the vote.

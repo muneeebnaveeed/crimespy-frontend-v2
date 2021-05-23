@@ -25,50 +25,23 @@ const fetchPosts = async () => {
 
     const user = getLoggedInUser();
 
-    const center = [user.latitude, user.longitude];
-
-    const radius = 10 * 1000;
-    const bounds = geofire.geohashQueryBounds(center, radius);
-    //console.log("lalalala", center, bounds);
-    const promises = [];
-    for (const b of bounds) {
-        const q = await db.collection("feeds").orderBy("geohash").startAt(b[0]).endAt(b[1]);
-        //console.log(q.get());
-        promises.push(q.get());
-    }
-    //console.log("here is what u need", promises);
-    const snapshots = await Promise.all(promises);
-    const matchingDocs = [];
-
-    for (const snap of snapshots) {
-        for (const doc of snap.docs) {
-            //console.log(doc.data());
-            const lat = parseFloat(doc.get("latitude"));
-            const lng = parseFloat(doc.get("longitude"));
-            //console.log(lat, lng);
-            // We have to filter out a few false positives due to GeoHash
-            // accuracy, but most will match
-            const distanceInKm = geofire.distanceBetween([lat, lng], center);
-            const distanceInM = distanceInKm * 1000;
-            console.log("distances ", distanceInKm, distanceInM);
-            if (distanceInM <= radius) {
-                matchingDocs.push({ id: doc.id, ...doc.data() });
-            } else {
-                console.log("condition not matching", distanceInM, radius);
-            }
-        }
-    }
-    return matchingDocs;
-
-    // return axios.get(`https://crimespy.herokuapp.com/posts`).then((res) => res.data);
+    return axios
+        .get(`https://crimespy.herokuapp.com/posts/lat/${user.latitude}/lon/${user.longitude}`)
+        .then((res) => res.data);
 };
 
 function Posts(props) {
     const posts = useModifiedQuery("feeds", fetchPosts);
-    console.log("to be tested", posts);
+    // const [hook, setHook] = useState();
     // const users = useModifiedQuery("users", fetchUsers);
     //console.log("weasdadas", posts);
     // console.log("pendahoe", users);
+    // console.log('hook',hook)
+    // useEffect(() => {
+    //    for(const obj of posts.data()){
+    //  console.log(Object.values(obj.verified).filter(Boolean).length)
+    //    }
+    // }, [])
 
     return (
         <>
@@ -86,8 +59,17 @@ function Posts(props) {
                             photoURL={post.mediaUrl}
                             Title={post.Title}
                             verified={post.verified}
+                            postVerified={post.postVerified}
                         />
                     </Col>
+                    {/* {console.log("object lenght",Object.keys(post.verified).length)} */}
+
+                    {/* {console.log("truee",Object.values(post.verified).filter(Boolean).length)
+                  } */}
+                    {/* {setHook(Object.values(post.verified).filter(Boolean).length)} */}
+
+                    {/* To count False */}
+                    {/* {console.log("truee",Object.values(post.verified).filter(status => !status).length)} */}
                 </Row>
             ))}
             <If condition={posts.isLoading}>
