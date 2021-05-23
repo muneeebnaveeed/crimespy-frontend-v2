@@ -34,7 +34,7 @@ function Posts(props) {
     const posts = useModifiedQuery("feeds", fetchPosts);
     // const [hook, setHook] = useState();
     // const users = useModifiedQuery("users", fetchUsers);
-    //console.log("weasdadas", posts);
+    console.log("weasdadas", posts);
     // console.log("pendahoe", users);
     // console.log('hook',hook)
     // useEffect(() => {
@@ -52,6 +52,7 @@ function Posts(props) {
                         <Post
                             key={post.id}
                             id={post.id}
+                            ownerId={post.ownerId}
                             username={post.username}
                             comments={post.comments}
                             profileUrl={post.profileUrl}
