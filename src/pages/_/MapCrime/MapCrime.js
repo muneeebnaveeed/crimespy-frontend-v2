@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Map, Marker, GoogleApiWrapper } from "google-maps-react";
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from "react-places-autocomplete";
 import { Col, Row } from "reactstrap/lib";
-
+import {db, getLoggedInUser} from "../../../helpers/auth";
 const mapStyles = { position: "block" };
 
 export class MapContainer extends Component {
@@ -21,10 +21,22 @@ export class MapContainer extends Component {
                 lng: 73.051884,
             },
         };
+
     }
 
-    handleChange = (address) => {
+    handleChange = async (address) => {
         this.setState({ address });
+    //     const posts = []
+    //     this.snapshot = await db.collection('feeds').where("postVerified", "==", true).get();
+    //     console.log(this.snapshot)
+    // //    this.snapshot.forEach(function (doc) { // doc.data() is never undefined for query doc snapshots
+
+    // //         posts.push({
+    // //             id: doc.id,
+    // //             ... doc.data()
+    // //         });
+    // //         console.log(doc.id, " => ", doc.data());
+    // //     });
     };
 
     handleSelect = (address) => {
