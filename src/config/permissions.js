@@ -17,4 +17,14 @@ export default {
         { key: "delete", label: "Delete Crime Chart" },
     ],
     timeline: [{ key: "review", label: "Access Timeline" }],
+    poststable: [
+        { key: "review", label: "Access Posts" },
+        { key: "verify", label: "Verify Posts" },
+        { key: "delete", label: "Delete Posts" },
+    ],
+    // chartstable: [
+    //     { key: "review", label: "Access Chart" },
+    //     { key: "verify", label: "Verify Chart" },
+    //     { key: "delete", label: "Delete Chart" },
+    // ],
 };

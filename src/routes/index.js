@@ -108,6 +108,7 @@ import Feed from "pages/_/feed";
 import Users from "pages/_/users";
 import profile from "pages/_/profile";
 import Mapcrime from "pages/_/MapCrime/MapCrime";
+import Posts from "pages/_/posts";
 import MapLayout from "components/VerticalLayout/MapLayout";
 import UserPermissions from "pages/_/permissions";
 import TimeLinePosts from "pages/_/feed/timelinePosts";
@@ -127,6 +128,13 @@ const sideBarRoutes = [
     { path: "/dashboard", icon: "fas fa-columns", title: "Feed", key: "feed", component: Feed },
     { path: "/timeline", icon: "fas fa-columns", title: "Time Line", key: "timeline", component: TimeLinePosts },
     { path: "/users", icon: "fas fa-users", title: "Users", key: "users", component: Users, roles: ["admin"] }, // doesn't appear for users
+    {
+        path: "/posts",
+        icon: "fas fa-columns",
+        title: "Post Management",
+        key: "poststable",
+        component: Posts,
+    },
     { path: "/map", icon: "fas fa-map", title: "Map", key: "map", component: Mapcrime, layout: MapLayout },
 ];
 
