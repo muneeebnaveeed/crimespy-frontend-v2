@@ -54,9 +54,9 @@ function PostsTable(props) {
         setPost(post);
     };
 
-    const HandleVerifyPost = async (id) => {
+    const HandleVerifyPost = async (post) => {
         VerifyDisclosure.toggle();
-        setPostId(id);
+        setPost(post);
     };
 
     const handlePassInfoShow = async (id) => {
@@ -162,7 +162,7 @@ function PostsTable(props) {
                                                         <Button
                                                             color="light"
                                                             size="sm"
-                                                            onClick={() => HandleVerifyPost(post.postsId)}
+                                                            onClick={() => HandleVerifyPost(post)}
                                                         >
                                                             <i class="fas fa-check" />
                                                         </Button>
@@ -191,7 +191,7 @@ function PostsTable(props) {
             </Card>
             <DeletePost isOpen={isOpen} toggle={toggle} postId={postId} />
             <ViewPost isOpen={ViewDisclosure.isOpen} toggle={ViewDisclosure.toggle} post={post} />
-            <VerifyPost isOpen={VerifyDisclosure.isOpen} toggle={VerifyDisclosure.toggle} postId={postId} />
+            <VerifyPost isOpen={VerifyDisclosure.isOpen} toggle={VerifyDisclosure.toggle} post={post} />
         </>
     );
 }

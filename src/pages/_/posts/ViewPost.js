@@ -9,6 +9,7 @@ import { FormGroup, Label, Modal, ModalBody, ModalFooter, ModalHeader } from "re
 import { toggleDeleteProductDisclosure } from "store/routes/products/actions";
 
 function ViewPost({ isOpen, toggle, post }) {
+    console.log(post);
     return (
         <Modal isOpen={isOpen} toggle={toggle} centered>
             <ModalHeader>Post</ModalHeader>
