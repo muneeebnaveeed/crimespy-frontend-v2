@@ -8,34 +8,32 @@ import { useDispatch, useSelector } from "react-redux";
 import { FormGroup, Label, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import { toggleDeleteProductDisclosure } from "store/routes/products/actions";
 
-function DeleteUser({ isOpen, toggle, postId, Title, Discription, Location, Longitude, Latitude }) {
-    const [isDeletePost, setIsDeletePost] = useState(false);
-
-    const queryClient = useQueryClient();
-
+function ViewPost({ isOpen, toggle, post }) {
     return (
-        <Modal isOpen={isOpen} toggle={toggleModal} centered>
+        <Modal isOpen={isOpen} toggle={toggle} centered>
             <ModalHeader>Post</ModalHeader>
             <ModalBody>
                 <FormGroup>
-                    <Label>Title </Label>
-                    <Label>{Title}</Label>
+                    <label>Title :</label>
+                    <Label>{post.Title}</Label>
                 </FormGroup>
                 <FormGroup>
-                    <Label>Location </Label>
-                    <Label>{Location}</Label>
+                    <label>Location :</label>
+                    <Label>{post.location}</Label>
                 </FormGroup>
                 <FormGroup>
-                    <Label>Detail </Label>
-                    <Label>{Discription}</Label>
+                    <label>Detail :</label>
+                    <Label>{post.description}</Label>
                 </FormGroup>
                 <FormGroup>
-                    <Label>Coordinates </Label>
-                    <Label>{(Longitude, Latitude)}</Label>
+                    <label>Coordinates :</label>
+                    <Label>
+                        {post.longitude} , {post.latitude}
+                    </Label>
                 </FormGroup>
             </ModalBody>
             <ModalFooter>
-                <Button color="light" w="55.5px" size="sm" onClick={toggleModal} color="primary">
+                <Button color="light" w="55.5px" size="sm" onClick={toggle} color="primary">
                     Close
                 </Button>
             </ModalFooter>
@@ -43,4 +41,4 @@ function DeleteUser({ isOpen, toggle, postId, Title, Discription, Location, Long
     );
 }
 
-export default DeleteUser;
+export default ViewPost;

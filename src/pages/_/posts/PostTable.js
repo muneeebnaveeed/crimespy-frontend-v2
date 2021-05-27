@@ -22,6 +22,8 @@ import usePermissions from "helpers/usePermissions";
 import { FastField } from "formik";
 import axios from "axios";
 import DeletePost from "./DeletePost";
+import ViewPost from "./ViewPost";
+import VerifyPost from "./VerifyPost";
 
 const fetchPosts = async () => {
     const posts = [];
@@ -39,10 +41,23 @@ function PostsTable(props) {
     //  const presets = useModifiedQuery("presets", fetchPresets);
     const queryClient = useQueryClient();
     const { isOpen, toggle, onOpen } = useDisclosure();
+    const ViewDisclosure = useDisclosure();
+    const VerifyDisclosure = useDisclosure();
 
     const [changingRole, setChangingRole] = useState(null);
     const [postId, setPostId] = useState("");
+    const [post, setPost] = useState([]);
     const history = useHistory();
+
+    const HandleViewPost = async (post) => {
+        ViewDisclosure.toggle();
+        setPost(post);
+    };
+
+    const HandleVerifyPost = async (id) => {
+        VerifyDisclosure.toggle();
+        setPostId(id);
+    };
 
     const handlePassInfoShow = async (id) => {
         toggle();
@@ -138,7 +153,7 @@ function PostsTable(props) {
                                                         <Button
                                                             color="light"
                                                             size="sm"
-                                                            // onClick={() => history.push(`/users/edit?user=${user.uid}`)}
+                                                            onClick={() => HandleViewPost(post)}
                                                         >
                                                             <i class="fas fa-eye" />
                                                         </Button>
@@ -147,7 +162,7 @@ function PostsTable(props) {
                                                         <Button
                                                             color="light"
                                                             size="sm"
-                                                            // onClick={() => history.push(`/users/edit?user=${user.uid}`)}
+                                                            onClick={() => HandleVerifyPost(post.postsId)}
                                                         >
                                                             <i class="fas fa-check" />
                                                         </Button>
@@ -175,6 +190,8 @@ function PostsTable(props) {
                 </CardBody>
             </Card>
             <DeletePost isOpen={isOpen} toggle={toggle} postId={postId} />
+            <ViewPost isOpen={ViewDisclosure.isOpen} toggle={ViewDisclosure.toggle} post={post} />
+            <VerifyPost isOpen={VerifyDisclosure.isOpen} toggle={VerifyDisclosure.toggle} postId={postId} />
         </>
     );
 }

@@ -18,6 +18,10 @@ import {
     Button,
 } from "reactstrap";
 import SetBio from "./SetBio";
+import UserDisplay from "../permissions/UserDisplay";
+import { getLoggedInUser } from "helpers/auth";
+
+const user = getLoggedInUser();
 
 const breadcrumbItems = [
     { title: "Crimespy", link: "/" },
@@ -25,11 +29,18 @@ const breadcrumbItems = [
 ];
 
 const profile = () => {
+    console.log(user);
+
     return (
         <>
             <div className="page-content">
                 <Container fluid>
                     <Breadcrumbs title="Profile" breadcrumbItems={breadcrumbItems} />
+                    <Row>
+                        <Col xs={12}>
+                            <UserDisplay user={user} />
+                        </Col>
+                    </Row>
                     <Row>
                         <Col xs={12}>
                             <SetuserName />
