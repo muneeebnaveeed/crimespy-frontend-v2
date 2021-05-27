@@ -143,6 +143,15 @@ function PostsTable(props) {
                                                             <i class="fas fa-eye" />
                                                         </Button>
                                                     }
+                                                    {
+                                                        <Button
+                                                            color="light"
+                                                            size="sm"
+                                                            // onClick={() => history.push(`/users/edit?user=${user.uid}`)}
+                                                        >
+                                                            <i class="fas fa-check" />
+                                                        </Button>
+                                                    }
                                                     {isAuthorized("delete") && (
                                                         <Button
                                                             color="light"

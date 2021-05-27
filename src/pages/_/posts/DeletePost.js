@@ -32,9 +32,9 @@ function DeleteUser({ isOpen, toggle, postId }) {
 
     return (
         <Modal isOpen={isOpen} toggle={toggleModal} centered>
-            <ModalHeader>Delete User</ModalHeader>
+            <ModalHeader>Delete Post</ModalHeader>
             <ModalBody>
-                <Label>Are you sure you want to delete this user?</Label>
+                <Label>Are you sure you want to delete this post?</Label>
             </ModalBody>
             <ModalFooter>
                 <Button color="light" w="55.5px" size="sm" onClick={toggleModal}>
