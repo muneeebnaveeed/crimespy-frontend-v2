@@ -2,20 +2,26 @@ import axios from "axios";
 import Button from "components/Common/Button";
 import api, { generateErrorMessage } from "helpers/query";
 import { showErrorToast, showSuccessToast } from "helpers/showToast";
+import { object } from "joi";
 import React, { useCallback, useRef, useState } from "react";
 import { useQueryClient } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
 import { FormGroup, Input, InputGroupAddon, Label, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import { toggleDeleteProductDisclosure } from "store/routes/products/actions";
 
-function ViewPost({ isOpen, toggle, postId }) {
+function VerifyPost({ isOpen, toggle, post }) {
+    console.log(post.verified);
     return (
         <Modal isOpen={isOpen} toggle={toggle} centered>
             <ModalHeader>Verify Post</ModalHeader>
             <ModalBody>
                 <FormGroup check inline>
                     <Label check>
-                        <Input type="checkbox" /> Verify post
+                        <Input
+                            type="checkbox"
+                            //defaultChecked={Object.values(post.verified).filter(Boolean).length >= 2}
+                        />{" "}
+                        Verify post
                     </Label>
                 </FormGroup>
             </ModalBody>
@@ -31,4 +37,4 @@ function ViewPost({ isOpen, toggle, postId }) {
     );
 }
 
-export default ViewPost;
+export default VerifyPost;
