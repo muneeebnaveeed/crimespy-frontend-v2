@@ -99,7 +99,7 @@ function Post({ username, profileUrl, description, comments, id, photoURL, Title
                 <Actions username={username} verified={verified} postVerified={postVerified} user={user} id={id} />
                 <Comments username={username} comments={comments} />
                 <When condition={isAuthorized("createComment")}>
-                    <CreateComment id={id} />
+                    <CreateComment id={id} comments={comments} />
                 </When>
             </CardBody>
         </Card>

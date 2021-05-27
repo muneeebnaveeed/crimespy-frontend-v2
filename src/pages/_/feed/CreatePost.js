@@ -167,10 +167,7 @@ const CreatePost = ({ toggle, isOpen }) => {
                         username: user.displayName.toLowerCase(),
                         profileUrl: user.photoURL,
                     };
-                    axios.post(`https://crimespy.herokuapp.com/posts`, newPost).then((res) => {
-                        console.log(res);
-                    });
-                    // await postRef.doc(user.uid).collection("userPosts").doc(postId).set(newPost);
+                    await axios.post(`https://crimespy.herokuapp.com/posts`, newPost);
                     await queryClient.invalidateQueries("posts");
                     showSuccessToast({ message: "Post has been created" });
                     toggleModal();
@@ -180,7 +177,6 @@ const CreatePost = ({ toggle, isOpen }) => {
                 }
             }
         );
-        console.log(values);
     }, []);
 
     const formik = useFormik({

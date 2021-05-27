@@ -32,47 +32,32 @@ const fetchPosts = async () => {
 
 function Posts(props) {
     const posts = useModifiedQuery("feeds", fetchPosts);
-    // const [hook, setHook] = useState();
-    // const users = useModifiedQuery("users", fetchUsers);
-    console.log("weasdadas", posts);
-    // console.log("pendahoe", users);
-    // console.log('hook',hook)
-    // useEffect(() => {
-    //    for(const obj of posts.data()){
-    //  console.log(Object.values(obj.verified).filter(Boolean).length)
-    //    }
-    // }, [])
 
     return (
         <>
             {" "}
-            {posts.data?.map((post, i) => (
-                <Row key={i}>
-                    <Col xs={12} className="d-flex justify-content-center">
-                        <Post
-                            key={post.id}
-                            id={post.id}
-                            ownerId={post.ownerId}
-                            username={post.username}
-                            comments={post.comments}
-                            profileUrl={post.profileUrl}
-                            description={post.description}
-                            photoURL={post.mediaUrl}
-                            Title={post.Title}
-                            verified={post.verified}
-                            postVerified={post.postVerified}
-                        />
-                    </Col>
-                    {/* {console.log("object lenght",Object.keys(post.verified).length)} */}
-
-                    {/* {console.log("truee",Object.values(post.verified).filter(Boolean).length)
-                  } */}
-                    {/* {setHook(Object.values(post.verified).filter(Boolean).length)} */}
-
-                    {/* To count False */}
-                    {/* {console.log("truee",Object.values(post.verified).filter(status => !status).length)} */}
-                </Row>
-            ))}
+            {posts.data?.map((post, i) => {
+                console.log("post [comments:%o]", post.comments);
+                return (
+                    <Row key={i}>
+                        <Col xs={12} className="d-flex justify-content-center">
+                            <Post
+                                key={post.id}
+                                id={post.id}
+                                ownerId={post.ownerId}
+                                username={post.username}
+                                comments={post.comments}
+                                profileUrl={post.profileUrl}
+                                description={post.description}
+                                photoURL={post.mediaUrl}
+                                Title={post.Title}
+                                verified={post.verified}
+                                postVerified={post.postVerified}
+                            />
+                        </Col>
+                    </Row>
+                );
+            })}
             <If condition={posts.isLoading}>
                 <Then>
                     <p className="mt-4 text-center">Fetching posts...</p>

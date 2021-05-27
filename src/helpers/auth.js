@@ -23,6 +23,7 @@ const facebookProvider = new firebase.auth.FacebookAuthProvider();
 export const auth = firebaseapp.auth();
 const db = firebase.firestore();
 const storage = firebase.storage();
+export const firestore = firebase.firestore;
 
 export { db, storage, facebookProvider };
 
@@ -37,7 +38,6 @@ export const setSession = (user) => {
 
 export const isUserAuthorized = (routeKey, user) => {
     if (!routeKey) return true;
-    if (routeKey == "timeline") console.log("userPermissions() [permissions:%o]", user.permissions);
     if (user.permissions[routeKey]?.length) return true;
     return false;
 };
