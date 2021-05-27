@@ -1,5 +1,6 @@
 import axios from "axios";
 import Button from "components/Common/Button";
+import { db } from "helpers/auth";
 import api, { generateErrorMessage } from "helpers/query";
 import { showErrorToast, showSuccessToast } from "helpers/showToast";
 import React, { useCallback, useRef, useState } from "react";
@@ -16,17 +17,19 @@ function DeleteUser({ isOpen, toggle, postId }) {
     const toggleModal = useCallback(() => {
         if (!isDeletePost) toggle();
     }, [isDeletePost, toggle]);
-
+    console.log('deete',postId)
     const handleDeletePost = async () => {
-        // setIsDeletePost(true);
-        // try {
-        //     await axios.delete(`https://crimespy.herokuapp.com/users/id/${}`);
-        //     await queryClient.invalidateQueries("users");
-        //     showSuccessToast({ message: "Post has been deleted successfully" });
-        // } catch (err) {
-        //     showErrorToast({ message: "Unable to delete user" });
-        // }
-        // setIsDeletePost(false);
+        setIsDeletePost(true);
+
+        
+        try {
+            await db.collection('feeds').doc(postId).delete()
+            await queryClient.invalidateQueries("feeds");
+            showSuccessToast({ message: "Post has been deleted successfully" });
+        } catch (err) {
+            showErrorToast({ message: "Unable to delete user" });
+        }
+        setIsDeletePost(false);
         console.log("will do it in server");
     };
 
