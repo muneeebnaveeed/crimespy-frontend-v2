@@ -7,7 +7,7 @@ import PostTable from "./PostTable";
 
 const breadcrumbItems = [
     { title: "Crimespy", link: "/" },
-    { title: "Posts", link: "/users" },
+    { title: "Posts", link: "/posts" },
 ];
 
 function Posts() {
