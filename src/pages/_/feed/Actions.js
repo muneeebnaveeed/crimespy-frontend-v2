@@ -34,11 +34,10 @@ function Actions({username, verified, id, user, postVerified}) {
       console.log(Object.values(verified).filter(Boolean).length)
       const value = Object.values(verified).filter(Boolean).length
       let verifiedPost
-      if(value === 2){
+      if(value === 1){
         postRef.update({postVerified:true})
-      }else{
-        postRef.update({postVerified:false})
       }
+      
     }, [verified])
 
 
