@@ -26,4 +26,8 @@ export default {
         { key: "review", label: "Access Statistics" },
         { key: "filter", label: "Filter Statistics" },
     ],
+    profile: [
+        { key: "review", label: "Access Profile" },
+        { key: "update", label: "Update Statistics" },
+    ],
 };

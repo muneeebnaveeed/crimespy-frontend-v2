@@ -112,10 +112,9 @@ import Posts from "pages/_/posts";
 import MapLayout from "components/VerticalLayout/MapLayout";
 import UserPermissions from "pages/_/permissions";
 import TimeLinePosts from "pages/_/feed/timelinePosts";
-import Statistics from "pages/_/Statistics";
+import Statistics from "pages/_/statistics";
 
 const hiddenRoutes = [
-    { path: "/profile", icon: "fas fa-user", title: "User Profile", key: "profile", component: profile },
     {
         path: "/users/edit",
         icon: "fas fa-users",
@@ -136,6 +135,7 @@ const sideBarRoutes = [
         key: "poststable",
         component: Posts,
     },
+    { path: "/profile", icon: "fas fa-user", title: "User Profile", key: "profile", component: profile },
     {
         path: "/statistics",
         icon: "fas fa-columns",
