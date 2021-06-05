@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Post from "./Post";
 import { db, getLoggedInUser } from "helpers/auth";
-import { useModifiedQuery } from "helpers/query";
+import { api, useModifiedQuery } from "helpers/query";
 import { Col } from "reactstrap";
 import { Row } from "reactstrap/lib";
-import { Else, If, Then } from "react-if";
+import { Else, If, Then, When } from "react-if";
 import axios from "axios";
-const geofire = require("geofire-common");
 
 // const fetchUsers = async () => {
 //     const snapshot = db.collection("users").get();
@@ -21,8 +20,6 @@ const geofire = require("geofire-common");
 //     });
 // };
 const fetchPosts = async () => {
-    const posts = [];
-
     const user = getLoggedInUser();
 
     return axios
@@ -35,9 +32,7 @@ function Posts(props) {
 
     return (
         <>
-            {" "}
             {posts.data?.map((post, i) => {
-                console.log("post [comments:%o]", post.comments);
                 return (
                     <Row key={i}>
                         <Col xs={12} className="d-flex justify-content-center">
@@ -63,9 +58,18 @@ function Posts(props) {
                     <p className="mt-4 text-center">Fetching posts...</p>
                 </Then>
                 <Else>
-                    <p className="mt-4 text-center">
-                        {!posts.data?.length ? "No posts available" : "You've reached the end of the internet"}{" "}
-                    </p>
+                    <If condition={posts.isError}>
+                        <Then>
+                            <p className="mt-4 text-center">
+                                Unable to fetch posts: <b>{posts.error?.message}</b>
+                            </p>
+                        </Then>
+                        <Else>
+                            <p className="mt-4 text-center">
+                                {!posts.data?.length ? "No posts available" : "You've reached the end of the internet"}
+                            </p>
+                        </Else>
+                    </If>
                 </Else>
             </If>
         </>

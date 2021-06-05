@@ -21,9 +21,11 @@ import { useControllableProp } from "@chakra-ui/hooks";
 import { db } from "helpers/auth";
 import Button from "components/Common/Button";
 import { preSetSchema } from "helpers/schema";
+import { useQueryClient } from "react-query";
 
 const CreatePreset = ({ permissions, toggle, isOpen }) => {
     const [isCreatingPreset, setIsCreatingPreset] = useState(false);
+    const queryClient = useQueryClient();
 
     const toggleModal = useCallback(() => {
         if (!isCreatingPreset) toggle();
@@ -42,6 +44,8 @@ const CreatePreset = ({ permissions, toggle, isOpen }) => {
         const newPreset = { title, permissions };
         try {
             await db.collection("presets").doc(title.toLowerCase()).set(newPreset);
+            await queryClient.invalidateQueries("presets");
+            toggle();
             showSuccessToast({ message: "Preset created successfully" });
         } catch (err) {
             console.error(err.message);

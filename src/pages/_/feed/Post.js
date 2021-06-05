@@ -17,29 +17,16 @@ function Post({ username, profileUrl, description, comments, id, photoURL, Title
     const [menu, setMenu] = useState(false);
     const user = getLoggedInUser();
     const queryClient = useQueryClient();
-    const postRef = db.collection("posts").doc(user.uid).collection("userPosts");
     const isAuthorized = usePermissions("feed");
     const arePostAuthorized = usePermissions("poststable");
-    const deletePost = async () => {
-        var imageRef = storage.refFromURL(photoURL);
+    const [isDeletingPost, setIsDeletingPost] = useState(false);
 
-        // imageRef.delete().then(function () {
-        //     console.log("delete successfully");
-        // }).catch(function (error) {
-        //     console.log(`Errors ${error}`);
-        // });
-
-        await axios.delete(`https://crimespy.herokuapp.com/posts/id/${user.uid}/${id}`).then((res) => {
-            console.log("Hello", res);
-        });
-
-        // await postRef.doc(id).delete().then(function () {
-        //     console.log("delete Post info successfully");
-        // }).catch(function (error) {
-        //     console.log(`Errors post info ${error}`);
-        // });
-        await queryClient.invalidateQueries("posts");
-    };
+    const handleDelete = useCallback(async () => {
+        setIsDeletingPost(true);
+        await axios.delete(`https://crimespy.herokuapp.com/posts/id/${user.uid}/${id}`);
+        await queryClient.invalidateQueries("feeds");
+        setIsDeletingPost(false);
+    }, [setIsDeletingPost]);
 
     const toggle = () => {
         setMenu(!menu);
@@ -73,30 +60,35 @@ function Post({ username, profileUrl, description, comments, id, photoURL, Title
                                 id="page-header-user-dropdown"
                             >
                                 <i className="fas fa-ellipsis-h" style={{ color: "black" }}></i>
-                                {/* <i className="mdi mdi-chevron-down d-none ml-1 d-xl-inline-block"></i> */}{" "}
                             </DropdownToggle>
                             <DropdownMenu right>
                                 <If condition={user.uid === ownerId || arePostAuthorized("delete")}>
-                                    <DropdownItem onClick={deletePost}>
+                                    <DropdownItem onClick={handleDelete}>
                                         <i className="fas fa-trash-alt mr-1" />
                                         Delete
                                     </DropdownItem>
                                 </If>
-                                {/* <DropdownItem href="#">
-                            <i className="ri-wallet-2-line align-middle mr-1"></i> My Wallet
-                        </DropdownItem>
-                        <DropdownItem className="d-block" href="#">
-                            <span className="badge badge-success float-right mt-1">11</span>
-                            <i className="ri-settings-2-line align-middle mr-1"></i> Settings
-                        </DropdownItem>
-                        <DropdownItem href="#">
-                            <i className="ri-lock-unlock-line align-middle mr-1"></i> Lock screen
-                        </DropdownItem> */}{" "}
                             </DropdownMenu>
                         </Dropdown>
                     </When>
                 </div>
-                <img className="post__image d-block mx-auto" width="500px" height="400px" src={photoURL} />
+                <div style={{ position: "relative" }}>
+                    <img className="post__image d-block mx-auto" width="500px" height="400px" src={photoURL} />
+                    {isDeletingPost && (
+                        <div
+                            style={{
+                                width: 50,
+                                height: 50,
+                                backgroundColor: "red",
+                                position: "absolute",
+                                top: "50%",
+                                left: "50%",
+                                transform: "translate(-50%,-50%)",
+                            }}
+                        />
+                    )}
+                </div>
+
                 <p className="p-3 m-0">{description}</p>
                 <Actions username={username} verified={verified} postVerified={postVerified} user={user} id={id} />
                 <Comments username={username} comments={comments} />
@@ -107,26 +99,5 @@ function Post({ username, profileUrl, description, comments, id, photoURL, Title
         </Card>
     );
 }
-
-// const DropdownMenu = ({profileUrl}) => {
-//     const dropdownRef = useRef(null);
-//     const [isActive, setIsActive] = useState(false);
-//     const onClick = () => setIsActive(!isActive);
-
-//     return (
-//       <div className="menu-container">
-//         <button onClick={onClick} className="menu-trigger">
-//           <span>User</span>
-//           <img src={profileUrl} alt="User avatar" />
-//         </button>
-//         <nav ref={dropdownRef} className={`menu ${isActive ? 'active' : 'inactive'}`}>
-//           <ul>
-//             <li>Delete Post</li>
-
-//           </ul>
-//         </nav>
-//       </div>
-//     );
-// };
 
 export default Post;

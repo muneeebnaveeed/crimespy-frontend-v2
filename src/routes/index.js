@@ -8,9 +8,6 @@ import Register from "../pages/Authentication/Register";
 import ForgetPwd from "../pages/Authentication/ForgetPassword";
 import AuthLockScreen from "../pages/Authentication/AuthLockScreen";
 
-// Dashboard
-import Dashboard from "../pages/Dashboard/index";
-
 // Pages Calendar
 import Calendar from "../pages/Calendar/Calendar";
 
@@ -112,7 +109,7 @@ import Posts from "pages/_/posts";
 import MapLayout from "components/VerticalLayout/MapLayout";
 import UserPermissions from "pages/_/permissions";
 import TimeLinePosts from "pages/_/feed/timelinePosts";
-import Statistics from "pages/_/statistics";
+import Dashboard from "pages/_/dashboard";
 
 const hiddenRoutes = [
     {
@@ -125,7 +122,8 @@ const hiddenRoutes = [
 ];
 
 const sideBarRoutes = [
-    { path: "/dashboard", icon: "fas fa-columns", title: "Feed", key: "feed", component: Feed },
+    { path: "/dashboard", icon: "fas fa-columns", title: "Dashboard", key: "dashboard", component: Dashboard },
+    { path: "/feed", icon: "fas fa-columns", title: "Feed", key: "feed", component: Feed },
     { path: "/timeline", icon: "fas fa-clock", title: "Time Line", key: "timeline", component: TimeLinePosts },
     { path: "/users", icon: "fas fa-users", title: "Users", key: "users", component: Users, roles: ["admin"] }, // doesn't appear for users
     {
@@ -136,14 +134,6 @@ const sideBarRoutes = [
         component: Posts,
     },
     { path: "/profile", icon: "fas fa-user", title: "User Profile", key: "profile", component: profile },
-    {
-        path: "/statistics",
-        icon: "fas fa-columns",
-        title: "Statistics",
-        key: "statistics",
-        component: Statistics,
-    },
-    //{ path: "/statistics", icon: "fas fa-chart-pie", title: "Statistics", key: "statistics", component: Statistics },
     { path: "/map", icon: "fas fa-map", title: "Map", key: "map", component: Mapcrime, layout: MapLayout },
 ];
 
@@ -151,7 +141,7 @@ const authProtectedRoutes = [...hiddenRoutes, ...sideBarRoutes];
 
 const publicRoutes = [
     // this route should be at the end of all other routes
-    { path: "/", exact: true, component: () => <Redirect to="/dashboard" /> },
+    { path: "/", exact: true, component: () => <Redirect to="/feed" /> },
     { path: "/logout", component: Logout },
     { path: "/login", component: Login },
     { path: "/forgot-password", component: ForgetPwd },

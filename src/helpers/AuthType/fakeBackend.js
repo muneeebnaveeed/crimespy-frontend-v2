@@ -1,5 +1,5 @@
 import MockAdapter from "axios-mock-adapter";
-import api from "helpers/query";
+import { api } from "helpers/query";
 
 const createUser = (id, username, email) => {
     return { id, username, email };

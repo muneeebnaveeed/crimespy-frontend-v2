@@ -25,127 +25,8 @@ import { db, getLoggedInUser, storage } from "helpers/auth";
 import makeid from "helpers/imagefunction";
 import { useQueryClient } from "react-query";
 import { showSuccessToast } from "helpers/showToast";
-import zIndex from "@material-ui/core/styles/zIndex";
+import crimeCategories from "config/crimeCategories";
 const geofire = require("geofire-common");
-
-const crimeCategory = [
-    {
-        value: "Robery",
-        label: "Robery",
-    },
-    {
-        value: "Snatching",
-        label: "Snatching",
-    },
-    {
-        value: "Kidnapping",
-        label: "Kidnapping",
-    },
-    {
-        value: "Murder",
-        label: "Murder",
-    },
-    {
-        value: "Group Assault",
-        label: "Group Assault",
-    },
-    {
-        value: "Fraud",
-        label: "Fraud",
-    },
-    {
-        value: "Assault",
-        label: "Assault",
-    },
-    {
-        value: "Arsonal",
-        label: "Arsonal",
-    },
-    {
-        value: "Sexual Assault",
-        label: "Sexual Assault",
-    },
-    {
-        value: "Bribery",
-        label: "Bribery",
-    },
-    {
-        value: "Burglary",
-        label: "Burglary",
-    },
-    {
-        value: "Child Abuse",
-        label: "Child abuse",
-    },
-    {
-        value: "Embezzelment",
-        label: "Embezzelment",
-    },
-    {
-        value: "Extortion",
-        label: "Extortion",
-    },
-    {
-        value: "Hijacking",
-        label: "Hijacking",
-    },
-    {
-        value: "Prostitution",
-        label: "rostitution",
-    },
-    {
-        value: "treason",
-        label: "treason",
-    },
-    {
-        value: "Smuggling",
-        label: "Smuggling",
-    },
-    {
-        value: "Forgery",
-        label: "Forgery",
-    },
-    {
-        value: "Drug Use",
-        label: "Drug Use",
-    },
-    {
-        value: "Homicide",
-        label: "Homicide",
-    },
-    {
-        value: "Terrorism",
-        label: "Terrorism",
-    },
-    {
-        value: "Treason",
-        label: "Treason",
-    },
-    {
-        value: "Larceny",
-        label: "Larceny",
-    },
-    {
-        value: "Sedition",
-        label: "Sedition",
-    },
-    {
-        value: "Incest",
-        label: "Incest",
-    },
-    {
-        value: "Organized Crime",
-        label: "Organized Crime",
-    },
-    {
-        value: "Incest",
-        label: "Incest",
-    },
-    {
-        value: "Trafficking",
-        label: "Trafficking",
-    },
-];
 
 const CreatePost = ({ toggle, isOpen }) => {
     const uuid = (a) => {
@@ -158,9 +39,6 @@ const CreatePost = ({ toggle, isOpen }) => {
     const user = getLoggedInUser();
     const [isCreatingPost, setIsCreatingPost] = useState(false);
     const [isGettingGeo, setIsgettingGeo] = useState(false);
-    const [getCurrentLocation, setCurrentLocation] = useState("");
-    const [latitude, setLatitude] = useState("");
-    const [longitude, setLongitude] = useState("");
     const queryClient = useQueryClient();
 
     const handleChange = (e) => {
@@ -178,35 +56,16 @@ const CreatePost = ({ toggle, isOpen }) => {
     const handleCurrentLocation = async () => {
         setIsgettingGeo(true);
         await navigator.geolocation.getCurrentPosition((position) => {
-            console.log(position.coords);
+            const lat = position.coords.latitude.toString();
+            const lon = position.coords.longitude.toString();
 
-            setCurrentLocation(`${position.coords.latitude}/${position.coords.longitude}`);
-
-            // setLongitude(position.coords.longitude);
-            const lat = position.coords.latitude;
-            const lon = position.coords.longitude;
-            formik.values.longitude = lon.toString();
-            formik.values.latitude = lat.toString();
-
-            // setLatitude(lat);
-            // setLongitude(lon)
-
-            console.log("LOcation", getCurrentLocation);
-            console.log(
-                "loc",
-                lat,
-                lon,
-                "formik longitude : " + formik.values.longitude,
-                "formik latitude " + formik.values.latitude
-            );
+            formik.setFieldValue("latitude", lat);
+            formik.setFieldValue("longitude", lon);
         });
-        setCurrentLocation();
         setIsgettingGeo(false);
     };
 
     const handleSubmit = useCallback((values) => {
-        console.log("loc2", values.latitude, values.longitude);
-
         var imageName = makeid(10);
         const uploadTask = storage.ref(`images/${imageName}.jpg`).put(values.image);
         setIsCreatingPost(true);
@@ -218,36 +77,6 @@ const CreatePost = ({ toggle, isOpen }) => {
             },
             async () => {
                 const postId = uuid();
-
-                // try {
-                //     const imageUrl = await storage.ref("images").child(`${imageName}.jpg`).getDownloadURL();
-
-                //     const newPost = {
-
-                //         postId: postId,
-                //         ownerId: user.uid,
-                //         longitude: values.longitude,
-                //         latitude: values.latitude,
-                //         Title: values.title,
-                //         verified: {},
-                //         description: values.description,
-                //         location: values.location,
-                //         mediaUrl: imageUrl,
-                //         category: values.crimeCategory,
-                //         username: user.displayName.toLowerCase(),
-                //         profileUrl: user.photoURL
-                //     };
-                //     axios.post(`https://crimespy.herokuapp.com/posts`, newPost).then(res => {
-                //         console.log(res)
-                //     })
-                //     // await postRef.doc(user.uid).collection("userPosts").doc(postId).set(newPost);
-                //     await queryClient.invalidateQueries("posts");
-                //     showSuccessToast({message: "Post has been created"});
-                //     toggleModal();
-                //     setIsCreatingPost(false);
-                // } catch (err) {
-                //     console.error(err.message);
-                // }
 
                 try {
                     const imageUrl = await storage.ref("images").child(`${imageName}.jpg`).getDownloadURL();
@@ -272,8 +101,9 @@ const CreatePost = ({ toggle, isOpen }) => {
                         username: user.displayName.toLowerCase(),
                         profileUrl: user.photoURL,
                     };
+                    console.log("posting");
                     await axios.post(`https://crimespy.herokuapp.com/posts`, newPost);
-                    await queryClient.invalidateQueries("posts");
+                    await queryClient.invalidateQueries("feeds");
                     showSuccessToast({ message: "Post has been created" });
                     toggleModal();
                     setIsCreatingPost(false);
@@ -290,7 +120,7 @@ const CreatePost = ({ toggle, isOpen }) => {
             description: "",
             location: "",
             image: "",
-            crimeCategory: "",
+            crimeCategory: crimeCategories[0].value,
             longitude: "",
             latitude: "",
         },
@@ -310,7 +140,7 @@ const CreatePost = ({ toggle, isOpen }) => {
     const toggleModal = useCallback(() => {
         if (!isCreatingPost) toggle();
     }, [isCreatingPost, toggle]);
-    console.log(formik.errors);
+
     return (
         <>
             <Modal isOpen={isOpen} toggle={toggleModal} centered>
@@ -349,10 +179,11 @@ const CreatePost = ({ toggle, isOpen }) => {
                             <FormFeedback> {formik.errors.description}</FormFeedback>
                         </FormGroup>
                         <FormGroup>
-                            <Label for="crimeCategory">crimeCategory</Label>
+                            <Label for="crimeCategory">Category</Label>
                             <Select
-                                options={crimeCategory}
-                                defaultValue={crimeCategory[0]}
+                                options={crimeCategories}
+                                defaultValue={crimeCategories[0]}
+                                customStyles={{ menu: { maxHeight: 150, overflowY: "hidden" } }}
                                 onChange={(crimeCategory) => formik.setFieldValue("crimeCategory", crimeCategory.value)}
                             />
                         </FormGroup>

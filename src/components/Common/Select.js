@@ -8,20 +8,27 @@ const colourOptions = [
     { value: "vanilla", label: "Vanilla" },
 ];
 
-const customStyles = {
-    control: (provided) => ({
-        ...provided,
-        borderTopLeftRadius: 0,
-        borderBottomLeftRadius: 0,
-        borderColor: "#ced4da",
-        boxShadow: 0,
-        "&:hover": {
+const getCustomStyles = (customStyles = {}) => {
+    return {
+        control: (provided) => ({
+            ...provided,
+            borderTopLeftRadius: 0,
+            borderBottomLeftRadius: 0,
             borderColor: "#ced4da",
-        },
-    }),
+            boxShadow: 0,
+            "&:hover": {
+                borderColor: "#ced4da",
+            },
+            ...(customStyles.control ?? {}),
+        }),
+        menu: (provided) => ({
+            ...provided,
+            ...(customStyles.menu ?? {}),
+        }),
+    };
 };
 
-export default function Select({ as = null, className = "", noOptionsMessage, ...props }) {
+export default function Select({ as = null, className = "", noOptionsMessage, customStyles, ...props }) {
     const Component = as ?? ReactSelect;
     return (
         <Component
@@ -30,7 +37,7 @@ export default function Select({ as = null, className = "", noOptionsMessage, ..
             isClearable={false}
             isRtl={false}
             isSearchable
-            styles={customStyles}
+            styles={getCustomStyles(customStyles)}
             noOptionsMessage={() => noOptionsMessage}
             {...props}
             //   defaultValue={colourOptions[0]}

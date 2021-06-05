@@ -30,7 +30,7 @@ const breadcrumbItems = [
     },
     {
         title: "Feed",
-        link: "/dashboard",
+        link: "/feed",
     },
 ];
 

@@ -22,12 +22,12 @@ export default {
         { key: "verify", label: "Verify Posts" },
         { key: "delete", label: "Delete Posts" },
     ],
-    statistics: [
-        { key: "review", label: "Access Statistics" },
-        { key: "filter", label: "Filter Statistics" },
+    dashboard: [
+        { key: "review", label: "Access Dashboard" },
+        { key: "filter", label: "Filter Dashboard" },
     ],
     profile: [
         { key: "review", label: "Access Profile" },
-        { key: "update", label: "Update Statistics" },
+        { key: "update", label: "Update Profile" },
     ],
 };

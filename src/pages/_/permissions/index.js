@@ -27,11 +27,14 @@ const Permission = () => {
     const [userId, setUserId] = useState(qs.parse(removeFirstLetter(params.search)).user);
 
     const fetchUserById = useCallback(async () => {
+        console.log("fetchUserById() [userId:%s]", userId);
         const userdata = await (await db.collection("users").doc(userId).get()).data();
         return userdata;
     }, [userId]);
 
     const user = useModifiedQuery(["user", userId], fetchUserById);
+
+    console.log(user);
 
     return (
         <div className="page-content">

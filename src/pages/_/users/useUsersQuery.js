@@ -1,4 +1,4 @@
-import api, { useModifiedQuery } from "helpers/query";
+import { api, useModifiedQuery } from "helpers/query";
 import qs from "querystring";
 import { useCallback } from "react";
 import { useSelector } from "react-redux";
