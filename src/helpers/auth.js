@@ -6,13 +6,13 @@ import "firebase/storage";
 import { Cookies } from "react-cookie";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyAVTMeHLm8coDhFavDKigMSlG1WSokGczs",
-    authDomain: "crimespyv3.firebaseapp.com",
-    projectId: "crimespyv3",
-    storageBucket: "crimespyv3.appspot.com",
-    messagingSenderId: "287743355804",
-    appId: "1:287743355804:web:4759f001f135a9f057b659",
-    measurementId: "G-5NK3RTNND8",
+    apiKey: "AIzaSyABIcKRrQeXZB4aSLiHRDG47MrmWDHtDL4",
+    authDomain: "crimespy-6fc6f.firebaseapp.com",
+    projectId: "crimespy-6fc6f",
+    storageBucket: "crimespy-6fc6f.appspot.com",
+    messagingSenderId: "61138601926",
+    appId: "1:61138601926:web:875ef65092b5d533c554c7",
+    measurementId: "G-HHD8Z9F5FT",
 };
 // Initialize Firebase
 
