@@ -22,7 +22,6 @@ export default function MapContainer() {
     const [postloc, setPostLoc] = useState([]);
     const [selectedCrime, setSelectedCrime] = useState(null);
 
-
     useEffect(() => {
         const fetchPost = async () => {
             const posts = [];
