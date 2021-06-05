@@ -25,7 +25,127 @@ import { db, getLoggedInUser, storage } from "helpers/auth";
 import makeid from "helpers/imagefunction";
 import { useQueryClient } from "react-query";
 import { showSuccessToast } from "helpers/showToast";
+import zIndex from "@material-ui/core/styles/zIndex";
 const geofire = require("geofire-common");
+
+const crimeCategory = [
+    {
+        value: "Robery",
+        label: "Robery",
+    },
+    {
+        value: "Snatching",
+        label: "Snatching",
+    },
+    {
+        value: "Kidnapping",
+        label: "Kidnapping",
+    },
+    {
+        value: "Murder",
+        label: "Murder",
+    },
+    {
+        value: "Group Assault",
+        label: "Group Assault",
+    },
+    {
+        value: "Fraud",
+        label: "Fraud",
+    },
+    {
+        value: "Assault",
+        label: "Assault",
+    },
+    {
+        value: "Arsonal",
+        label: "Arsonal",
+    },
+    {
+        value: "Sexual Assault",
+        label: "Sexual Assault",
+    },
+    {
+        value: "Bribery",
+        label: "Bribery",
+    },
+    {
+        value: "Burglary",
+        label: "Burglary",
+    },
+    {
+        value: "Child Abuse",
+        label: "Child abuse",
+    },
+    {
+        value: "Embezzelment",
+        label: "Embezzelment",
+    },
+    {
+        value: "Extortion",
+        label: "Extortion",
+    },
+    {
+        value: "Hijacking",
+        label: "Hijacking",
+    },
+    {
+        value: "Prostitution",
+        label: "rostitution",
+    },
+    {
+        value: "treason",
+        label: "treason",
+    },
+    {
+        value: "Smuggling",
+        label: "Smuggling",
+    },
+    {
+        value: "Forgery",
+        label: "Forgery",
+    },
+    {
+        value: "Drug Use",
+        label: "Drug Use",
+    },
+    {
+        value: "Homicide",
+        label: "Homicide",
+    },
+    {
+        value: "Terrorism",
+        label: "Terrorism",
+    },
+    {
+        value: "Treason",
+        label: "Treason",
+    },
+    {
+        value: "Larceny",
+        label: "Larceny",
+    },
+    {
+        value: "Sedition",
+        label: "Sedition",
+    },
+    {
+        value: "Incest",
+        label: "Incest",
+    },
+    {
+        value: "Organized Crime",
+        label: "Organized Crime",
+    },
+    {
+        value: "Incest",
+        label: "Incest",
+    },
+    {
+        value: "Trafficking",
+        label: "Trafficking",
+    },
+];
 
 const CreatePost = ({ toggle, isOpen }) => {
     const uuid = (a) => {
@@ -83,21 +203,6 @@ const CreatePost = ({ toggle, isOpen }) => {
         setCurrentLocation();
         setIsgettingGeo(false);
     };
-
-    const crimeCategory = [
-        {
-            value: "Robery",
-            label: "Robery",
-        },
-        {
-            value: "Snatching",
-            label: "Snatching",
-        },
-        {
-            value: "Murder",
-            label: "Murder",
-        },
-    ];
 
     const handleSubmit = useCallback((values) => {
         console.log("loc2", values.latitude, values.longitude);
@@ -269,6 +374,7 @@ const CreatePost = ({ toggle, isOpen }) => {
                                         type="button"
                                         onClick={handleCurrentLocation}
                                         loading={isGettingGeo}
+                                        style={{ zIndex: 0 }}
                                     >
                                         Current Location
                                     </Button>

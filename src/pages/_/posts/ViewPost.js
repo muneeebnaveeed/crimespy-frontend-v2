@@ -5,7 +5,7 @@ import { showErrorToast, showSuccessToast } from "helpers/showToast";
 import React, { useCallback, useRef, useState } from "react";
 import { useQueryClient } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
-import { FormGroup, Label, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
+import { FormGroup, Label, Input, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import { toggleDeleteProductDisclosure } from "store/routes/products/actions";
 
 function ViewPost({ isOpen, toggle, post }) {
@@ -24,7 +24,13 @@ function ViewPost({ isOpen, toggle, post }) {
                 </FormGroup>
                 <FormGroup>
                     <label>Detail :</label>
-                    <Label>{post.description}</Label>
+                    <Input
+                        type="textarea"
+                        name="text"
+                        onChange={null}
+                        value={post.description}
+                        style={{ height: 150 }}
+                    />
                 </FormGroup>
                 <FormGroup>
                     <label>Coordinates :</label>

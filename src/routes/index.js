@@ -112,9 +112,9 @@ import Posts from "pages/_/posts";
 import MapLayout from "components/VerticalLayout/MapLayout";
 import UserPermissions from "pages/_/permissions";
 import TimeLinePosts from "pages/_/feed/timelinePosts";
+import Statistics from "pages/_/statistics";
 
 const hiddenRoutes = [
-    { path: "/profile", icon: "fas fa-user", title: "User Profile", key: "profile", component: profile },
     {
         path: "/users/edit",
         icon: "fas fa-users",
@@ -126,15 +126,24 @@ const hiddenRoutes = [
 
 const sideBarRoutes = [
     { path: "/dashboard", icon: "fas fa-columns", title: "Feed", key: "feed", component: Feed },
-    { path: "/timeline", icon: "fas fa-columns", title: "Time Line", key: "timeline", component: TimeLinePosts },
+    { path: "/timeline", icon: "fas fa-clock", title: "Time Line", key: "timeline", component: TimeLinePosts },
     { path: "/users", icon: "fas fa-users", title: "Users", key: "users", component: Users, roles: ["admin"] }, // doesn't appear for users
     {
         path: "/posts",
-        icon: "fas fa-columns",
+        icon: "fas fa-archive",
         title: "Post Management",
         key: "poststable",
         component: Posts,
     },
+    { path: "/profile", icon: "fas fa-user", title: "User Profile", key: "profile", component: profile },
+    {
+        path: "/statistics",
+        icon: "fas fa-columns",
+        title: "Statistics",
+        key: "statistics",
+        component: Statistics,
+    },
+    //{ path: "/statistics", icon: "fas fa-chart-pie", title: "Statistics", key: "statistics", component: Statistics },
     { path: "/map", icon: "fas fa-map", title: "Map", key: "map", component: Mapcrime, layout: MapLayout },
 ];
 

@@ -19,6 +19,7 @@ function Post({ username, profileUrl, description, comments, id, photoURL, Title
     const queryClient = useQueryClient();
     const postRef = db.collection("posts").doc(user.uid).collection("userPosts");
     const isAuthorized = usePermissions("feed");
+    const arePostAuthorized = usePermissions("poststable");
     const deletePost = async () => {
         var imageRef = storage.refFromURL(photoURL);
 
@@ -43,6 +44,7 @@ function Post({ username, profileUrl, description, comments, id, photoURL, Title
     const toggle = () => {
         setMenu(!menu);
     };
+    //console.log(user);
     return (
         <Card className="m-0 mt-4" style={{ maxWidth: 840 }}>
             <CardBody className="p-0">
@@ -74,7 +76,7 @@ function Post({ username, profileUrl, description, comments, id, photoURL, Title
                                 {/* <i className="mdi mdi-chevron-down d-none ml-1 d-xl-inline-block"></i> */}{" "}
                             </DropdownToggle>
                             <DropdownMenu right>
-                                <If condition={user.uid === ownerId}>
+                                <If condition={user.uid === ownerId || arePostAuthorized("delete")}>
                                     <DropdownItem onClick={deletePost}>
                                         <i className="fas fa-trash-alt mr-1" />
                                         Delete

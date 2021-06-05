@@ -22,9 +22,12 @@ export default {
         { key: "verify", label: "Verify Posts" },
         { key: "delete", label: "Delete Posts" },
     ],
-    // chartstable: [
-    //     { key: "review", label: "Access Chart" },
-    //     { key: "verify", label: "Verify Chart" },
-    //     { key: "delete", label: "Delete Chart" },
-    // ],
+    statistics: [
+        { key: "review", label: "Access Statistics" },
+        { key: "filter", label: "Filter Statistics" },
+    ],
+    profile: [
+        { key: "review", label: "Access Profile" },
+        { key: "update", label: "Update Statistics" },
+    ],
 };
