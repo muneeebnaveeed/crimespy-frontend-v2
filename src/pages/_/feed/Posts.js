@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Post from "./Post";
 import { db, getLoggedInUser } from "helpers/auth";
 import { api, useModifiedQuery } from "helpers/query";
@@ -6,6 +6,8 @@ import { Col } from "reactstrap";
 import { Row } from "reactstrap/lib";
 import { Else, If, Then, When } from "react-if";
 import axios from "axios";
+import useDisclosure from "helpers/useDisclosure";
+import EditPost from "./EditPost.js";
 
 // const fetchUsers = async () => {
 //     const snapshot = db.collection("users").get();
@@ -19,6 +21,7 @@ import axios from "axios";
 //         resolve(users);
 //     });
 // };
+
 const fetchPosts = async () => {
     const user = getLoggedInUser();
 
@@ -29,6 +32,16 @@ const fetchPosts = async () => {
 
 function Posts(props) {
     const posts = useModifiedQuery("feeds", fetchPosts);
+    const editPostDisclosure = useDisclosure();
+    const [selectedPost, setSelectedPost] = useState(null);
+
+    const handleEditPost = useCallback(
+        (post) => {
+            setSelectedPost(post);
+            editPostDisclosure.toggle();
+        },
+        [editPostDisclosure.toggle, setSelectedPost]
+    );
 
     return (
         <>
@@ -48,6 +61,7 @@ function Posts(props) {
                                 Title={post.Title}
                                 verified={post.verified}
                                 postVerified={post.postVerified}
+                                editTask={() => handleEditPost(post)}
                             />
                         </Col>
                     </Row>
@@ -72,6 +86,16 @@ function Posts(props) {
                     </If>
                 </Else>
             </If>
+            <When condition={selectedPost}>
+                <EditPost
+                    isOpen={editPostDisclosure.isOpen}
+                    post={selectedPost}
+                    toggle={() => {
+                        setSelectedPost(null);
+                        editPostDisclosure.toggle();
+                    }}
+                />
+            </When>
         </>
     );
 }

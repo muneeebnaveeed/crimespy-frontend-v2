@@ -38,7 +38,7 @@ const EditPost = ({ toggle, isOpen, post }) => {
     // const fileimageRef = useRef();
     // const user = getLoggedInUser();
     // const [isCreatingPost, setIsCreatingPost] = useState(false);
-    // const [isGettingGeo, setIsgettingGeo] = useState(false);
+    const [isGettingGeo, setIsgettingGeo] = useState(false);
     // const queryClient = useQueryClient();
 
     // const handleChange = (e) => {
@@ -53,17 +53,21 @@ const EditPost = ({ toggle, isOpen, post }) => {
     //     }
     // };
 
-    // const handleCurrentLocation = async () => {
-    //     setIsgettingGeo(true);
-    //     await navigator.geolocation.getCurrentPosition((position) => {
-    //         const lat = position.coords.latitude.toString();
-    //         const lon = position.coords.longitude.toString();
+    const handleCurrentLocation = async () => {
+        setIsgettingGeo(true);
+        await navigator.geolocation.getCurrentPosition((position) => {
+            const lat = position.coords.latitude.toString();
+            const lon = position.coords.longitude.toString();
 
-    //         formik.setFieldValue("latitude", lat);
-    //         formik.setFieldValue("longitude", lon);
-    //     });
-    //     setIsgettingGeo(false);
-    // };
+            formik.setFieldValue("latitude", lat);
+            formik.setFieldValue("longitude", lon);
+        });
+        setIsgettingGeo(false);
+    };
+
+    const handleSubmit = () => {
+        console.log(formik.values);
+    };
 
     // const handleSubmit = useCallback((values) => {
     //     var imageName = makeid(10);
@@ -126,21 +130,20 @@ const EditPost = ({ toggle, isOpen, post }) => {
         },
         onSubmit: handleSubmit,
         validate: (values) => {
-            // let errors = {};
+            let errors = {};
 
-            // const validationErrors = postSchema.validate(values, { abortEarly: false })?.error?.details;
+            const validationErrors = postSchema.validate(values, { abortEarly: false })?.error?.details;
 
-            // if (validationErrors) validationErrors.forEach((err) => (errors[err.context.label] = err.message));
+            if (validationErrors) validationErrors.forEach((err) => (errors[err.context.label] = err.message));
 
-            // return errors;
-            console.log(values);
+            return errors;
         },
         validateOnChange: false,
     });
 
     const toggleModal = useCallback(() => {
-        if (!isCreatingPost) toggle();
-    }, [isCreatingPost, toggle]);
+        toggle();
+    }, [toggle]);
 
     return (
         <>
@@ -220,7 +223,7 @@ const EditPost = ({ toggle, isOpen, post }) => {
                                 justifyContent: "space-between",
                             }}
                         >
-                            <Label
+                            {/* <Label
                                 className="image_preview"
                                 style={{
                                     height: "36PX",
@@ -250,7 +253,7 @@ const EditPost = ({ toggle, isOpen, post }) => {
                                     ref={fileimageRef}
                                 />
                                 Attach Image
-                            </Label>
+                            </Label> */}
                             <div className="invalid-feedback">{formik.errors.image}</div>
                         </FormGroup>
                     </ModalBody>
@@ -258,7 +261,13 @@ const EditPost = ({ toggle, isOpen, post }) => {
                         <Button color="light" size="sm" onClick={toggleModal}>
                             Cancel
                         </Button>
-                        <Button loading={isCreatingPost} w="55.5px" color="primary" size="sm" type="submit">
+                        <Button
+                            // loading={isCreatingPost}
+                            w="55.5px"
+                            color="primary"
+                            size="sm"
+                            type="submit"
+                        >
                             Update
                         </Button>
                     </ModalFooter>

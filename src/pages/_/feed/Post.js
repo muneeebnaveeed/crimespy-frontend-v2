@@ -13,7 +13,19 @@ import usePermissions from "helpers/usePermissions.js";
 import { When } from "react-if";
 import axios from "axios";
 
-function Post({ username, profileUrl, description, comments, id, photoURL, Title, verified, postVerified, ownerId }) {
+function Post({
+    username,
+    profileUrl,
+    description,
+    comments,
+    id,
+    photoURL,
+    Title,
+    verified,
+    postVerified,
+    ownerId,
+    editTask,
+}) {
     const [menu, setMenu] = useState(false);
     const user = getLoggedInUser();
     const queryClient = useQueryClient();
@@ -66,6 +78,12 @@ function Post({ username, profileUrl, description, comments, id, photoURL, Title
                                     <DropdownItem onClick={handleDelete}>
                                         <i className="fas fa-trash-alt mr-1" />
                                         Delete
+                                    </DropdownItem>
+                                </If>
+                                <If condition={user.uid === ownerId}>
+                                    <DropdownItem>
+                                        <i className="fas fa-edit mr-1" onClick={editTask} />
+                                        Edit
                                     </DropdownItem>
                                 </If>
                             </DropdownMenu>

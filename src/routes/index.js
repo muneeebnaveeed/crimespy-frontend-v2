@@ -123,7 +123,7 @@ const hiddenRoutes = [
 
 const sideBarRoutes = [
     { path: "/dashboard", icon: "fas fa-columns", title: "Dashboard", key: "dashboard", component: Dashboard },
-    { path: "/feed", icon: "fas fa-columns", title: "Feed", key: "feed", component: Feed },
+    { path: "/feed", icon: "fas fa-globe", title: "Feed", key: "feed", component: Feed },
     { path: "/timeline", icon: "fas fa-clock", title: "Time Line", key: "timeline", component: TimeLinePosts },
     { path: "/users", icon: "fas fa-users", title: "Users", key: "users", component: Users, roles: ["admin"] }, // doesn't appear for users
     {
