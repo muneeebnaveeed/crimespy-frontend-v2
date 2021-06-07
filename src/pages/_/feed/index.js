@@ -11,6 +11,8 @@ import usePermissions from "helpers/usePermissions";
 import { When } from "react-if";
 import api from "helpers/query";
 import axios from "axios";
+import EditPost from "./EditPost";
+import { useSelector } from "react-redux";
 
 const breadcrumbItems = [
     {
@@ -24,21 +26,14 @@ const breadcrumbItems = [
 ];
 
 function Feed() {
-    const { isOpen, toggle } = useDisclosure();
+    const createPostDisclosure = useDisclosure();
     const whatsOnYourMindRef = useRef();
 
-    // useEffect(() => {
-    //     const data = {
-    //         firstName: 'Finn',
-    //         lastName: 'Williams'
-    //     }
-    //     axios.post("https://crimespy.herokuapp.com/users/id/abc", data).then(res => {
-    //         console.log(res)
-    //     })
-
-    // }, [])
-
     const isAuthorized = usePermissions("feed");
+
+    const { editPostDisclosure } = useSelector((state) => state.Feed);
+
+    console.log("Feed() [editPostDisclosure:%s]", editPostDisclosure);
 
     return (
         <>
@@ -55,7 +50,7 @@ function Feed() {
                                         cursor: "pointer",
                                     }}
                                     className="rounded d-flex justify-content-center align-items-center shadow-sm p-4"
-                                    onClick={toggle}
+                                    onClick={createPostDisclosure.toggle}
                                     onMouseEnter={() => {
                                         whatsOnYourMindRef.current.classList.toggle("whatsOnYourMind-active", true);
                                     }}
@@ -81,7 +76,10 @@ function Feed() {
                     <Posts />
                 </Container>
             </div>
-            {isAuthorized("create") && <CreatePost isOpen={isOpen} toggle={toggle} />}{" "}
+            {isAuthorized("create") && (
+                <CreatePost isOpen={createPostDisclosure.isOpen} toggle={createPostDisclosure.toggle} />
+            )}
+            {editPostDisclosure && <EditPost />}
         </>
     );
 }

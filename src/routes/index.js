@@ -48,7 +48,6 @@ import FontAwesome from "../pages/Icons/FontAwesome";
 import StarterPage from "../pages/Utility/StarterPage";
 import Maintenance from "../pages/Utility/Maintenance";
 import CommingSoon from "../pages/Utility/CommingSoon";
-import Timeline from "../pages/Utility/Timeline";
 import FAQs from "../pages/Utility/FAQs";
 import Pricing from "../pages/Utility/Pricing";
 import Error404 from "../pages/Utility/Error404";
@@ -108,7 +107,7 @@ import Mapcrime from "pages/_/MapCrime/MapCrime";
 import Posts from "pages/_/posts";
 import MapLayout from "components/VerticalLayout/MapLayout";
 import UserPermissions from "pages/_/permissions";
-import TimeLinePosts from "pages/_/feed/timelinePosts";
+import Timeline from "pages/_/timeline";
 import Dashboard from "pages/_/dashboard";
 
 const hiddenRoutes = [
@@ -124,7 +123,7 @@ const hiddenRoutes = [
 const sideBarRoutes = [
     { path: "/dashboard", icon: "fas fa-columns", title: "Dashboard", key: "dashboard", component: Dashboard },
     { path: "/feed", icon: "fas fa-globe", title: "Feed", key: "feed", component: Feed },
-    { path: "/timeline", icon: "fas fa-clock", title: "Time Line", key: "timeline", component: TimeLinePosts },
+    { path: "/timeline", icon: "fas fa-clock", title: "Time Line", key: "timeline", component: Timeline },
     { path: "/users", icon: "fas fa-users", title: "Users", key: "users", component: Users, roles: ["admin"] }, // doesn't appear for users
     {
         path: "/posts",

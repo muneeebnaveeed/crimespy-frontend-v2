@@ -35,17 +35,10 @@ function Posts(props) {
     const editPostDisclosure = useDisclosure();
     const [selectedPost, setSelectedPost] = useState(null);
 
-    const handleEditPost = useCallback(
-        (post) => {
-            setSelectedPost(post);
-            editPostDisclosure.toggle();
-        },
-        [editPostDisclosure.toggle, setSelectedPost]
-    );
-
     return (
         <>
             {posts.data?.map((post, i) => {
+                console.log("ownerId", post.ownerId);
                 return (
                     <Row key={i}>
                         <Col xs={12} className="d-flex justify-content-center">
@@ -61,7 +54,6 @@ function Posts(props) {
                                 Title={post.Title}
                                 verified={post.verified}
                                 postVerified={post.postVerified}
-                                editTask={() => handleEditPost(post)}
                             />
                         </Col>
                     </Row>
@@ -86,16 +78,6 @@ function Posts(props) {
                     </If>
                 </Else>
             </If>
-            <When condition={selectedPost}>
-                <EditPost
-                    isOpen={editPostDisclosure.isOpen}
-                    post={selectedPost}
-                    toggle={() => {
-                        setSelectedPost(null);
-                        editPostDisclosure.toggle();
-                    }}
-                />
-            </When>
         </>
     );
 }

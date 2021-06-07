@@ -183,7 +183,7 @@ const CreatePost = ({ toggle, isOpen }) => {
                             <Select
                                 options={crimeCategories}
                                 defaultValue={crimeCategories[0]}
-                                customStyles={{ menu: { maxHeight: 150, overflowY: "hidden" } }}
+                                customStyles={{ menu: { maxHeight: 250 } }}
                                 onChange={(crimeCategory) => formik.setFieldValue("crimeCategory", crimeCategory.value)}
                             />
                         </FormGroup>

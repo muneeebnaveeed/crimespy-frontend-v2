@@ -13,6 +13,7 @@ import Login from "./auth/login/reducer";
 import Forget from "./auth/forgetpwd/reducer";
 
 import Auth from "./auth/reducer";
+import Feed from "./routes/feed/reducer";
 
 const rootReducer = combineReducers({
     // public
@@ -22,10 +23,9 @@ const rootReducer = combineReducers({
     Account,
     Login,
     Forget,
-
-    Products,
-    Categories,
     Auth,
+
+    Feed,
 });
 
 export default rootReducer;

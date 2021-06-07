@@ -25,6 +25,10 @@ const getCustomStyles = (customStyles = {}) => {
             ...provided,
             ...(customStyles.menu ?? {}),
         }),
+        valueContainer: (provided) => ({
+            ...provided,
+            ...(customStyles.valueContainer ?? {}),
+        }),
     };
 };
 

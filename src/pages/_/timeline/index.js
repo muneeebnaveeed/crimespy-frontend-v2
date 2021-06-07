@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Post from "./Post";
+import Post from "../feed/Post";
 import { db, getLoggedInUser } from "helpers/auth";
 import { useModifiedQuery } from "helpers/query";
 import { Col, Container } from "reactstrap";
@@ -7,6 +7,8 @@ import { Row } from "reactstrap/lib";
 import { Else, If, Then } from "react-if";
 import Axios from "axios";
 import Breadcrumbs from "components/Common/Breadcrumb";
+import { useSelector } from "react-redux";
+import EditPost from "../feed/EditPost";
 
 // const fetchPosts = async () => {
 //     const user = getLoggedInUser();
@@ -35,16 +37,13 @@ const breadcrumbItems = [
 ];
 
 const fetchPosts = async () => {
-    // const posts = [];
     const user = getLoggedInUser();
-    console.log("usER", user);
-
     return Axios.get(`https://crimespy.herokuapp.com/posts/id/${user.uid}`).then((res) => res.data);
 };
 
 function TimeLinePosts(props) {
-    // const posts = useModifiedQuery("posts", fetchPosts);
-    const posts = useModifiedQuery("feeds", fetchPosts);
+    const posts = useModifiedQuery("timeline", fetchPosts);
+    const { editPostDisclosure } = useSelector((state) => state.Feed);
 
     return (
         <>
@@ -57,6 +56,7 @@ function TimeLinePosts(props) {
                                 <Post
                                     key={post.id}
                                     id={post.id}
+                                    ownerId={post.ownerId}
                                     username={post.username}
                                     comments={post.comments}
                                     profileUrl={post.profileUrl}
@@ -80,6 +80,7 @@ function TimeLinePosts(props) {
                     </If>
                 </Container>
             </div>
+            {editPostDisclosure && <EditPost />}
         </>
     );
 }

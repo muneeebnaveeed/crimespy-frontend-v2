@@ -26,32 +26,19 @@ import makeid from "helpers/imagefunction";
 import { useQueryClient } from "react-query";
 import { showSuccessToast } from "helpers/showToast";
 import crimeCategories from "config/crimeCategories";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleEditPostDisclosure } from "store/routes/feed/actions";
 const geofire = require("geofire-common");
 
-const EditPost = ({ toggle, isOpen, post }) => {
-    // const uuid = (a) => {
-    //     return a
-    //         ? (a ^ ((Math.random() * 16) >> (a / 4))).toString(16)
-    //         : ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, uuid);
-    // };
+const EditPost = (props) => {
     // const postRef = db.collection("posts");
     // const fileimageRef = useRef();
     // const user = getLoggedInUser();
     // const [isCreatingPost, setIsCreatingPost] = useState(false);
     const [isGettingGeo, setIsgettingGeo] = useState(false);
-    // const queryClient = useQueryClient();
 
-    // const handleChange = (e) => {
-    //     e.preventDefault();
-    //     if (e.target.files[0]) {
-    //         formik.setFieldValue("image", e.target.files[0]);
-    //         var selectedImageSrc = URL.createObjectURL(e.target.files[0]);
-
-    //         var imagepreview = document.getElementById("image-preview");
-    //         imagepreview.src = selectedImageSrc;
-    //         imagepreview.style.display = "block";
-    //     }
-    // };
+    const { editPostDisclosure, selectedPost } = useSelector((state) => state.Feed);
+    const dispatch = useDispatch();
 
     const handleCurrentLocation = async () => {
         setIsgettingGeo(true);
@@ -69,64 +56,14 @@ const EditPost = ({ toggle, isOpen, post }) => {
         console.log(formik.values);
     };
 
-    // const handleSubmit = useCallback((values) => {
-    //     var imageName = makeid(10);
-    //     const uploadTask = storage.ref(`images/${imageName}.jpg`).put(values.image);
-    //     setIsCreatingPost(true);
-    //     uploadTask.on(
-    //         "state_changed",
-    //         (snapshot) => {},
-    //         (error) => {
-    //             console.log(error);
-    //         },
-    //         async () => {
-    //             const postId = uuid();
-
-    //             try {
-    //                 const imageUrl = await storage.ref("images").child(`${imageName}.jpg`).getDownloadURL();
-    //                 const hash = geofire.geohashForLocation([
-    //                     parseFloat(values.latitude),
-    //                     parseFloat(values.longitude),
-    //                 ]);
-
-    //                 const newPost = {
-    //                     postId: postId,
-    //                     ownerId: user.uid,
-    //                     longitude: values.longitude,
-    //                     latitude: values.latitude,
-    //                     geohash: hash,
-    //                     Title: values.title,
-    //                     verified: {},
-    //                     description: values.description,
-    //                     location: values.location,
-    //                     mediaUrl: imageUrl,
-    //                     postVerified: false,
-    //                     category: values.crimeCategory,
-    //                     username: user.displayName.toLowerCase(),
-    //                     profileUrl: user.photoURL,
-    //                 };
-    //                 console.log("posting");
-    //                 await axios.post(`https://crimespy.herokuapp.com/posts`, newPost);
-    //                 await queryClient.invalidateQueries("feeds");
-    //                 showSuccessToast({ message: "Post has been created" });
-    //                 toggleModal();
-    //                 setIsCreatingPost(false);
-    //             } catch (err) {
-    //                 console.error(err.message);
-    //             }
-    //         }
-    //     );
-    // }, []);
-
     const formik = useFormik({
         initialValues: {
-            title: post.Title,
-            description: post.description,
-            location: post.location,
-            //image: "",
+            title: selectedPost.Title,
+            description: selectedPost.description,
+            location: selectedPost.location,
             crimeCategory: crimeCategories[0].value,
-            longitude: post.longitude,
-            latitude: post.latitude,
+            longitude: selectedPost.longitude,
+            latitude: selectedPost.latitude,
         },
         onSubmit: handleSubmit,
         validate: (values) => {
@@ -142,13 +79,15 @@ const EditPost = ({ toggle, isOpen, post }) => {
     });
 
     const toggleModal = useCallback(() => {
-        toggle();
-    }, [toggle]);
+        dispatch(toggleEditPostDisclosure());
+    }, [dispatch]);
+
+    console.log("EditPost() [isOpen:%s,selectedPost:%o]", editPostDisclosure, selectedPost);
 
     return (
         <>
-            <Modal isOpen={isOpen} toggle={toggleModal} centered>
-                <ModalHeader>Create Post</ModalHeader>
+            <Modal isOpen={editPostDisclosure} toggle={toggleModal} centered>
+                <ModalHeader>Edit Post</ModalHeader>
                 <form onSubmit={formik.handleSubmit}>
                     <ModalBody>
                         <FormGroup>
@@ -178,7 +117,7 @@ const EditPost = ({ toggle, isOpen, post }) => {
                                 invalid={formik.errors.description && formik.touched.description}
                                 placeholder="Enter all detail of event in here atlesat above 150 words"
                                 onChange={formik.handleChange}
-                                value={formik.value}
+                                value={formik.values.description}
                             />
                             <FormFeedback> {formik.errors.description}</FormFeedback>
                         </FormGroup>
@@ -201,7 +140,7 @@ const EditPost = ({ toggle, isOpen, post }) => {
                                     invalid={formik.errors.location && formik.touched.location}
                                     placeholder="Enter the events location here"
                                     onChange={formik.handleChange}
-                                    value={formik.value}
+                                    value={formik.values.location}
                                 />
                                 <InputGroupAddon addonType="append">
                                     <Button
@@ -214,7 +153,7 @@ const EditPost = ({ toggle, isOpen, post }) => {
                                         Current Location
                                     </Button>
                                 </InputGroupAddon>
-                                <FormFeedback> {formik.errors.location}</FormFeedback>
+                                <FormFeedback>{formik.errors.location}</FormFeedback>
                             </InputGroup>
                         </FormGroup>
                         <FormGroup

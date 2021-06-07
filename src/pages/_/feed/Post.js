@@ -12,26 +12,18 @@ import { useQueryClient } from "react-query";
 import usePermissions from "helpers/usePermissions.js";
 import { When } from "react-if";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { selectPost, toggleEditPostDisclosure } from "store/routes/feed/actions.js";
 
-function Post({
-    username,
-    profileUrl,
-    description,
-    comments,
-    id,
-    photoURL,
-    Title,
-    verified,
-    postVerified,
-    ownerId,
-    editTask,
-}) {
+function Post({ username, profileUrl, description, comments, id, photoURL, Title, verified, postVerified, ownerId }) {
     const [menu, setMenu] = useState(false);
     const user = getLoggedInUser();
     const queryClient = useQueryClient();
     const isAuthorized = usePermissions("feed");
     const arePostAuthorized = usePermissions("poststable");
     const [isDeletingPost, setIsDeletingPost] = useState(false);
+
+    const dispatch = useDispatch();
 
     const handleDelete = useCallback(async () => {
         setIsDeletingPost(true);
@@ -43,7 +35,27 @@ function Post({
     const toggle = () => {
         setMenu(!menu);
     };
-    //console.log(user);
+
+    const handleEditPost = useCallback(() => {
+        const currentPost = {
+            username,
+            profileUrl,
+            description,
+            comments,
+            id,
+            photoURL,
+            Title,
+            verified,
+            postVerified,
+            ownerId,
+        };
+
+        console.log("handleEditPost() [currentPost:%o]", currentPost);
+
+        dispatch(selectPost(currentPost));
+        dispatch(toggleEditPostDisclosure());
+    }, [dispatch]);
+
     return (
         <Card className="m-0 mt-4" style={{ maxWidth: 840 }}>
             <CardBody className="p-0">
@@ -81,8 +93,8 @@ function Post({
                                     </DropdownItem>
                                 </If>
                                 <If condition={user.uid === ownerId}>
-                                    <DropdownItem>
-                                        <i className="fas fa-edit mr-1" onClick={editTask} />
+                                    <DropdownItem onClick={handleEditPost}>
+                                        <i className="fas fa-edit mr-1" />
                                         Edit
                                     </DropdownItem>
                                 </If>
