@@ -18,7 +18,7 @@ class Sources extends Component {
     render() {
         return (
             <React.Fragment>
-                <Col lg={4}>
+                <Col xl={6}>
                     <Card>
                         <CardBody>
                             <Dropdown

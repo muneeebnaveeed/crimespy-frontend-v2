@@ -105,10 +105,6 @@ export default [
         label: "Sedition",
     },
     {
-        value: "Incest",
-        label: "Incest",
-    },
-    {
         value: "Organized Crime",
         label: "Organized Crime",
     },
@@ -116,5 +112,13 @@ export default [
     {
         value: "Trafficking",
         label: "Trafficking",
+    },
+    {
+        value: "Blackmail",
+        label: "Blackmail",
+    },
+    {
+        value: "Obscenity",
+        label: "Obscenity",
     },
 ];

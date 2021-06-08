@@ -94,16 +94,16 @@ const Dashboard = () => {
                     <RecentlyActivity />
 
                     {/* revenue by locations */}
-                    <RevenueByLocations />
+                    {/* <RevenueByLocations /> */}
                 </Row>
 
-                <Row>
-                    {/* chat box */}
+                {/* <Row>
+                     chat box is a comment 
                     <ChatBox />
 
-                    {/* latest transactions */}
+                    latest transactions is a comment
                     <LatestTransactions />
-                </Row>
+                </Row> */}
             </Container>
         </div>
     );
