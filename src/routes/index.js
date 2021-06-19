@@ -141,7 +141,7 @@ const authProtectedRoutes = [...hiddenRoutes, ...sideBarRoutes];
 const publicRoutes = [
     // this route should be at the end of all other routes
     { path: "/", exact: true, component: () => <Redirect to="/feed" /> },
-    { path: "/logout", component: Logout },
+    { path: "/logout", icon: "fas fa-power", component: Logout },
     { path: "/login", component: Login },
     { path: "/forgot-password", component: ForgetPwd },
     { path: "/register", component: Register },

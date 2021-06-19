@@ -4,7 +4,7 @@ import React, { Component } from "react";
 import MetisMenu from "metismenujs";
 import { withRouter } from "react-router-dom";
 import { Link } from "react-router-dom";
-
+import { getLoggedInUser, setSession, signOutFireabse, isUserAuthorized } from "helpers/auth";
 import { connect } from "react-redux";
 import {
     changeLayout,
@@ -15,8 +15,6 @@ import {
 } from "../../store/actions";
 import { sideBarRoutes } from "routes";
 
-import { getLoggedInUser, isUserAuthorized } from "helpers/auth";
-
 class SidebarContent extends Component {
     constructor(props) {
         super(props);
@@ -24,6 +22,16 @@ class SidebarContent extends Component {
             user: getLoggedInUser(),
         };
     }
+
+    handleLogout = async () => {
+        try {
+            await signOutFireabse();
+            setSession(null);
+            this.props.history.push("/login");
+        } catch (err) {
+            console.error(err.message);
+        }
+    };
 
     componentDidMount() {
         this.initMenu();
@@ -109,6 +117,15 @@ class SidebarContent extends Component {
 
                             return null;
                         })}
+
+                        <li key="logout">
+                            <Link className="text-danger" onClick={this.handleLogout}>
+                                <span className="ml-1">
+                                    <i className="ri-shut-down-line align-middle mr-1 text-danger"></i>
+                                    Logout
+                                </span>
+                            </Link>
+                        </li>
 
                         {/* <li>
                             <Link to="products" className="waves-effect">

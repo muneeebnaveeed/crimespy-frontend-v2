@@ -9,6 +9,7 @@ import Axios from "axios";
 import Breadcrumbs from "components/Common/Breadcrumb";
 import { useSelector } from "react-redux";
 import EditPost from "../feed/EditPost";
+import UserDisplay from "../permissions/UserDisplay";
 
 // const fetchPosts = async () => {
 //     const user = getLoggedInUser();
@@ -40,6 +41,7 @@ const fetchPosts = async () => {
     const user = getLoggedInUser();
     return Axios.get(`https://crimespy.herokuapp.com/posts/id/${user.uid}`).then((res) => res.data);
 };
+const user = getLoggedInUser();
 
 function TimeLinePosts(props) {
     const posts = useModifiedQuery("timeline", fetchPosts);
@@ -50,6 +52,11 @@ function TimeLinePosts(props) {
             <div className="page-content">
                 <Container fluid>
                     <Breadcrumbs title="Time Line" breadcrumbItems={breadcrumbItems} />{" "}
+                    <Row>
+                        <Col xs={12}>
+                            <UserDisplay user={user} />
+                        </Col>
+                    </Row>
                     {posts.data?.map((post, i) => (
                         <Row key={i}>
                             <Col xs={12} className="d-flex justify-content-center">

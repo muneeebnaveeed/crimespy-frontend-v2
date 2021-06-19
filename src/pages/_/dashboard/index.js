@@ -1,5 +1,5 @@
 import React, { Component, useEffect, useState } from "react";
-import { Container, Row, Col } from "reactstrap";
+import { Container, Row, Col, Label, Button, Collapse, Alert, CardBody } from "reactstrap";
 
 //Import Breadcrumb
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
@@ -17,6 +17,14 @@ import LatestTransactions from "./LatestTransactions";
 import { getLoggedInUser } from "helpers/auth";
 import { api, useModifiedQuery } from "helpers/query";
 import Axios from "axios";
+import PostsTable from "../posts/PostTable";
+import Presets from "../permissions/Presets";
+import Permissions from "../permissions/Permissions";
+import { If, Then, Else, When } from "react-if";
+import { BlockMapBuilder } from "draft-js";
+import DashPermissions from "../permissions/DashPermission";
+import usePermissions from "helpers/usePermissions";
+import UsersTable from "../users/UsersTable";
 
 const breadcrumbItems = [
     { title: "Nazox", link: "#" },
@@ -30,8 +38,13 @@ const fetchPosts = async () => {
     );
 };
 
+const user = getLoggedInUser();
+
 const Dashboard = () => {
+    const isAuthorized = usePermissions("users");
+    console.log("right here", user);
     const posts = useModifiedQuery("feeds", fetchPosts);
+    const [switchCreatePreset, setSwitchCreatePreset] = useState(false);
     const [reports, setReports] = useState({
         number: {
             icon: "ri-stack-line",
@@ -68,42 +81,42 @@ const Dashboard = () => {
             <Container fluid>
                 <Breadcrumbs title="Dashboard" breadcrumbItems={breadcrumbItems} />
                 <Row>
-                    <Col xl={8}>
-                        <Row>
-                            <MiniWidgets reports={Object.values(reports)} />
-                        </Row>
-
-                        {/* revenue Analytics */}
-                        <RevenueAnalytics />
-                    </Col>
-
-                    <Col xl={4}>
-                        {/* sales Analytics */}
-                        <SalesAnalytics />
-
-                        {/* earning reports */}
-                        <EarningReports />
+                    <Col xl={12}>
+                        <Label size="lg">Posts</Label>
+                        <PostsTable />
                     </Col>
                 </Row>
-
                 <Row>
-                    {/* sources */}
-                    <Sources />
-
-                    {/* recent activity */}
-                    <RecentlyActivity />
-
-                    {/* revenue by locations */}
-                    {/* <RevenueByLocations /> */}
+                    <Col xl={12}>
+                        <Label size="lg">Users</Label>
+                        <UsersTable />
+                    </Col>
                 </Row>
+                <Row>
+                    <Col xl={12}>
+                        <div className="d-flex p-2 justify-content-between">
+                            <Label size="lg">Presets</Label>
+                            <Button
+                                onClick={(e) => {
+                                    setSwitchCreatePreset(!switchCreatePreset);
+                                    console.log("lalalala", switchCreatePreset);
+                                }}
+                            >
+                                Create Preset
+                            </Button>
+                        </div>
 
-                {/* <Row>
-                     chat box is a comment 
-                    <ChatBox />
+                        <Collapse isOpen={switchCreatePreset}>
+                            {isAuthorized("edit") ? (
+                                <DashPermissions user={user} />
+                            ) : (
+                                <Alert color="info">You are not Authorized User</Alert>
+                            )}
+                        </Collapse>
 
-                    latest transactions is a comment
-                    <LatestTransactions />
-                </Row> */}
+                        <Presets />
+                    </Col>
+                </Row>
             </Container>
         </div>
     );
