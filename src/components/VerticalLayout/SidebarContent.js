@@ -108,7 +108,12 @@ class SidebarContent extends Component {
                             if (isUserAuthorized(route.key, this.state.user))
                                 return (
                                     <li key={`sidebar-list-item-${index}`}>
-                                        <Link to={route.path} className="waves-effect">
+                                        <Link
+                                            to={`${route.path}${
+                                                route.key == "timeline" ? `?user=${getLoggedInUser().id}` : ``
+                                            }`}
+                                            className="waves-effect"
+                                        >
                                             {route.icon && <i className={route.icon} />}
                                             <span className="ml-1">{route.title}</span>
                                         </Link>
@@ -119,11 +124,9 @@ class SidebarContent extends Component {
                         })}
 
                         <li key="logout">
-                            <Link className="text-danger" onClick={this.handleLogout}>
-                                <span className="ml-1">
-                                    <i className="ri-shut-down-line align-middle mr-1 text-danger"></i>
-                                    Logout
-                                </span>
+                            <Link className="waves-effect" onClick={this.handleLogout}>
+                                <i className="ri-shut-down-line align-middle mr-1 text-danger"></i>
+                                <span className="ml-1">Logout</span>
                             </Link>
                         </li>
 

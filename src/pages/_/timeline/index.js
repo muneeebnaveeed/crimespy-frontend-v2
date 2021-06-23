@@ -37,8 +37,8 @@ const breadcrumbItems = [
     },
 ];
 
-const fetchPosts = async () => {
-    const user = getLoggedInUser();
+const fetchPosts = async ({ user }) => {
+    //const user = getLoggedInUser();
     return Axios.get(`https://crimespy.herokuapp.com/posts/id/${user.uid}`).then((res) => res.data);
 };
 const user = getLoggedInUser();

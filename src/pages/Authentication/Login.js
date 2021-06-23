@@ -52,6 +52,7 @@ function Login(props) {
                 console.log(lon, lat);
                 let user = {
                     ...fbUser,
+                    id: fbUser.uid,
                     role: "user",
                     gender: "",
                     longitude: lon,
@@ -74,9 +75,11 @@ function Login(props) {
                 //     console.log(res)
                 // })
                 if (!dbUser)
-                    axios.post(`https://crimespy.herokuapp.com/users/id/${user.uid}/lat/${lat}/long/${lon}`, user).then((res) => {
-                        console.log(res);
-                    });
+                    axios
+                        .post(`https://crimespy.herokuapp.com/users/id/${user.uid}/lat/${lat}/long/${lon}`, user)
+                        .then((res) => {
+                            console.log(res);
+                        });
                 else user = dbUser;
                 dispatch(setUser(user));
                 setSession(user);
@@ -126,14 +129,12 @@ function Login(props) {
                                                         <i className="fab fa-facebook-f mr-1" />
                                                         Login with Facebook
                                                     </Button>
-                                                    
                                                 </div>
                                                 <div className="p-2 mt-2 d-flex justify-content-center">
                                                     <Button color="secondary" onClick={handleLogin}>
-                                                    <i class="fa fa-phone-alt mr-1"/>
+                                                        <i class="fa fa-phone-alt mr-1" />
                                                         Login with Phone Number
                                                     </Button>
-                                                    
                                                 </div>
 
                                                 <div className="mt-5 text-center">
