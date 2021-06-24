@@ -22,6 +22,7 @@ import usePermissions from "helpers/usePermissions";
 import { FastField } from "formik";
 import axios from "axios";
 import DeleteUser from "./DeleteUser";
+import SearchTask from "../feed/SearchTask";
 
 const fetchUsers = async () => {
     return axios.get(`https://crimespy.herokuapp.com/users`).then((res) => res.data);
@@ -104,6 +105,7 @@ function UsersTable(props) {
                               }
                     }
                 >
+                    <SearchTask />
                     <Table
                         responsive
                         size="xl"
@@ -124,12 +126,12 @@ function UsersTable(props) {
                         <tbody>
                             {" "}
                             {users.data?.map((user, i) => {
-                                const isSelectBusy = changingRole === user.uid;
+                                const isSelectBusy = changingRole === user.id;
                                 return (
                                     <>
                                         <tr key={i}>
                                             <Th scope="row" key={i}>
-                                                {user.uid.substring(user.uid.length - 3, user.uid.length)}{" "}
+                                                {user.id.substring(user.id.length - 3, user.id.length)}{" "}
                                             </Th>
                                             <Th>{user.displayName}</Th>
                                             <Th>{user.email}</Th>
@@ -142,7 +144,7 @@ function UsersTable(props) {
                                                     }}
                                                     onChange={(role) =>
                                                         role.label !== user.role
-                                                            ? handleChangeRole(role, user.uid)
+                                                            ? handleChangeRole(role, user.id)
                                                             : null
                                                     }
                                                     isLoading={isSelectBusy}
@@ -156,7 +158,7 @@ function UsersTable(props) {
                                                         <Button
                                                             color="light"
                                                             size="sm"
-                                                            onClick={() => history.push(`/users/edit?user=${user.uid}`)}
+                                                            onClick={() => history.push(`/users/edit?user=${user.id}`)}
                                                         >
                                                             <i class="fas fa-user-edit" />
                                                         </Button>
@@ -165,7 +167,7 @@ function UsersTable(props) {
                                                         <Button
                                                             color="light"
                                                             size="sm"
-                                                            onClick={() => handlePassInfoShow(user.uid)}
+                                                            onClick={() => handlePassInfoShow(user.id)}
                                                         >
                                                             <i className="fas fa-trash-alt" />
                                                         </Button>

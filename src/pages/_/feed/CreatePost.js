@@ -67,7 +67,9 @@ const CreatePost = ({ toggle, isOpen }) => {
 
     const handleSubmit = useCallback((values) => {
         var imageName = makeid(10);
-        const uploadTask = storage.ref(`images/${imageName}.jpg`).put(values.image);
+        const postId = uuid();
+        console.log("imageid", postId);
+        const uploadTask = storage.ref(`post_${postId}.jpg`).put(values.image);
         setIsCreatingPost(true);
         uploadTask.on(
             "state_changed",
@@ -76,10 +78,10 @@ const CreatePost = ({ toggle, isOpen }) => {
                 console.log(error);
             },
             async () => {
-                const postId = uuid();
+                // const postId = uuid();
 
                 try {
-                    const imageUrl = await storage.ref("images").child(`${imageName}.jpg`).getDownloadURL();
+                    const imageUrl = await storage.ref().child(`post_${postId}.jpg`).getDownloadURL();
                     const hash = geofire.geohashForLocation([
                         parseFloat(values.latitude),
                         parseFloat(values.longitude),
@@ -87,22 +89,24 @@ const CreatePost = ({ toggle, isOpen }) => {
 
                     const newPost = {
                         postId: postId,
-                        ownerId: user.uid,
-                        longitude: values.longitude,
-                        latitude: values.latitude,
-                        geohash: hash,
+                        ownerId: user.id,
+                        longitude: parseFloat(values.longitude),
+                        latitude: parseFloat(values.latitude),
+                        // geohash: hash,
                         Title: values.title,
-                        verified: {},
+                        peopleVerifiedPost: {},
                         description: values.description,
                         location: values.location,
                         mediaUrl: imageUrl,
                         postVerified: false,
                         category: values.crimeCategory,
                         username: user.displayName.toLowerCase(),
-                        profileUrl: user.photoURL,
+
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                     };
                     console.log("posting");
-                    await axios.post(`https://crimespy.herokuapp.com/posts`, newPost);
+                    db.collection("posts").doc(user.id).collection("userPosts").doc(postId).set(newPost);
+                    // await axios.post(`https://crimespy.herokuapp.com/posts`, newPost);
                     await queryClient.invalidateQueries("feeds");
                     showSuccessToast({ message: "Post has been created" });
                     toggleModal();

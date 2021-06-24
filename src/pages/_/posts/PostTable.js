@@ -24,15 +24,51 @@ import axios from "axios";
 import DeletePost from "./DeletePost";
 import ViewPost from "./ViewPost";
 import VerifyPost from "./VerifyPost";
+import SearchTask from "../feed/SearchTask";
 
+// const fetchPosts = async () => {
+//     const posts = [];
+
+//     const user = getLoggedInUser();
+
+//     return axios
+//         .get(`https://crimespy.herokuapp.com/posts/lat/${user.latitude}/lon/${user.longitude}`)
+//         .then((res) => res.data);
+// };
 const fetchPosts = async () => {
-    const posts = [];
-
     const user = getLoggedInUser();
 
-    return axios
-        .get(`https://crimespy.herokuapp.com/posts/lat/${user.latitude}/lon/${user.longitude}`)
-        .then((res) => res.data);
+    // return axios
+    //     .get(`https://crimespy.herokuapp.com/posts/lat/${user.latitude}/lon/${user.longitude}`)
+    //     .then((res) => res.data);
+    // const snapshot= await db.collectionGroup('userPosts').where('postVerified', '==',false).orderBy("timestamp", "desc").get();
+    // const posts =[]
+    // snapshot.forEach(function (doc) { // doc.data() is never undefined for query doc snapshots
+
+    //     posts.push({
+    //         id: doc.id,
+    //         ... doc.data()
+    //     });
+    //     console.log(doc.id, " => ", doc.data());
+    // });
+
+    const snapshot = db
+        .collectionGroup("userPosts")
+        .where("postVerified", "==", false)
+        .orderBy("timestamp", "desc")
+        .get();
+    const posts = [];
+
+    // const snapshot = db.collection("users").get();
+    const docs = (await snapshot).docs;
+
+    return new Promise((resolve, reject) => {
+        const postss = docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+        }));
+        resolve(postss);
+    });
 };
 
 function PostsTable(props) {
@@ -84,7 +120,6 @@ function PostsTable(props) {
     return (
         <>
             <Card>
-                {" "}
                 {/* {((users.isLoading && !users.isError) || (presets.isLoading && !presets.isError)) && <Spinner />}
                 {((users.isError && !users.isLoading) || (presets.isError && !presets.isLoading)) && (
                     <Error
@@ -102,6 +137,7 @@ function PostsTable(props) {
                               }
                     }
                 >
+                    <SearchTask />
                     <Table
                         responsive
                         size="xl"

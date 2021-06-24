@@ -8,6 +8,7 @@ import { Else, If, Then, When } from "react-if";
 import axios from "axios";
 import useDisclosure from "helpers/useDisclosure";
 import EditPost from "./EditPost.js";
+import { isEqual } from "lodash";
 
 // const fetchUsers = async () => {
 //     const snapshot = db.collection("users").get();
@@ -25,20 +26,52 @@ import EditPost from "./EditPost.js";
 const fetchPosts = async () => {
     const user = getLoggedInUser();
 
-    return axios
-        .get(`https://crimespy.herokuapp.com/posts/lat/${user.latitude}/lon/${user.longitude}`)
-        .then((res) => res.data);
+    // return axios
+    //     .get(`https://crimespy.herokuapp.com/posts/lat/${user.latitude}/lon/${user.longitude}`)
+    //     .then((res) => res.data);
+    // const snapshot= await db.collectionGroup('userPosts').where('postVerified', '==',false).orderBy("timestamp", "desc").get();
+    // const posts =[]
+    // snapshot.forEach(function (doc) { // doc.data() is never undefined for query doc snapshots
+
+    //     posts.push({
+    //         id: doc.id,
+    //         ... doc.data()
+    //     });
+    //     console.log(doc.id, " => ", doc.data());
+    // });
+
+    const snapshot = db
+        .collectionGroup("userPosts")
+        .where("postVerified", "==", false)
+        .orderBy("timestamp", "desc")
+        .get();
+    const posts = [];
+
+    // const snapshot = db.collection("users").get();
+    const docs = (await snapshot).docs;
+
+    return new Promise((resolve, reject) => {
+        const postss = docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+        }));
+        resolve(postss);
+    });
 };
 
 function Posts(props) {
-    const posts = useModifiedQuery("feeds", fetchPosts);
+    const posts = useModifiedQuery("posts", fetchPosts);
+
     const editPostDisclosure = useDisclosure();
     const [selectedPost, setSelectedPost] = useState(null);
 
     return (
         <>
+            {console.log("here", posts)}
             {posts.data?.map((post, i) => {
-                console.log("ownerId", post.ownerId);
+                {
+                    /* console.log("ownerIdHelllllp", post); */
+                }
                 return (
                     <Row key={i}>
                         <Col xs={12} className="d-flex justify-content-center">

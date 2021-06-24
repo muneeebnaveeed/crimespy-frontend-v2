@@ -34,15 +34,16 @@ function Login(props) {
         let lat;
         try {
             const res = await signInWithFacebook();
+            console.log("sdsd", res.user);
 
-            const fbUser = _.pick(res.user, ["uid", "displayName", "email", "photoURL"]);
+            // const fbUser = _.pick(res.user, ['uid', "displayName", "email", "photoURL"]);
 
             // const data = {
             //     firstName: 'Finn',
             //     lastName: 'Williams'
             // }
 
-            const dbUser = (await db.collection("users").doc(fbUser.uid).get()).data();
+            const dbUser = (await db.collection("users").doc(res.user.uid).get()).data();
             // console.log("location", location)
             // console.log(`DATA FROM DB ${dbUser}`);
             await navigator.geolocation.getCurrentPosition((position) => {
@@ -51,12 +52,15 @@ function Login(props) {
                 lat = position.coords.latitude;
                 console.log(lon, lat);
                 let user = {
-                    ...fbUser,
-                    id: fbUser.uid,
+                    // ...fbUser,
+                    id: res.user.uid,
+                    displayName: res.user.displayName,
+
+                    photoUrl: res.user.photoURL,
                     role: "user",
                     gender: "",
-                    longitude: lon,
-                    latitude: lat,
+                    email: res.user.email,
+
                     bio: "",
                     dob: "",
                     permissions: {
@@ -75,11 +79,13 @@ function Login(props) {
                 //     console.log(res)
                 // })
                 if (!dbUser)
-                    axios
-                        .post(`https://crimespy.herokuapp.com/users/id/${user.uid}/lat/${lat}/long/${lon}`, user)
-                        .then((res) => {
-                            console.log(res);
-                        });
+                    // axios.post(`https://crimespy.herokuapp.com/users/id/${user.uid}/lat/${lat}/long/${lon}`, user).then((res) => {
+                    //     console.log(res);
+                    // });
+                    axios.post(`https://crimespy.herokuapp.com/users/id/${res.user.uid}`, user).then((res) => {
+                        console.log("here", res);
+                    });
+                // db.collection('users').doc(res.user.uid).set(user);
                 else user = dbUser;
                 dispatch(setUser(user));
                 setSession(user);

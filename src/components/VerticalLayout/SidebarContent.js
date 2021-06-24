@@ -125,7 +125,7 @@ class SidebarContent extends Component {
 
                         <li key="logout">
                             <Link className="waves-effect" onClick={this.handleLogout}>
-                                <i className="ri-shut-down-line align-middle mr-1 text-danger"></i>
+                                <i className="ri-shut-down-line align-middle mr-1 "></i>
                                 <span className="ml-1">Logout</span>
                             </Link>
                         </li>

@@ -92,7 +92,7 @@ function Post({ username, profileUrl, description, comments, id, photoURL, Title
                                         Delete
                                     </DropdownItem>
                                 </If>
-                                <If condition={user.uid === ownerId}>
+                                <If condition={user.id === ownerId}>
                                     <DropdownItem onClick={handleEditPost}>
                                         <i className="fas fa-edit mr-1" />
                                         Edit
@@ -120,7 +120,7 @@ function Post({ username, profileUrl, description, comments, id, photoURL, Title
                 </div>
 
                 <p className="p-3 m-0">{description}</p>
-                <Actions username={username} verified={verified} postVerified={postVerified} user={user} id={id} />
+                {/* <Actions username={username} verified={verified} postVerified={postVerified} user={user} id={id} /> */}
                 <Comments username={username} comments={comments} />
                 <When condition={isAuthorized("createComment")}>
                     <CreateComment id={id} comments={comments} />
