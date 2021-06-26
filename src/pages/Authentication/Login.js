@@ -47,11 +47,11 @@ function Login(props) {
             const dbUser = (await db.collection("users").doc(res.user.uid).get()).data();
             // console.log("location", location)
             // console.log(`DATA FROM DB ${dbUser}`);
-            await navigator.geolocation.getCurrentPosition((position) => {
-                console.log("1");
-                lon = position.coords.longitude;
-                lat = position.coords.latitude;
-                console.log(lon, lat);
+            // await navigator.geolocation.getCurrentPosition((position) => {
+                // console.log("1");
+                // lon = position.coords.longitude;
+                // lat = position.coords.latitude;
+                // console.log(lon, lat);
                 let user = {
                     // ...fbUser,
                     id: res.user.uid,
@@ -71,7 +71,7 @@ function Login(props) {
                         map: ["review"],
                         chart: ["review"],
                     },
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                  
                 };
 
                 // axios.post(`https://crimespy.herokuapp.com/users/id/${
@@ -91,7 +91,7 @@ function Login(props) {
                 dispatch(setUser(user));
                 setSession(user);
                 history.push("/");
-            });
+            // });
         } catch (err) {
             console.error(err.message);
         }
