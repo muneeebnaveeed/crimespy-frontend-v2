@@ -48,7 +48,7 @@ class ProfileMenu extends Component {
                     >
                         <img
                             className="rounded-circle header-profile-user mr-1"
-                            src={this.state.user.photoURL}
+                            src={this.state.user.photoUrl}
                             alt="Header Avatar"
                         />
                         <span className="d-none d-xl-inline-block ml-1 text-transform">

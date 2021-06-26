@@ -7,7 +7,7 @@ import { useQueryClient } from "react-query";
 import { useFormik } from "formik";
 import { commentSchema } from "helpers/schema";
 import { showErrorToast } from "helpers/showToast";
-
+import firebase from "firebase/app";
 export default function CreateComment({ id, ...props }) {
     const [comments, setComments] = useState(props.comments || []);
     const [isCreatingComment, setIsCreatingComment] = useState(false);
@@ -20,17 +20,25 @@ export default function CreateComment({ id, ...props }) {
         try {
             const user = getLoggedInUser();
             // const postRef = db.collection("posts").doc(user.uid).collection("userPosts");
-            const postRef = db.collection("feeds").doc(id);
+            const commentRef =  db.collection("comments")
+            // const postRef = db.collection("feeds").doc(id);
 
-            const newComment = {
-                comment: values.comment,
+            // const newComment = {
+            //     comment: values.comment,
+            //     username: user.displayName,
+            // };
+
+            // const updatedComments = [...comments, newComment];
+            // setComments(updatedComments);
+
+            // await postRef.update({ comments: updatedComments });
+          await commentRef.doc(id).collection("comments").add({
                 username: user.displayName,
-            };
-
-            const updatedComments = [...comments, newComment];
-            setComments(updatedComments);
-
-            await postRef.update({ comments: updatedComments });
+                comment: values.comment,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                avatarUrl: user.photoUrl,
+                userId: user.id,
+              });
         } catch (err) {
             showErrorToast({
                 message: `Unable to create comment: ${err.message}`,

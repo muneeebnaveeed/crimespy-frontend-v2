@@ -8,6 +8,7 @@ import { Else, If, Then, When } from "react-if";
 import axios from "axios";
 import useDisclosure from "helpers/useDisclosure";
 import EditPost from "./EditPost.js";
+import haversine from 'haversine-distance'
 
 // const fetchUsers = async () => {
 //     const snapshot = db.collection("users").get();
@@ -21,13 +22,52 @@ import EditPost from "./EditPost.js";
 //         resolve(users);
 //     });
 // };
-
+const matchingDocs = [];
 const fetchPosts = async () => {
     const user = getLoggedInUser();
+    await navigator.geolocation.getCurrentPosition( async (position) =>{
 
-    return axios
-        .get(`https://crimespy.herokuapp.com/posts/lat/${user.latitude}/lon/${user.longitude}`)
-        .then((res) => res.data);
+    
+    // return axios
+    //     .get(`https://crimespy.herokuapp.com/posts/lat/${position.coords.latitude}/lon/${position.coords.longitude}`)
+    //     .then((res) => res.data);
+    const latitude = parseFloat(position.coords.latitude)
+    const longitude = parseFloat(position.coords.longitude)
+    const a = { lat: 33.6099, lng: 73.0064 }
+    const promises = [];
+    const q = await db.collectionGroup('userPosts').where('postVerified', '==',false).orderBy("timestamp", "desc");
+    const useref = await db.collection('users')
+   
+    promises.push(q.get());
+    const snapshots = await Promise.all(promises);
+    
+    for (const snap of snapshots) {
+        for (const doc of snap.docs) {
+            //console.log(doc.data());
+            const lat = parseFloat(doc.get("latitude"));
+            const lng = parseFloat(doc.get("longitude"));
+            
+            //console.log(lat, lng);
+            // We have to filter out a few false positives due to GeoHash
+            // accuracy, but most will match
+            const b = { lat: lat, lon: lng }
+            const userarea = await useref.doc(doc.data().ownerId).get()
+            const inmeters = parseInt(haversine(a, b));
+            
+            // const distanceInKm = geofire.distanceBetween([lat, lng], center);
+            // const distanceInM = distanceInKm * 1000;
+            // console.log("distances ", distanceInKm, distanceInM);
+            if (inmeters >5000) {
+                console.log("condition not matching", inmeters);
+            } else {
+                
+                matchingDocs.push({ id: doc.id,photo:userarea.data().photoUrl, ...doc.data() });
+                console.log('dds',userarea.data().photoUrl)
+            }
+        }
+    }
+
+    })
 };
 
 function Posts(props) {
@@ -37,18 +77,19 @@ function Posts(props) {
 
     return (
         <>
-            {posts.data?.map((post, i) => {
+        {console.log('dasdasda',matchingDocs)}
+            {matchingDocs?.map((post, i) => {
                 console.log("ownerId", post.ownerId);
                 return (
                     <Row key={i}>
                         <Col xs={12} className="d-flex justify-content-center">
                             <Post
                                 key={post.id}
-                                id={post.id}
+                                id={post.postId}
                                 ownerId={post.ownerId}
                                 username={post.username}
                                 comments={post.comments}
-                                profileUrl={post.profileUrl}
+                                profileUrl={post.photo}
                                 description={post.description}
                                 photoURL={post.mediaUrl}
                                 Title={post.Title}

@@ -8,6 +8,8 @@ function Map() {
     const [selectedPark, setSelectedPark] = useState(null);
     const [user, setUser] = useState(getLoggedInUser());
     const [postloc, setPostLoc] = useState([]);
+    const [lonn, setLon] =useState(70.879465);
+    const [latt,setLat] = useState(30.987163);
 
     useEffect(() => {
         const listener = (e) => {
@@ -43,6 +45,14 @@ function Map() {
         fetchPost();
     }, []);
 
+    navigator.geolocation.getCurrentPosition((position) => {
+        console.log("1", position.coords.longitude);
+        // lon = position.coords.longitude;
+        setLat(position.coords.latitude)
+        setLon(position.coords.longitude)
+        // lat = position.coords.latitude;
+    })
+
     const lat = parseFloat(user.latitude);
     const long = parseFloat(user.longitude);
 
@@ -56,7 +66,7 @@ function Map() {
     // }));
 
     return (
-        <GoogleMap defaultZoom={10} defaultCenter={{ lat: lat, lng: long }} defaultOptions={{ styles: mapStyles }}>
+        <GoogleMap defaultZoom={10} defaultCenter={{ lat:parseFloat(latt), lng: parseFloat(lonn) }} defaultOptions={{ styles: mapStyles }}>
             {postloc.map((crime) => (
                 <Marker
                     key={crime.id}
@@ -73,7 +83,7 @@ function Map() {
                     }}
                 />
             ))}
-            {console.log("selected", selectedPark)}
+            {console.log("selected", latt)}
             {selectedPark && (
                 <InfoWindow
                     onCloseClick={() => {

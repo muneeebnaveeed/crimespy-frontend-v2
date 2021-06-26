@@ -1,6 +1,14 @@
+import { db } from "helpers/auth";
 import React from "react";
 //
-function Comment({ username, comment }) {
+function Comment({ username, comment,id }) {
+
+
+    // const commentRef =  db.collection("comments")
+    // commentsRef.doc(id)
+    //         .collection("comments")
+    //         .orderBy("timestamp", "desc")
+    //         .snapshots()
     return (
         <p className="mb-1">
             <strong className="mr-2">{username}</strong> {comment}
@@ -8,21 +16,25 @@ function Comment({ username, comment }) {
     );
 }
 
-export default function Comments({ username, comments }) {
+export default function Comments({ username, comments,id }) {
+    var commentse = [];
+    const commentRef =  db.collection("comments")
+   commentRef.doc(id)
+            .collection("comments")
+            .orderBy("timestamp", "desc")
+            .onSnapshot((querySnapshot) => {
+                
+                querySnapshot.forEach((doc) => {
+                    commentse.push(doc?.data());
+                });
+                console.log("Current cities in CA: ", commentse);
+            });
+    
+
     return (
         <div className="px-3 d-flex flex-column">
-        {
-            comments ? (
-                comments.map((comment,i) => (
-                    <div key={i}>
-
-                    <Comment username={comment.username} comment={comment.comment} />
-
-                    </div>
-                ))
-            ) : (
-                <> </>
-            )
+        { console.log("Curre ", commentse)
+           
         }
             {/* <Comment username={username} comment={comment} />
             <Comment username={username} comment={comment} />

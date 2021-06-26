@@ -25,8 +25,13 @@ import { db, getLoggedInUser, storage } from "helpers/auth";
 import makeid from "helpers/imagefunction";
 import { useQueryClient } from "react-query";
 import { showSuccessToast } from "helpers/showToast";
+import PlacesAutocomplete, {
+    geocodeByAddress,
+    getLatLng
+  } from "react-places-autocomplete";
 import crimeCategories from "config/crimeCategories";
 const geofire = require("geofire-common");
+
 
 const CreatePost = ({ toggle, isOpen }) => {
     const uuid = (a) => {
@@ -40,6 +45,11 @@ const CreatePost = ({ toggle, isOpen }) => {
     const [isCreatingPost, setIsCreatingPost] = useState(false);
     const [isGettingGeo, setIsgettingGeo] = useState(false);
     const queryClient = useQueryClient();
+    const [address, setAddress] = React.useState("");
+  const [coordinates, setCoordinates] = React.useState({
+    lat: null,
+    lng: null
+  });
 
     const handleChange = (e) => {
         e.preventDefault();
@@ -52,6 +62,13 @@ const CreatePost = ({ toggle, isOpen }) => {
             imagepreview.style.display = "block";
         }
     };
+
+    const handleSelect = async value =>{
+        const results = await geocodeByAddress(value);
+        const latLng = await getLatLng(results[0]);
+        setAddress(value);
+        setCoordinates(latLng);
+    }
 
     const handleCurrentLocation = async () => {
         setIsgettingGeo(true);
@@ -67,7 +84,9 @@ const CreatePost = ({ toggle, isOpen }) => {
 
     const handleSubmit = useCallback((values) => {
         var imageName = makeid(10);
-        const uploadTask = storage.ref(`images/${imageName}.jpg`).put(values.image);
+        const postId = uuid();
+        console.log('imageid', postId)
+        const uploadTask = storage.ref(`post_${postId}.jpg`).put(values.image);
         setIsCreatingPost(true);
         uploadTask.on(
             "state_changed",
@@ -76,10 +95,10 @@ const CreatePost = ({ toggle, isOpen }) => {
                 console.log(error);
             },
             async () => {
-                const postId = uuid();
+                // const postId = uuid();
 
                 try {
-                    const imageUrl = await storage.ref("images").child(`${imageName}.jpg`).getDownloadURL();
+                    const imageUrl = await storage.ref().child(`post_${postId}.jpg`).getDownloadURL();
                     const hash = geofire.geohashForLocation([
                         parseFloat(values.latitude),
                         parseFloat(values.longitude),
@@ -87,22 +106,25 @@ const CreatePost = ({ toggle, isOpen }) => {
 
                     const newPost = {
                         postId: postId,
-                        ownerId: user.uid,
-                        longitude: values.longitude,
-                        latitude: values.latitude,
-                        geohash: hash,
+                        ownerId: user.id,
+                        longitude: parseFloat(values.longitude),
+                        latitude: parseFloat(values.latitude),
+                        // geohash: hash,
                         Title: values.title,
-                        verified: {},
+                        peopleVerifiedPost: {},
                         description: values.description,
                         location: values.location,
                         mediaUrl: imageUrl,
                         postVerified: false,
                         category: values.crimeCategory,
                         username: user.displayName.toLowerCase(),
-                        profileUrl: user.photoURL,
+
+                       
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                     };
                     console.log("posting");
-                    await axios.post(`https://crimespy.herokuapp.com/posts`, newPost);
+                    db.collection('posts').doc(user.id).collection('userPosts').doc(postId).set(newPost);
+                    // await axios.post(`https://crimespy.herokuapp.com/posts`, newPost);
                     await queryClient.invalidateQueries("feeds");
                     showSuccessToast({ message: "Post has been created" });
                     toggleModal();
@@ -190,7 +212,7 @@ const CreatePost = ({ toggle, isOpen }) => {
                         <FormGroup>
                             <Label for="location">Location</Label>
                             <InputGroup>
-                                <Input
+                                {/* <Input
                                     type="text"
                                     name="location"
                                     id="location"
@@ -198,7 +220,38 @@ const CreatePost = ({ toggle, isOpen }) => {
                                     placeholder="Enter the events location here"
                                     onChange={formik.handleChange}
                                     value={formik.value}
-                                />
+                                /> */}
+                                <PlacesAutocomplete
+        value={address}
+        onChange={setAddress}
+        onSelect={handleSelect}
+      >
+
+{({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+          <div>
+            <p>Latitude: {coordinates.lat}</p>
+            <p>Longitude: {coordinates.lng}</p>
+
+            <input {...getInputProps({ placeholder: "Type address" })} />
+
+            <div>
+              {loading ? <div>...loading</div> : null}
+
+              {suggestions.map(suggestion => {
+                const style = {
+                  backgroundColor: suggestion.active ? "#41b6e6" : "#fff"
+                };
+
+                return (
+                  <div {...getSuggestionItemProps(suggestion, { style })}>
+                    {suggestion.description}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </PlacesAutocomplete>
                                 <InputGroupAddon addonType="append">
                                     <Button
                                         color="warning"
