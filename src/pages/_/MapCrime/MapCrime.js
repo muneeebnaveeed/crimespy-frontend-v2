@@ -8,8 +8,8 @@ function Map() {
     const [selectedPark, setSelectedPark] = useState(null);
     const [user, setUser] = useState(getLoggedInUser());
     const [postloc, setPostLoc] = useState([]);
-    const [lonn, setLon] =useState(70.879465);
-    const [latt,setLat] = useState(30.987163);
+    const [lonn, setLon] =useState();
+    const [latt,setLat] = useState();
 
     useEffect(() => {
         const listener = (e) => {

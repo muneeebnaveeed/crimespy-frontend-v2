@@ -1,5 +1,6 @@
 import axios from "axios";
 import Button from "components/Common/Button";
+import { db } from "helpers/auth";
 import api, { generateErrorMessage } from "helpers/query";
 import { showErrorToast, showSuccessToast } from "helpers/showToast";
 import React, { useCallback, useRef, useState } from "react";
@@ -21,12 +22,19 @@ function DeleteUser({ isOpen, toggle, userId }) {
         setIsDeletingUser(true);
 
         try {
-            await axios.delete(`https://crimespy.herokuapp.com/users/id/${userId}`);
-            await queryClient.invalidateQueries("users");
+            // await axios.delete(`https://crimespy.herokuapp.com/users/id/${userId}`);
+           
+            await db.collection('users').doc(userId).delete().then(function () {
+                console.log("delete Users info successfully");
+            }).catch(function (error) {
+                console.log(`Errors post info ${error}`);
+            });
+             await queryClient.invalidateQueries("users");
             showSuccessToast({ message: "User has been deleted successfully" });
         } catch (err) {
             showErrorToast({ message: "Unable to delete user" });
         }
+
         setIsDeletingUser(false);
     };
 

@@ -33,7 +33,7 @@ const fetchPosts = async () => {
     //     .then((res) => res.data);
     const latitude = parseFloat(position.coords.latitude)
     const longitude = parseFloat(position.coords.longitude)
-    const a = { lat: 33.6099, lng: 73.0064 }
+    const a = { lat: latitude, lng: longitude }
     const promises = [];
     const q = await db.collectionGroup('userPosts').where('postVerified', '==',false).orderBy("timestamp", "desc");
     const useref = await db.collection('users')
