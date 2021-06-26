@@ -136,14 +136,12 @@ function Login(props) {
                                                         <i className="fab fa-facebook-f mr-1" />
                                                         Login with Facebook
                                                     </Button>
-                                                    
                                                 </div>
                                                 <div className="p-2 mt-2 d-flex justify-content-center">
                                                     <Button color="secondary" onClick={handleLogin}>
-                                                    <i class="fa fa-phone-alt mr-1"/>
+                                                        <i class="fa fa-phone-alt mr-1" />
                                                         Login with Phone Number
                                                     </Button>
-                                                    
                                                 </div>
 
                                                 <div className="mt-5 text-center">

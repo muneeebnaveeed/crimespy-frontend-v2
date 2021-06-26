@@ -40,7 +40,11 @@ class ProfileMenu extends Component {
     render() {
         return (
             <React.Fragment>
-                <Dropdown isOpen={this.state.menu} toggle={this.toggle} className="d-inline-block user-dropdown">
+                <Dropdown
+                    isOpen={this.state.menu}
+                    onClick={this.handlePermissions}
+                    className="d-inline-block user-dropdown"
+                >
                     <DropdownToggle
                         tag="button"
                         className="btn header-item waves-effect"
@@ -54,13 +58,13 @@ class ProfileMenu extends Component {
                         <span className="d-none d-xl-inline-block ml-1 text-transform">
                             {this.state.user.displayName}
                         </span>
-                        <i className="mdi mdi-chevron-down d-none ml-1 d-xl-inline-block"></i>
+                        {/* <i className="mdi mdi-chevron-down d-none ml-1 d-xl-inline-block"></i> */}
                     </DropdownToggle>
-                    <DropdownMenu right>
+                    {/* <DropdownMenu right>
                         <DropdownItem onClick={this.handlePermissions}>
                             <i className="ri-user-line align-middle mr-1"></i> Profile
                         </DropdownItem>
-                        {/* <DropdownItem href="#">
+                        <DropdownItem href="#">
                             <i className="ri-wallet-2-line align-middle mr-1"></i> My Wallet
                         </DropdownItem>
                         <DropdownItem className="d-block" href="#">
@@ -69,12 +73,12 @@ class ProfileMenu extends Component {
                         </DropdownItem>
                         <DropdownItem href="#">
                             <i className="ri-lock-unlock-line align-middle mr-1"></i> Lock screen
-                        </DropdownItem> */}
+                        </DropdownItem>
                         <DropdownItem divider />
                         <DropdownItem className="text-danger" onClick={this.handleLogout}>
                             <i className="ri-shut-down-line align-middle mr-1 text-danger"></i> Logout
                         </DropdownItem>
-                    </DropdownMenu>
+                    </DropdownMenu> */}
                 </Dropdown>
             </React.Fragment>
         );

@@ -3,6 +3,7 @@ import React, { useCallback, useState } from "react";
 import { Container, Card, CardBody, Row, Col, CardHeader, CardSubtitle, CardImg } from "reactstrap";
 
 const UserDisplay = ({ user }) => {
+    console.log("right here mofo", user);
     return (
         <>
             <Card>
@@ -16,8 +17,9 @@ const UserDisplay = ({ user }) => {
                                 alt="Header Avatar"
                             />
                             <div className="d-flex mt-4 ml-2 flex-column">
-                                <h1>{user?.displayName}</h1>
-                                <p>{user?.gender}</p>
+                                <h1>{user.displayName}</h1>
+                                <p>{user.dob}</p>
+                                <p>{user.gender}</p>
                             </div>
                         </div>
                     </Row>

@@ -92,7 +92,7 @@ function Post({ username, profileUrl, description, comments, id, photoURL, Title
                                         Delete
                                     </DropdownItem>
                                 </If>
-                                <If condition={user.uid === ownerId}>
+                                <If condition={user.id === ownerId}>
                                     <DropdownItem onClick={handleEditPost}>
                                         <i className="fas fa-edit mr-1" />
                                         Edit

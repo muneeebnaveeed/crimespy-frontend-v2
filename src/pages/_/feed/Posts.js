@@ -71,7 +71,8 @@ const fetchPosts = async () => {
 };
 
 function Posts(props) {
-    const posts = useModifiedQuery("feeds", fetchPosts);
+    const posts = useModifiedQuery("posts", fetchPosts);
+
     const editPostDisclosure = useDisclosure();
     const [selectedPost, setSelectedPost] = useState(null);
 
@@ -79,7 +80,7 @@ function Posts(props) {
         <>
         {console.log('dasdasda',matchingDocs)}
             {matchingDocs?.map((post, i) => {
-                console.log("ownerId", post.ownerId);
+                {/* console.log("ownerId", post.ownerId); */}
                 return (
                     <Row key={i}>
                         <Col xs={12} className="d-flex justify-content-center">

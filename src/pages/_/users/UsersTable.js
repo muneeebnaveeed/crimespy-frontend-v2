@@ -22,6 +22,7 @@ import usePermissions from "helpers/usePermissions";
 import { FastField } from "formik";
 import axios from "axios";
 import DeleteUser from "./DeleteUser";
+import SearchTask from "../feed/SearchTask";
 
 const fetchUsers = async () => {
     return axios.get(`https://crimespy.herokuapp.com/users`).then((res) => res.data);
@@ -104,6 +105,7 @@ function UsersTable(props) {
                               }
                     }
                 >
+                    <SearchTask />
                     <Table
                         responsive
                         size="xl"
