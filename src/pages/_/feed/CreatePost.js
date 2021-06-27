@@ -212,7 +212,7 @@ const CreatePost = ({ toggle, isOpen }) => {
                         <FormGroup>
                             <Label for="location">Location</Label>
                             <InputGroup>
-                                <Input
+                                {/* <Input
                                     type="text"
                                     name="location"
                                     id="location"
@@ -220,8 +220,8 @@ const CreatePost = ({ toggle, isOpen }) => {
                                     placeholder="Enter the events location here"
                                     onChange={formik.handleChange}
                                     value={formik.value}
-                                />
-                                {/* <PlacesAutocomplete
+                                /> */}
+                                <PlacesAutocomplete
         value={address}
         onChange={setAddress}
         onSelect={handleSelect}
@@ -232,7 +232,7 @@ const CreatePost = ({ toggle, isOpen }) => {
             {/* <p>Latitude: {coordinates.lat}</p>
             <p>Longitude: {coordinates.lng}</p> */}
 
-            {/* <input {...getInputProps({ placeholder: "Type address" })} />
+            <input {...getInputProps({ placeholder: "Type address" })} />
 
             <div>
               {loading ? <div>...loading</div> : null}
@@ -248,10 +248,10 @@ const CreatePost = ({ toggle, isOpen }) => {
                   </div>
                 );
               })}
-            </div> */}
-          {/* </div>
+            </div>
+          </div>
         )}
-      </PlacesAutocomplete> */} 
+      </PlacesAutocomplete>
                                 <InputGroupAddon addonType="append">
                                     <Button
                                         color="warning"
