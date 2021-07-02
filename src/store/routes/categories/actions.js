@@ -8,7 +8,7 @@ import {
     SET_SORT,
     TOGGLE_CREATE_CATEGORY_DISCLOSURE,
     TOGGLE_DELETE_CATEGORY_DISCLOSURE,
-} from "./actionTypes";
+} from './actionTypes';
 
 export const setPage = (page) => ({
     type: SET_PAGE,

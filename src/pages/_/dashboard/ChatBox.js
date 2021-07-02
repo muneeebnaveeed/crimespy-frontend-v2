@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
     Row,
     Card,
@@ -11,13 +11,13 @@ import {
     Form,
     Input,
     Button,
-} from "reactstrap";
+} from 'reactstrap';
 
-//Import images
-import avatar2 from "../../../assets/images/users/avatar-2.jpg";
+// Import images
+import SimpleBar from 'simplebar-react';
+import avatar2 from '../../../assets/images/users/avatar-2.jpg';
 
-//Simple bar
-import SimpleBar from "simplebar-react";
+// Simple bar
 
 class ChatBox extends Component {
     constructor(props) {
@@ -31,7 +31,7 @@ class ChatBox extends Component {
 
     render() {
         return (
-            <React.Fragment>
+            <>
                 <Col lg={4}>
                     <Card>
                         <CardBody className="border-bottom">
@@ -40,7 +40,7 @@ class ChatBox extends Component {
                                     <Col md={5} xs={9}>
                                         <h5 className="font-size-15 mb-1">Frank Vickery</h5>
                                         <p className="text-muted mb-0">
-                                            <i className="mdi mdi-circle text-success align-middle mr-1"></i> Active now
+                                            <i className="mdi mdi-circle text-success align-middle mr-1" /> Active now
                                         </p>
                                     </Col>
                                     <Col md={7} xs={3}>
@@ -48,10 +48,12 @@ class ChatBox extends Component {
                                             <li className="list-inline-item">
                                                 <Dropdown
                                                     isOpen={this.state.isSearch}
-                                                    toggle={() => this.setState({ isSearch: !this.state.isSearch })}
+                                                    toggle={() =>
+                                                        this.setState((prev) => ({ isSearch: !prev.isSearch }))
+                                                    }
                                                 >
                                                     <DropdownToggle tag="i" className="btn nav-btn" type="button">
-                                                        <i className="mdi mdi-magnify"></i>
+                                                        <i className="mdi mdi-magnify" />
                                                     </DropdownToggle>
                                                     <DropdownMenu right className=" dropdown-menu-md p-0">
                                                         <Form className="p-2">
@@ -62,7 +64,7 @@ class ChatBox extends Component {
                                                                         className="form-control rounded bg-light border-0"
                                                                         placeholder="Search..."
                                                                     />
-                                                                    <i className="mdi mdi-magnify search-icon"></i>
+                                                                    <i className="mdi mdi-magnify search-icon" />
                                                                 </div>
                                                             </div>
                                                         </Form>
@@ -72,10 +74,12 @@ class ChatBox extends Component {
                                             <li className="list-inline-item d-none d-sm-inline-block">
                                                 <Dropdown
                                                     isOpen={this.state.isSetting}
-                                                    toggle={() => this.setState({ isSetting: !this.state.isSetting })}
+                                                    toggle={() =>
+                                                        this.setState((prev) => ({ isSetting: !prev.isSetting }))
+                                                    }
                                                 >
                                                     <DropdownToggle tag="button" className="btn nav-btn" type="button">
-                                                        <i className="mdi mdi-cog"></i>
+                                                        <i className="mdi mdi-cog" />
                                                     </DropdownToggle>
                                                     <DropdownMenu right>
                                                         <DropdownItem href="#">View Profile</DropdownItem>
@@ -89,10 +93,10 @@ class ChatBox extends Component {
                                             <li className="list-inline-item">
                                                 <Dropdown
                                                     isOpen={this.state.isMore}
-                                                    toggle={() => this.setState({ isMore: !this.state.isMore })}
+                                                    toggle={() => this.setState((prev) => ({ isMore: !prev.isMore }))}
                                                 >
                                                     <DropdownToggle tag="button" className="btn nav-btn" type="button">
-                                                        <i className="mdi mdi-dots-horizontal"></i>
+                                                        <i className="mdi mdi-dots-horizontal" />
                                                     </DropdownToggle>
                                                     <DropdownMenu right>
                                                         <DropdownItem href="#">Action</DropdownItem>
@@ -109,7 +113,7 @@ class ChatBox extends Component {
                         <CardBody>
                             <div className="chat-widget">
                                 <div className="chat-conversation">
-                                    <SimpleBar style={{ maxHeight: "237px" }}>
+                                    <SimpleBar style={{ maxHeight: '237px' }}>
                                         <ul className="list-unstyled mb-0 pr-3">
                                             <li>
                                                 <div className="conversation-list">
@@ -122,7 +126,7 @@ class ChatBox extends Component {
                                                             <p className="mb-0">Hey! I am available</p>
                                                         </div>
                                                         <p className="chat-time mb-0">
-                                                            <i className="mdi mdi-clock-outline align-middle mr-1"></i>{" "}
+                                                            <i className="mdi mdi-clock-outline align-middle mr-1" />{' '}
                                                             12:09
                                                         </p>
                                                     </div>
@@ -140,7 +144,7 @@ class ChatBox extends Component {
                                                         </div>
 
                                                         <p className="chat-time mb-0">
-                                                            <i className="bx bx-time-five align-middle mr-1"></i> 10:02
+                                                            <i className="bx bx-time-five align-middle mr-1" /> 10:02
                                                         </p>
                                                     </div>
                                                 </div>
@@ -162,7 +166,7 @@ class ChatBox extends Component {
                                                             <p className="mb-0">Hello!</p>
                                                         </div>
                                                         <p className="chat-time mb-0">
-                                                            <i className="mdi mdi-clock-outline align-middle mr-1"></i>{" "}
+                                                            <i className="mdi mdi-clock-outline align-middle mr-1" />{' '}
                                                             10:00
                                                         </p>
                                                     </div>
@@ -180,7 +184,7 @@ class ChatBox extends Component {
                                                         </div>
 
                                                         <p className="chat-time mb-0">
-                                                            <i className="bx bx-time-five align-middle mr-1"></i> 10:02
+                                                            <i className="bx bx-time-five align-middle mr-1" /> 10:02
                                                         </p>
                                                     </div>
                                                 </div>
@@ -198,7 +202,7 @@ class ChatBox extends Component {
                                                         </div>
 
                                                         <p className="chat-time mb-0">
-                                                            <i className="bx bx-time-five align-middle mr-1"></i> 10:06
+                                                            <i className="bx bx-time-five align-middle mr-1" /> 10:06
                                                         </p>
                                                     </div>
                                                 </div>
@@ -215,7 +219,7 @@ class ChatBox extends Component {
                                                             <p className="mb-0">& Next meeting tomorrow 10.00AM</p>
                                                         </div>
                                                         <p className="chat-time mb-0">
-                                                            <i className="bx bx-time-five align-middle mr-1"></i> 10:06
+                                                            <i className="bx bx-time-five align-middle mr-1" /> 10:06
                                                         </p>
                                                     </div>
                                                 </div>
@@ -230,7 +234,7 @@ class ChatBox extends Component {
                                                         </div>
 
                                                         <p className="chat-time mb-0">
-                                                            <i className="bx bx-time-five align-middle mr-1"></i> 10:07
+                                                            <i className="bx bx-time-five align-middle mr-1" /> 10:07
                                                         </p>
                                                     </div>
                                                 </div>
@@ -251,21 +255,21 @@ class ChatBox extends Component {
                                         />
                                     </div>
                                 </Col>
-                                <Col xs={{ size: "auto" }}>
+                                <Col xs={{ size: 'auto' }}>
                                     <Button
                                         color="primary"
                                         type="submit"
                                         className="chat-send w-md waves-effect waves-light"
                                     >
-                                        <span className="d-none d-sm-inline-block mr-2">Send</span>{" "}
-                                        <i className="mdi mdi-send"></i>
+                                        <span className="d-none d-sm-inline-block mr-2">Send</span>{' '}
+                                        <i className="mdi mdi-send" />
                                     </Button>
                                 </Col>
                             </Row>
                         </div>
                     </Card>
                 </Col>
-            </React.Fragment>
+            </>
         );
     }
 }

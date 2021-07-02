@@ -10,13 +10,13 @@ import {
     SET_DELETE_CATEGORY_ID,
     TOGGLE_CREATE_CATEGORY_DISCLOSURE,
     TOGGLE_DELETE_CATEGORY_DISCLOSURE,
-} from "./actionTypes";
+} from './actionTypes';
 
 const INIT_STATE = {
     page: 0,
     pageSize: 5,
-    sort: "created_at",
-    order: "ASC",
+    sort: 'created_at',
+    order: 'ASC',
     createDisclosure: false,
     deleteDisclosure: false,
     categories: null,

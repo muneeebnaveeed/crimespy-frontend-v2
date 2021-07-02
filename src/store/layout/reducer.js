@@ -9,14 +9,14 @@ import {
     SHOW_RIGHT_SIDEBAR,
     CHANGE_PRELOADER,
     HIDE_RIGHT_SIDEBAR,
-} from "./actionTypes";
+} from './actionTypes';
 
 const INIT_STATE = {
-    layoutType: "vertical",
-    layoutWidth: "fluid",
-    leftSideBarTheme: "light",
-    leftSideBarType: "default",
-    topbarTheme: "dark",
+    layoutType: 'vertical',
+    layoutWidth: 'fluid',
+    leftSideBarTheme: 'light',
+    leftSideBarType: 'default',
+    topbarTheme: 'dark',
     isPreloader: false,
     showRightSidebar: false,
     isMobile: false,

@@ -11,19 +11,19 @@ import {
     TOGGLE_CREATE_PRODUCT_DISCLOSURE,
     TOGGLE_DELETE_PRODUCT_DISCLOSURE,
     SET_CATEGORY_ID,
-} from "./actionTypes";
+} from './actionTypes';
 
 const INIT_STATE = {
     page: 0,
     pageSize: 5,
-    sort: "created_at",
-    order: "ASC",
+    sort: 'created_at',
+    order: 'ASC',
     createDisclosure: false,
     deleteDisclosure: false,
     products: null,
     count: null,
     deleteProductId: null,
-    categoryId: "",
+    categoryId: '',
 };
 
 const Products = (state = INIT_STATE, action) => {

@@ -1,4 +1,4 @@
-import { batch } from "react-redux";
+import { batch } from 'react-redux';
 import {
     SET_COUNT,
     SET_DELETE_PRODUCT_ID,
@@ -10,7 +10,7 @@ import {
     TOGGLE_CREATE_PRODUCT_DISCLOSURE,
     TOGGLE_DELETE_PRODUCT_DISCLOSURE,
     SET_CATEGORY_ID,
-} from "./actionTypes";
+} from './actionTypes';
 
 export const setPage = (page) => ({
     type: SET_PAGE,
@@ -63,7 +63,7 @@ export const setCategoryId = (id) => ({
 export const toggleCreateProductDisclosure = (categoryId) => {
     console.log(typeof categoryId);
     return (dispatch) => {
-        console.log("clicking");
+        console.log('clicking');
         if (categoryId) dispatch(setCategoryId(categoryId));
         dispatch(toggleCreateDisclosure());
     };

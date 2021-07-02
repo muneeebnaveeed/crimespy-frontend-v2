@@ -1,6 +1,6 @@
 // @flow
 
-import { SELECT_POST, TOGGLE_EDIT_POST_DISCLOSURE } from "./actionTypes";
+import { SELECT_POST, TOGGLE_EDIT_POST_DISCLOSURE } from './actionTypes';
 
 const INIT_STATE = {
     editPostDisclosure: false,

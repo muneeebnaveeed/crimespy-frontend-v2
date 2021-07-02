@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { Route, Redirect } from "react-router-dom";
-import { getLoggedInUser } from "helpers/auth";
+import React, { useState } from 'react';
+import { Route, Redirect } from 'react-router-dom';
+import { getLoggedInUser } from 'helpers/auth';
 
 const AppRoute = ({ component: Component, layout: Layout, isAuthProtected = false, roles = [], ...rest }) => {
     const [user, setUser] = useState(getLoggedInUser());
@@ -13,7 +12,7 @@ const AppRoute = ({ component: Component, layout: Layout, isAuthProtected = fals
                     return (
                         <Redirect
                             to={{
-                                pathname: "/login",
+                                pathname: '/login',
                                 state: { from: props.location },
                             }}
                         />

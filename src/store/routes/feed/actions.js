@@ -1,4 +1,4 @@
-import { SELECT_POST, TOGGLE_EDIT_POST_DISCLOSURE } from "./actionTypes";
+import { SELECT_POST, TOGGLE_EDIT_POST_DISCLOSURE } from './actionTypes';
 
 export const toggleEditPostDisclosure = () => ({
     type: TOGGLE_EDIT_POST_DISCLOSURE,
