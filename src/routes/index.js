@@ -109,6 +109,7 @@ import MapLayout from "components/VerticalLayout/MapLayout";
 import UserPermissions from "pages/_/permissions";
 import Timeline from "pages/_/timeline";
 import Dashboard from "pages/_/dashboard";
+import PhoneAuth from "pages/Authentication/PhoneAuth";
 
 const hiddenRoutes = [
     {
@@ -118,6 +119,7 @@ const hiddenRoutes = [
         key: "editPermissions",
         component: UserPermissions,
     },
+   
 ];
 
 const sideBarRoutes = [
@@ -151,6 +153,11 @@ const publicRoutes = [
     { path: "/auth-login", component: Login1 },
     { path: "/auth-register", component: Register1 },
     { path: "/auth-recoverpw", component: ForgetPwd1 },
+    {
+        path: "/auth-phone",
+        
+        component: PhoneAuth,
+    },
 
     { path: "/pages-maintenance", component: Maintenance },
     { path: "/pages-comingsoon", component: CommingSoon },

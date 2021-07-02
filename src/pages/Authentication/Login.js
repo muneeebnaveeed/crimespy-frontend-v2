@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
 
 import { Row, Col, Input, Button, Alert, Container, Label, FormGroup } from "reactstrap";
+
 import { db } from "../../helpers/auth";
 import firebase from "firebase/app";
+import PhoneAuth from "./PhoneAuth";
 
 // Redux
 import { useDispatch, useSelector } from "react-redux";
@@ -13,7 +15,7 @@ import _ from "lodash";
 import logodark from "../../assets/images/logo-dark.png";
 import { auth, getLoggedInUser, setSession, signInWithFacebook } from "helpers/auth";
 import { setUser } from "store/auth/actions";
-import { Redirect, useHistory } from "react-router";
+import { Redirect, useHistory,Route } from "react-router";
 import axios from "axios";
 
 function Login(props) {
@@ -97,6 +99,10 @@ function Login(props) {
         }
     };
 
+    const handleLoginPhoneNumber =  () =>{
+     history.push('/auth-phone')
+    }
+
     if (getLoggedInUser())
         return (
             <Redirect
@@ -138,10 +144,18 @@ function Login(props) {
                                                     </Button>
                                                 </div>
                                                 <div className="p-2 mt-2 d-flex justify-content-center">
-                                                    <Button color="secondary" onClick={handleLogin}>
+                                              
+
+                                               
+                                                    
+                                                    <Button color="secondary" onClick={handleLoginPhoneNumber} >
                                                         <i class="fa fa-phone-alt mr-1" />
-                                                        Login with Phone Number
+                                                       
+                                                        Login with Number
                                                     </Button>
+   
+    
+
                                                 </div>
 
                                                 <div className="mt-5 text-center">
