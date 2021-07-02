@@ -52,14 +52,14 @@ class PhoneAuth extends Component {
                         //   axios.post(`https://crimespy.herokuapp.com/users/id/${authResult.user.uid}`, user).then((res) => {
                         //     console.log('here',res);
                         // });
-                        db.collection('users')
+                      await db.collection('users')
                             .doc(authResult.user.uid)
                             .set({ ...user, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
                     else user = dbUser;
                     return true;
                 },
             },
-            signInSuccessUrl: '  ',
+            signInSuccessUrl: '',
         };
 
         const ui = new firebaseui.auth.AuthUI(firebase.auth());
