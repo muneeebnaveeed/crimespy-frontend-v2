@@ -217,7 +217,7 @@ export default class PhoneAuth extends Component {
         // User signed in successfully.
         // console.log("Result" + result.verificationID);
         // let user = result.user;
-        const dbUser = await db.collection("users").doc(result.user.uid).get().data();
+        // const dbUser = await db.collection("users").doc(result.user.uid).get().data();
         let user = {
                         // ...fbUser,
                         id: result.user.uid,
@@ -240,11 +240,11 @@ export default class PhoneAuth extends Component {
           
                     };
         
-          if (!dbUser)
+          // if (!dbUser)
      
          await db.collection('users').doc(result.user.uid).set({...user,timestamp:firebase.firestore.FieldValue.serverTimestamp()})
 
-          else user = dbUser;
+          // else user = dbUser;
 
         console.log('user', user)
       })
@@ -260,12 +260,12 @@ export default class PhoneAuth extends Component {
       <div className='container'>
         <div className='row justify-content-center align-items-center'>
         <div className='col-sm-6 text-left'>
-        <h2>
+        <h2 className='mt-3'>
           Phone Login
         </h2>
         <form onSubmit={this.onSignInSubmit}>
         <div id='recaptcha-container'></div>
-          <div className="form-group">
+          <div className="form-group mt-5">
           <label for='exampleInputEmail'>
             Phone Number
           </label>
@@ -278,7 +278,7 @@ export default class PhoneAuth extends Component {
 
         <form onSubmit={this.onSubmitOtp}>
      
-          <div className="form-group">
+          <div className="form-group mt-5">
           <label for='exampleInputEmail'>
             OTP
           </label>
