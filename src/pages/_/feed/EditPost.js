@@ -1,7 +1,7 @@
-import React from "react";
-import Button from "components/Common/Button";
-import { useCallback, useMemo, useRef, useState } from "react";
-import axios from "axios";
+import React, { useCallback, useMemo, useRef, useState } from 'react';
+import Button from 'components/Common/Button';
+
+import axios from 'axios';
 import {
     Form,
     FormFeedback,
@@ -14,21 +14,22 @@ import {
     ModalBody,
     ModalFooter,
     ModalHeader,
-} from "reactstrap";
-import Input from "reactstrap/lib/Input";
-import { Formik, useFormik } from "formik";
-import { Col, Row } from "reactstrap/lib";
-import Select from "components/Common/Select";
-import firebase from "firebase";
-import { postSchema } from "helpers/schema";
-import { db, getLoggedInUser, storage } from "helpers/auth";
-import makeid from "helpers/imagefunction";
-import { useQueryClient } from "react-query";
-import { showSuccessToast } from "helpers/showToast";
-import crimeCategories from "config/crimeCategories";
-import { useDispatch, useSelector } from "react-redux";
-import { toggleEditPostDisclosure } from "store/routes/feed/actions";
-const geofire = require("geofire-common");
+} from 'reactstrap';
+import Input from 'reactstrap/lib/Input';
+import { Formik, useFormik } from 'formik';
+import { Col, Row } from 'reactstrap/lib';
+import Select from 'components/Common/Select';
+import firebase from 'firebase';
+import { postSchema } from 'helpers/schema';
+import { db, getLoggedInUser, storage } from 'helpers/auth';
+import makeid from 'helpers/imagefunction';
+import { useQueryClient } from 'react-query';
+import { showSuccessToast } from 'helpers/showToast';
+import crimeCategories from 'config/crimeCategories';
+import { useDispatch, useSelector } from 'react-redux';
+import { toggleEditPostDisclosure } from 'store/routes/feed/actions';
+
+const geofire = require('geofire-common');
 
 const EditPost = (props) => {
     // const postRef = db.collection("posts");
@@ -40,20 +41,8 @@ const EditPost = (props) => {
     const { editPostDisclosure, selectedPost } = useSelector((state) => state.Feed);
     const dispatch = useDispatch();
 
-    const handleCurrentLocation = async () => {
-        setIsgettingGeo(true);
-        await navigator.geolocation.getCurrentPosition((position) => {
-            const lat = position.coords.latitude.toString();
-            const lon = position.coords.longitude.toString();
-
-            formik.setFieldValue("latitude", lat);
-            formik.setFieldValue("longitude", lon);
-        });
-        setIsgettingGeo(false);
-    };
-
-    const handleSubmit = () => {
-        console.log(formik.values);
+    const handleSubmit = (values) => {
+        console.log(values);
     };
 
     const formik = useFormik({
@@ -67,7 +56,7 @@ const EditPost = (props) => {
         },
         onSubmit: handleSubmit,
         validate: (values) => {
-            let errors = {};
+            const errors = {};
 
             const validationErrors = postSchema.validate(values, { abortEarly: false })?.error?.details;
 
@@ -78,11 +67,23 @@ const EditPost = (props) => {
         validateOnChange: false,
     });
 
+    const handleCurrentLocation = async () => {
+        setIsgettingGeo(true);
+        await navigator.geolocation.getCurrentPosition((position) => {
+            const lat = position.coords.latitude.toString();
+            const lon = position.coords.longitude.toString();
+
+            formik.setFieldValue('latitude', lat);
+            formik.setFieldValue('longitude', lon);
+        });
+        setIsgettingGeo(false);
+    };
+
     const toggleModal = useCallback(() => {
         dispatch(toggleEditPostDisclosure());
     }, [dispatch]);
 
-    console.log("EditPost() [isOpen:%s,selectedPost:%o]", editPostDisclosure, selectedPost);
+    console.log('EditPost() [isOpen:%s,selectedPost:%o]', editPostDisclosure, selectedPost);
 
     return (
         <>
@@ -126,8 +127,8 @@ const EditPost = (props) => {
                             <Select
                                 options={crimeCategories}
                                 defaultValue={crimeCategories[0]}
-                                customStyles={{ menu: { maxHeight: 150, overflowY: "hidden" } }}
-                                onChange={(crimeCategory) => formik.setFieldValue("crimeCategory", crimeCategory.value)}
+                                customStyles={{ menu: { maxHeight: 150, overflowY: 'hidden' } }}
+                                onChange={(crimeCategory) => formik.setFieldValue('crimeCategory', crimeCategory.value)}
                             />
                         </FormGroup>
                         <FormGroup>
@@ -158,8 +159,8 @@ const EditPost = (props) => {
                         </FormGroup>
                         <FormGroup
                             style={{
-                                display: "flex",
-                                justifyContent: "space-between",
+                                display: 'flex',
+                                justifyContent: 'space-between',
                             }}
                         >
                             {/* <Label

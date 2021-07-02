@@ -1,35 +1,36 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
-import { Row, Col, Card, CardBody, Container, Table } from "reactstrap";
-//Import Breadcrumb
+import { Row, Col, Card, CardBody, Container, Table } from 'reactstrap';
+// Import Breadcrumb
 import Breadcrumbs from '../../components/Common/Breadcrumb';
-
 
 class ResponsiveTables extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            breadcrumbItems : [
-                { title : "Tables", link : "#" },
-                { title : "Responsive Table", link : "#" },
+            breadcrumbItems: [
+                { title: 'Tables', link: '#' },
+                { title: 'Responsive Table', link: '#' },
             ],
         };
     }
 
     render() {
         return (
-            <React.Fragment>
+            <>
                 <div className="page-content">
                     <Container fluid>
-
-                    <Breadcrumbs title="Responsive Table" breadcrumbItems={this.state.breadcrumbItems} />
+                        <Breadcrumbs title="Responsive Table" breadcrumbItems={this.state.breadcrumbItems} />
 
                         <Row>
                             <Col xs={12}>
                                 <Card>
                                     <CardBody>
-                                    <h4 className="card-title">Example</h4>
-                                        <p className="card-title-desc">This is an experimental awesome solution for responsive tables with complex data.</p>
+                                        <h4 className="card-title">Example</h4>
+                                        <p className="card-title-desc">
+                                            This is an experimental awesome solution for responsive tables with complex
+                                            data.
+                                        </p>
 
                                         <div className="table-rep-plugin">
                                             <div className="table-responsive mb-0" data-pattern="priority-columns">
@@ -49,7 +50,9 @@ class ResponsiveTables extends Component {
                                                     </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <th>GOOG <span className="co-name">Google Inc.</span></th>
+                                                            <th>
+                                                                GOOG <span className="co-name">Google Inc.</span>
+                                                            </th>
                                                             <td>597.74</td>
                                                             <td>12:12PM</td>
                                                             <td>14.81 (2.54%)</td>
@@ -60,7 +63,9 @@ class ResponsiveTables extends Component {
                                                             <td>731.10</td>
                                                         </tr>
                                                         <tr>
-                                                            <th>AAPL <span className="co-name">Apple Inc.</span></th>
+                                                            <th>
+                                                                AAPL <span className="co-name">Apple Inc.</span>
+                                                            </th>
                                                             <td>378.94</td>
                                                             <td>12:22PM</td>
                                                             <td>5.74 (1.54%)</td>
@@ -71,7 +76,9 @@ class ResponsiveTables extends Component {
                                                             <td>505.94</td>
                                                         </tr>
                                                         <tr>
-                                                            <th>AMZN <span className="co-name">Amazon.com Inc.</span></th>
+                                                            <th>
+                                                                AMZN <span className="co-name">Amazon.com Inc.</span>
+                                                            </th>
                                                             <td>191.55</td>
                                                             <td>12:23PM</td>
                                                             <td>3.16 (1.68%)</td>
@@ -82,7 +89,9 @@ class ResponsiveTables extends Component {
                                                             <td>240.32</td>
                                                         </tr>
                                                         <tr>
-                                                            <th>ORCL <span className="co-name">Oracle Corporation</span></th>
+                                                            <th>
+                                                                ORCL <span className="co-name">Oracle Corporation</span>
+                                                            </th>
                                                             <td>31.15</td>
                                                             <td>12:44PM</td>
                                                             <td>1.41 (4.72%)</td>
@@ -93,7 +102,10 @@ class ResponsiveTables extends Component {
                                                             <td>36.11</td>
                                                         </tr>
                                                         <tr>
-                                                            <th>MSFT <span className="co-name">Microsoft Corporation</span></th>
+                                                            <th>
+                                                                MSFT{' '}
+                                                                <span className="co-name">Microsoft Corporation</span>
+                                                            </th>
                                                             <td>25.50</td>
                                                             <td>12:27PM</td>
                                                             <td>0.66 (2.67%)</td>
@@ -104,7 +116,10 @@ class ResponsiveTables extends Component {
                                                             <td>31.50</td>
                                                         </tr>
                                                         <tr>
-                                                            <th>CSCO <span className="co-name">Cisco Systems, Inc.</span></th>
+                                                            <th>
+                                                                CSCO{' '}
+                                                                <span className="co-name">Cisco Systems, Inc.</span>
+                                                            </th>
                                                             <td>18.65</td>
                                                             <td>12:45PM</td>
                                                             <td>0.97 (5.49%)</td>
@@ -115,7 +130,9 @@ class ResponsiveTables extends Component {
                                                             <td>21.12</td>
                                                         </tr>
                                                         <tr>
-                                                            <th>YHOO <span className="co-name">Yahoo! Inc.</span></th>
+                                                            <th>
+                                                                YHOO <span className="co-name">Yahoo! Inc.</span>
+                                                            </th>
                                                             <td>15.81</td>
                                                             <td>12:25PM</td>
                                                             <td>0.11 (0.67%)</td>
@@ -126,7 +143,9 @@ class ResponsiveTables extends Component {
                                                             <td>18.16</td>
                                                         </tr>
                                                         <tr>
-                                                            <th>GOOG <span className="co-name">Google Inc.</span></th>
+                                                            <th>
+                                                                GOOG <span className="co-name">Google Inc.</span>
+                                                            </th>
                                                             <td>597.74</td>
                                                             <td>12:12PM</td>
                                                             <td>14.81 (2.54%)</td>
@@ -137,7 +156,9 @@ class ResponsiveTables extends Component {
                                                             <td>731.10</td>
                                                         </tr>
                                                         <tr>
-                                                            <th>AAPL <span className="co-name">Apple Inc.</span></th>
+                                                            <th>
+                                                                AAPL <span className="co-name">Apple Inc.</span>
+                                                            </th>
                                                             <td>378.94</td>
                                                             <td>12:22PM</td>
                                                             <td>5.74 (1.54%)</td>
@@ -148,7 +169,9 @@ class ResponsiveTables extends Component {
                                                             <td>505.94</td>
                                                         </tr>
                                                         <tr>
-                                                            <th>AMZN <span className="co-name">Amazon.com Inc.</span></th>
+                                                            <th>
+                                                                AMZN <span className="co-name">Amazon.com Inc.</span>
+                                                            </th>
                                                             <td>191.55</td>
                                                             <td>12:23PM</td>
                                                             <td>3.16 (1.68%)</td>
@@ -159,7 +182,9 @@ class ResponsiveTables extends Component {
                                                             <td>240.32</td>
                                                         </tr>
                                                         <tr>
-                                                            <th>ORCL <span className="co-name">Oracle Corporation</span></th>
+                                                            <th>
+                                                                ORCL <span className="co-name">Oracle Corporation</span>
+                                                            </th>
                                                             <td>31.15</td>
                                                             <td>12:44PM</td>
                                                             <td>1.41 (4.72%)</td>
@@ -170,7 +195,10 @@ class ResponsiveTables extends Component {
                                                             <td>36.11</td>
                                                         </tr>
                                                         <tr>
-                                                            <th>MSFT <span className="co-name">Microsoft Corporation</span></th>
+                                                            <th>
+                                                                MSFT{' '}
+                                                                <span className="co-name">Microsoft Corporation</span>
+                                                            </th>
                                                             <td>25.50</td>
                                                             <td>12:27PM</td>
                                                             <td>0.66 (2.67%)</td>
@@ -181,7 +209,10 @@ class ResponsiveTables extends Component {
                                                             <td>31.50</td>
                                                         </tr>
                                                         <tr>
-                                                            <th>CSCO <span className="co-name">Cisco Systems, Inc.</span></th>
+                                                            <th>
+                                                                CSCO{' '}
+                                                                <span className="co-name">Cisco Systems, Inc.</span>
+                                                            </th>
                                                             <td>18.65</td>
                                                             <td>12:45PM</td>
                                                             <td>0.97 (5.49%)</td>
@@ -192,7 +223,9 @@ class ResponsiveTables extends Component {
                                                             <td>21.12</td>
                                                         </tr>
                                                         <tr>
-                                                            <th>YHOO <span className="co-name">Yahoo! Inc.</span></th>
+                                                            <th>
+                                                                YHOO <span className="co-name">Yahoo! Inc.</span>
+                                                            </th>
                                                             <td>15.81</td>
                                                             <td>12:25PM</td>
                                                             <td>0.11 (0.67%)</td>
@@ -203,7 +236,9 @@ class ResponsiveTables extends Component {
                                                             <td>18.16</td>
                                                         </tr>
                                                         <tr>
-                                                            <th>GOOG <span className="co-name">Google Inc.</span></th>
+                                                            <th>
+                                                                GOOG <span className="co-name">Google Inc.</span>
+                                                            </th>
                                                             <td>597.74</td>
                                                             <td>12:12PM</td>
                                                             <td>14.81 (2.54%)</td>
@@ -214,7 +249,9 @@ class ResponsiveTables extends Component {
                                                             <td>731.10</td>
                                                         </tr>
                                                         <tr>
-                                                            <th>AAPL <span className="co-name">Apple Inc.</span></th>
+                                                            <th>
+                                                                AAPL <span className="co-name">Apple Inc.</span>
+                                                            </th>
                                                             <td>378.94</td>
                                                             <td>12:22PM</td>
                                                             <td>5.74 (1.54%)</td>
@@ -225,7 +262,9 @@ class ResponsiveTables extends Component {
                                                             <td>505.94</td>
                                                         </tr>
                                                         <tr>
-                                                            <th>AMZN <span className="co-name">Amazon.com Inc.</span></th>
+                                                            <th>
+                                                                AMZN <span className="co-name">Amazon.com Inc.</span>
+                                                            </th>
                                                             <td>191.55</td>
                                                             <td>12:23PM</td>
                                                             <td>3.16 (1.68%)</td>
@@ -236,7 +275,9 @@ class ResponsiveTables extends Component {
                                                             <td>240.32</td>
                                                         </tr>
                                                         <tr>
-                                                            <th>ORCL <span className="co-name">Oracle Corporation</span></th>
+                                                            <th>
+                                                                ORCL <span className="co-name">Oracle Corporation</span>
+                                                            </th>
                                                             <td>31.15</td>
                                                             <td>12:44PM</td>
                                                             <td>1.41 (4.72%)</td>
@@ -247,7 +288,10 @@ class ResponsiveTables extends Component {
                                                             <td>36.11</td>
                                                         </tr>
                                                         <tr>
-                                                            <th>MSFT <span className="co-name">Microsoft Corporation</span></th>
+                                                            <th>
+                                                                MSFT{' '}
+                                                                <span className="co-name">Microsoft Corporation</span>
+                                                            </th>
                                                             <td>25.50</td>
                                                             <td>12:27PM</td>
                                                             <td>0.66 (2.67%)</td>
@@ -258,7 +302,10 @@ class ResponsiveTables extends Component {
                                                             <td>31.50</td>
                                                         </tr>
                                                         <tr>
-                                                            <th>CSCO <span className="co-name">Cisco Systems, Inc.</span></th>
+                                                            <th>
+                                                                CSCO{' '}
+                                                                <span className="co-name">Cisco Systems, Inc.</span>
+                                                            </th>
                                                             <td>18.65</td>
                                                             <td>12:45PM</td>
                                                             <td>0.97 (5.49%)</td>
@@ -269,7 +316,9 @@ class ResponsiveTables extends Component {
                                                             <td>21.12</td>
                                                         </tr>
                                                         <tr>
-                                                            <th>YHOO <span className="co-name">Yahoo! Inc.</span></th>
+                                                            <th>
+                                                                YHOO <span className="co-name">Yahoo! Inc.</span>
+                                                            </th>
                                                             <td>15.81</td>
                                                             <td>12:25PM</td>
                                                             <td>0.11 (0.67%)</td>
@@ -280,7 +329,9 @@ class ResponsiveTables extends Component {
                                                             <td>18.16</td>
                                                         </tr>
                                                         <tr>
-                                                            <th>GOOG <span className="co-name">Google Inc.</span></th>
+                                                            <th>
+                                                                GOOG <span className="co-name">Google Inc.</span>
+                                                            </th>
                                                             <td>597.74</td>
                                                             <td>12:12PM</td>
                                                             <td>14.81 (2.54%)</td>
@@ -291,7 +342,9 @@ class ResponsiveTables extends Component {
                                                             <td>731.10</td>
                                                         </tr>
                                                         <tr>
-                                                            <th>AAPL <span className="co-name">Apple Inc.</span></th>
+                                                            <th>
+                                                                AAPL <span className="co-name">Apple Inc.</span>
+                                                            </th>
                                                             <td>378.94</td>
                                                             <td>12:22PM</td>
                                                             <td>5.74 (1.54%)</td>
@@ -302,7 +355,9 @@ class ResponsiveTables extends Component {
                                                             <td>505.94</td>
                                                         </tr>
                                                         <tr>
-                                                            <th>AMZN <span className="co-name">Amazon.com Inc.</span></th>
+                                                            <th>
+                                                                AMZN <span className="co-name">Amazon.com Inc.</span>
+                                                            </th>
                                                             <td>191.55</td>
                                                             <td>12:23PM</td>
                                                             <td>3.16 (1.68%)</td>
@@ -313,7 +368,9 @@ class ResponsiveTables extends Component {
                                                             <td>240.32</td>
                                                         </tr>
                                                         <tr>
-                                                            <th>ORCL <span className="co-name">Oracle Corporation</span></th>
+                                                            <th>
+                                                                ORCL <span className="co-name">Oracle Corporation</span>
+                                                            </th>
                                                             <td>31.15</td>
                                                             <td>12:44PM</td>
                                                             <td>1.41 (4.72%)</td>
@@ -324,7 +381,10 @@ class ResponsiveTables extends Component {
                                                             <td>36.11</td>
                                                         </tr>
                                                         <tr>
-                                                            <th>MSFT <span className="co-name">Microsoft Corporation</span></th>
+                                                            <th>
+                                                                MSFT{' '}
+                                                                <span className="co-name">Microsoft Corporation</span>
+                                                            </th>
                                                             <td>25.50</td>
                                                             <td>12:27PM</td>
                                                             <td>0.66 (2.67%)</td>
@@ -335,7 +395,10 @@ class ResponsiveTables extends Component {
                                                             <td>31.50</td>
                                                         </tr>
                                                         <tr>
-                                                            <th>CSCO <span className="co-name">Cisco Systems, Inc.</span></th>
+                                                            <th>
+                                                                CSCO{' '}
+                                                                <span className="co-name">Cisco Systems, Inc.</span>
+                                                            </th>
                                                             <td>18.65</td>
                                                             <td>12:45PM</td>
                                                             <td>0.97 (5.49%)</td>
@@ -346,7 +409,9 @@ class ResponsiveTables extends Component {
                                                             <td>21.12</td>
                                                         </tr>
                                                         <tr>
-                                                            <th>YHOO <span className="co-name">Yahoo! Inc.</span></th>
+                                                            <th>
+                                                                YHOO <span className="co-name">Yahoo! Inc.</span>
+                                                            </th>
                                                             <td>15.81</td>
                                                             <td>12:25PM</td>
                                                             <td>0.11 (0.67%)</td>
@@ -357,7 +422,9 @@ class ResponsiveTables extends Component {
                                                             <td>18.16</td>
                                                         </tr>
                                                         <tr>
-                                                            <th>GOOG <span className="co-name">Google Inc.</span></th>
+                                                            <th>
+                                                                GOOG <span className="co-name">Google Inc.</span>
+                                                            </th>
                                                             <td>597.74</td>
                                                             <td>12:12PM</td>
                                                             <td>14.81 (2.54%)</td>
@@ -368,7 +435,9 @@ class ResponsiveTables extends Component {
                                                             <td>731.10</td>
                                                         </tr>
                                                         <tr>
-                                                            <th>AAPL <span className="co-name">Apple Inc.</span></th>
+                                                            <th>
+                                                                AAPL <span className="co-name">Apple Inc.</span>
+                                                            </th>
                                                             <td>378.94</td>
                                                             <td>12:22PM</td>
                                                             <td>5.74 (1.54%)</td>
@@ -379,7 +448,9 @@ class ResponsiveTables extends Component {
                                                             <td>505.94</td>
                                                         </tr>
                                                         <tr>
-                                                            <th>AMZN <span className="co-name">Amazon.com Inc.</span></th>
+                                                            <th>
+                                                                AMZN <span className="co-name">Amazon.com Inc.</span>
+                                                            </th>
                                                             <td>191.55</td>
                                                             <td>12:23PM</td>
                                                             <td>3.16 (1.68%)</td>
@@ -390,7 +461,9 @@ class ResponsiveTables extends Component {
                                                             <td>240.32</td>
                                                         </tr>
                                                         <tr>
-                                                            <th>ORCL <span className="co-name">Oracle Corporation</span></th>
+                                                            <th>
+                                                                ORCL <span className="co-name">Oracle Corporation</span>
+                                                            </th>
                                                             <td>31.15</td>
                                                             <td>12:44PM</td>
                                                             <td>1.41 (4.72%)</td>
@@ -401,7 +474,10 @@ class ResponsiveTables extends Component {
                                                             <td>36.11</td>
                                                         </tr>
                                                         <tr>
-                                                            <th>MSFT <span className="co-name">Microsoft Corporation</span></th>
+                                                            <th>
+                                                                MSFT{' '}
+                                                                <span className="co-name">Microsoft Corporation</span>
+                                                            </th>
                                                             <td>25.50</td>
                                                             <td>12:27PM</td>
                                                             <td>0.66 (2.67%)</td>
@@ -412,7 +488,10 @@ class ResponsiveTables extends Component {
                                                             <td>31.50</td>
                                                         </tr>
                                                         <tr>
-                                                            <th>CSCO <span className="co-name">Cisco Systems, Inc.</span></th>
+                                                            <th>
+                                                                CSCO{' '}
+                                                                <span className="co-name">Cisco Systems, Inc.</span>
+                                                            </th>
                                                             <td>18.65</td>
                                                             <td>12:45PM</td>
                                                             <td>0.97 (5.49%)</td>
@@ -423,7 +502,9 @@ class ResponsiveTables extends Component {
                                                             <td>21.12</td>
                                                         </tr>
                                                         <tr>
-                                                            <th>YHOO <span className="co-name">Yahoo! Inc.</span></th>
+                                                            <th>
+                                                                YHOO <span className="co-name">Yahoo! Inc.</span>
+                                                            </th>
                                                             <td>15.81</td>
                                                             <td>12:25PM</td>
                                                             <td>0.11 (0.67%)</td>
@@ -443,7 +524,7 @@ class ResponsiveTables extends Component {
                         </Row>
                     </Container>
                 </div>
-            </React.Fragment>
+            </>
         );
     }
 }

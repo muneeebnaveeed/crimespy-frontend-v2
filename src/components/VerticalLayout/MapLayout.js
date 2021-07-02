@@ -1,7 +1,7 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
-import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import {
     changeLayout,
     changeSidebarTheme,
@@ -9,12 +9,12 @@ import {
     toggleRightSidebar,
     changeTopbarTheme,
     changeLayoutWidth,
-} from "../../store/actions";
+} from '../../store/actions';
 
 // Layout Related Components
-import Header from "./Header";
-import Sidebar from "./Sidebar";
-import Footer from "./Footer";
+import Header from './Header';
+import Sidebar from './Sidebar';
+import Footer from './Footer';
 
 class MapLayout extends Component {
     constructor(props) {
@@ -26,35 +26,10 @@ class MapLayout extends Component {
         this.toggleRightSidebar = this.toggleRightSidebar.bind(this);
     }
 
-    toggleRightSidebar() {
-        this.props.toggleRightSidebar();
-    }
-
-    capitalizeFirstLetter = (string) => {
-        return string.charAt(1).toUpperCase() + string.slice(2);
-    };
-
-    componentDidUpdate(prevProps) {
-        if (prevProps !== this.props) {
-            if (this.props.isPreloader === true) {
-                document.getElementById("preloader").style.display = "block";
-                document.getElementById("status").style.display = "block";
-
-                setTimeout(function () {
-                    document.getElementById("preloader").style.display = "none";
-                    document.getElementById("status").style.display = "none";
-                }, 2500);
-            } else {
-                document.getElementById("preloader").style.display = "none";
-                document.getElementById("status").style.display = "none";
-            }
-        }
-    }
-
     componentDidMount() {
         // Scroll Top to 0
         window.scrollTo(0, 0);
-        let currentage = this.capitalizeFirstLetter(this.props.location.pathname);
+        const currentage = this.capitalizeFirstLetter(this.props.location.pathname);
 
         document.title = currentage;
         if (this.props.leftSideBarTheme) {
@@ -76,21 +51,45 @@ class MapLayout extends Component {
             this.toggleRightSidebar();
         }
     }
+
+    componentDidUpdate(prevProps) {
+        if (prevProps !== this.props) {
+            if (this.props.isPreloader === true) {
+                document.getElementById('preloader').style.display = 'block';
+                document.getElementById('status').style.display = 'block';
+
+                setTimeout(function () {
+                    document.getElementById('preloader').style.display = 'none';
+                    document.getElementById('status').style.display = 'none';
+                }, 2500);
+            } else {
+                document.getElementById('preloader').style.display = 'none';
+                document.getElementById('status').style.display = 'none';
+            }
+        }
+    }
+
     toggleMenuCallback = () => {
-        if (this.props.leftSideBarType === "default") {
-            this.props.changeSidebarType("condensed", this.state.isMobile);
-        } else if (this.props.leftSideBarType === "condensed") {
-            this.props.changeSidebarType("default", this.state.isMobile);
+        if (this.props.leftSideBarType === 'default') {
+            this.props.changeSidebarType('condensed', this.state.isMobile);
+        } else if (this.props.leftSideBarType === 'condensed') {
+            this.props.changeSidebarType('default', this.state.isMobile);
         }
     };
 
+    capitalizeFirstLetter = (string) => string.charAt(1).toUpperCase() + string.slice(2);
+
+    toggleRightSidebar() {
+        this.props.toggleRightSidebar();
+    }
+
     render() {
         return (
-            <React.Fragment>
+            <>
                 <div id="preloader">
                     <div id="status">
                         <div className="spinner">
-                            <i className="ri-loader-line spin-icon"></i>
+                            <i className="ri-loader-line spin-icon" />
                         </div>
                     </div>
                 </div>
@@ -104,16 +103,14 @@ class MapLayout extends Component {
                     />
                     <div className="main-content">{this.props.children}</div>
                 </div>
-            </React.Fragment>
+            </>
         );
     }
 }
 
-const mapStatetoProps = (state) => {
-    return {
-        ...state.Layout,
-    };
-};
+const mapStatetoProps = (state) => ({
+    ...state.Layout,
+});
 export default connect(mapStatetoProps, {
     changeLayout,
     changeSidebarTheme,

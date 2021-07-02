@@ -1,34 +1,33 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 // Reactstrap
-import { Dropdown, DropdownToggle, DropdownMenu, Row, Col } from "reactstrap";
+import { Dropdown, DropdownToggle, DropdownMenu, Row, Col } from 'reactstrap';
 
-//Import Images
-import megamenuImg from "../../assets/images/megamenu-img.png";
+// Import Images
+import megamenuImg from '../../assets/images/megamenu-img.png';
 
 class MegaMenu extends Component {
-    state = {
-        megaMenu: false,
-    };
+    constructor(props) {
+        super(props);
+        this.state = {
+            megaMenu: false,
+        };
+    }
+
     render() {
         return (
-            <React.Fragment>
+            <>
                 <Dropdown
                     className="dropdown-mega d-none d-lg-block ml-2"
                     isOpen={this.state.megaMenu}
                     toggle={() => {
-                        this.setState({ megaMenu: !this.state.megaMenu });
+                        this.setState((prev) => ({ megaMenu: !prev.megaMenu }));
                     }}
                 >
-                    <DropdownToggle
-                        tag="button"
-                        type="button"
-                        caret
-                        className="btn header-item waves-effect"
-                    >
+                    <DropdownToggle tag="button" type="button" caret className="btn header-item waves-effect">
                         Mega Menu
-                        <i className="mdi mdi-chevron-down"></i>
+                        <i className="mdi mdi-chevron-down" />
                     </DropdownToggle>
                     <DropdownMenu className="dropdown-megamenu">
                         <Row>
@@ -144,11 +143,7 @@ class MegaMenu extends Component {
 
                                     <Col sm={5}>
                                         <div>
-                                            <img
-                                                src={megamenuImg}
-                                                alt=""
-                                                className="img-fluid mx-auto d-block"
-                                            />
+                                            <img src={megamenuImg} alt="" className="img-fluid mx-auto d-block" />
                                         </div>
                                     </Col>
                                 </Row>
@@ -156,7 +151,7 @@ class MegaMenu extends Component {
                         </Row>
                     </DropdownMenu>
                 </Dropdown>
-            </React.Fragment>
+            </>
         );
     }
 }

@@ -1,15 +1,9 @@
-import axios from "axios";
-import Button from "components/Common/Button";
-import api, { generateErrorMessage } from "helpers/query";
-import { showErrorToast, showSuccessToast } from "helpers/showToast";
-import React, { useCallback, useRef, useState } from "react";
-import { useQueryClient } from "react-query";
-import { useDispatch, useSelector } from "react-redux";
-import { FormGroup, Label, Input, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
-import { toggleDeleteProductDisclosure } from "store/routes/products/actions";
+/* eslint-disable jsx-a11y/label-has-associated-control */
+import Button from 'components/Common/Button';
+import React from 'react';
+import { FormGroup, Label, Input, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 
 function ViewPost({ isOpen, toggle, post }) {
-    console.log(post);
     return (
         <Modal isOpen={isOpen} toggle={toggle} centered>
             <ModalHeader>Post</ModalHeader>
@@ -40,7 +34,7 @@ function ViewPost({ isOpen, toggle, post }) {
                 </FormGroup>
             </ModalBody>
             <ModalFooter>
-                <Button color="light" w="55.5px" size="sm" onClick={toggle} color="primary">
+                <Button w="55.5px" size="sm" onClick={toggle} color="primary">
                     Close
                 </Button>
             </ModalFooter>

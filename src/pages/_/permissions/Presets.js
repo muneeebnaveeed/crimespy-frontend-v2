@@ -1,38 +1,17 @@
-import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
-import { Formik, useFormik } from "formik";
-import {
-    Col,
-    Collapse,
-    Container,
-    Form,
-    FormFeedback,
-    FormGroup,
-    Input,
-    InputGroup,
-    InputGroupText,
-    InputGroupAddon,
-    Card,
-    CardBody,
-    Label,
-    Row,
-    ButtonGroup,
-    Button,
-    Table,
-    Spinner,
-} from "reactstrap";
-import Th from "components/Common/Th";
-import { db } from "helpers/auth";
-import { useModifiedQuery } from "helpers/query";
-import EditPreset from "./EditPreset";
-import { If, Then, Else, When } from "react-if";
-import useDisclosure from "helpers/useDisclosure";
-import ViewPreset from "./ViewPreset";
-import { useQueryClient } from "react-query";
-import axios from "axios";
+import React, { useState, useCallback } from 'react';
+import { Col, Card, CardBody, Row, ButtonGroup, Button, Table, Spinner } from 'reactstrap';
+import Th from 'components/Common/Th';
+import { db } from 'helpers/auth';
+import { useModifiedQuery } from 'helpers/query';
+import { If, Then, Else, When } from 'react-if';
+import useDisclosure from 'helpers/useDisclosure';
+import { useQueryClient } from 'react-query';
+import ViewPreset from './ViewPreset';
+import EditPreset from './EditPreset';
 
 const fetchPresets = async () => {
-    const snapshot = db.collection("presets").get();
-    const docs = (await snapshot).docs;
+    const snapshot = db.collection('presets').get();
+    const { docs } = await snapshot;
 
     return new Promise((resolve, reject) => {
         const presets = docs.map((doc) => ({
@@ -45,7 +24,7 @@ const fetchPresets = async () => {
 };
 
 const Presets = () => {
-    const presets = useModifiedQuery("presets", fetchPresets);
+    const presets = useModifiedQuery('presets', fetchPresets);
     const editDisclosure = useDisclosure();
     const viewDisclosure = useDisclosure();
     const queryClient = useQueryClient();
@@ -68,17 +47,17 @@ const Presets = () => {
     );
 
     const deletePreset = async (title) => {
-        const presetRef = db.collection("presets");
+        const presetRef = db.collection('presets');
         await presetRef
             .doc(title)
             .delete()
             .then(function () {
-                console.log("delete Presets info successfully");
+                console.log('delete Presets info successfully');
             })
             .catch(function (error) {
                 console.log(`Errors post info ${error}`);
             });
-        await queryClient.invalidateQueries("presets");
+        await queryClient.invalidateQueries('presets');
     };
 
     return (
@@ -109,7 +88,7 @@ const Presets = () => {
                                                 size="xl"
                                                 borderless
                                                 hover
-                                                style={{ minWidth: "706px" }}
+                                                style={{ minWidth: '706px' }}
                                                 className="position-relative"
                                             >
                                                 <thead>
@@ -121,7 +100,7 @@ const Presets = () => {
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {" "}
+                                                    {' '}
                                                     {presets.data?.map((preset, i) => (
                                                         <>
                                                             <tr key={i}>
@@ -160,7 +139,7 @@ const Presets = () => {
                                                                 </Th>
                                                             </tr>
                                                         </>
-                                                    ))}{" "}
+                                                    ))}{' '}
                                                 </tbody>
                                             </Table>
                                         </Col>

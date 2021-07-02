@@ -1,9 +1,9 @@
-import { getLoggedInUser } from "helpers/auth";
-import React, { useCallback, useState } from "react";
-import { Container, Card, CardBody, Row, Col, CardHeader, CardSubtitle, CardImg } from "reactstrap";
+import { getLoggedInUser } from 'helpers/auth';
+import React, { useCallback, useState } from 'react';
+import { Container, Card, CardBody, Row, Col, CardHeader, CardSubtitle, CardImg } from 'reactstrap';
 
 const UserDisplay = ({ user }) => {
-    console.log("right here mofo", user);
+    console.log('right here mofo', user);
     return (
         <>
             <Card>

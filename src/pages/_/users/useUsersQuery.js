@@ -1,7 +1,7 @@
-import { api, useModifiedQuery } from "helpers/query";
-import qs from "querystring";
-import { useCallback } from "react";
-import { useSelector } from "react-redux";
+import { api, useModifiedQuery } from 'helpers/query';
+import qs from 'querystring';
+import { useCallback } from 'react';
+import { useSelector } from 'react-redux';
 
 const fetchUsers = ({ sort, order, page, pageSize }) => {
     const query = qs.stringify({
@@ -17,7 +17,7 @@ function useUsersQuery() {
 
     const queryFn = useCallback(() => fetchUsers({ sort, order, page, pageSize }), [sort, order, page, pageSize]);
 
-    const query = useModifiedQuery("users", queryFn, {
+    const query = useModifiedQuery('users', queryFn, {
         keepPreviousData: true,
     });
 

@@ -1,13 +1,13 @@
-import React, { useCallback, useState } from "react";
-import { Container, Card, CardBody, Row, Col } from "reactstrap";
+import React, { useCallback, useState } from 'react';
+import { Container, Card, CardBody, Row, Col } from 'reactstrap';
 
-//Import Breadcrumb
-import Breadcrumbs from "components/Common/Breadcrumb";
-import PostTable from "./PostTable";
+// Import Breadcrumb
+import Breadcrumbs from 'components/Common/Breadcrumb';
+import PostTable from './PostTable';
 
 const breadcrumbItems = [
-    { title: "Crimespy", link: "/" },
-    { title: "Posts", link: "/posts" },
+    { title: 'Crimespy', link: '/' },
+    { title: 'Posts', link: '/posts' },
 ];
 
 function Posts() {

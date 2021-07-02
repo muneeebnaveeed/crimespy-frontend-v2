@@ -1,13 +1,6 @@
-import axios from "axios";
-import Button from "components/Common/Button";
-import api, { generateErrorMessage } from "helpers/query";
-import { showErrorToast, showSuccessToast } from "helpers/showToast";
-import { object } from "joi";
-import React, { useCallback, useRef, useState } from "react";
-import { useQueryClient } from "react-query";
-import { useDispatch, useSelector } from "react-redux";
-import { FormGroup, Input, InputGroupAddon, Label, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
-import { toggleDeleteProductDisclosure } from "store/routes/products/actions";
+import Button from 'components/Common/Button';
+import React, { useCallback } from 'react';
+import { FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 
 function VerifyPost({ isOpen, toggle, post }) {
     const calculateIsVerified = useCallback(() => {
@@ -30,7 +23,7 @@ function VerifyPost({ isOpen, toggle, post }) {
                 <Button color="light" w="55.5px" size="sm" onClick={toggle}>
                     Close
                 </Button>
-                <Button color="light" w="55.5px" size="sm" onClick={toggle} color="primary">
+                <Button w="55.5px" size="sm" onClick={toggle} color="primary">
                     Submit
                 </Button>
             </ModalFooter>

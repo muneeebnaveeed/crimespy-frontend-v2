@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Formik, useFormik } from "formik";
+import React, { useState, useEffect, useRef } from 'react';
+import { Formik, useFormik } from 'formik';
 import {
     Col,
     Collapse,
@@ -16,11 +16,12 @@ import {
     Label,
     Row,
     Button,
-} from "reactstrap";
-import { bioSchema } from "helpers/schema";
-import { showSuccessToast } from "helpers/showToast";
-import { db, getLoggedInUser } from "helpers/auth";
-import { useQueryClient } from "react-query";
+} from 'reactstrap';
+import { bioSchema } from 'helpers/schema';
+import { showSuccessToast } from 'helpers/showToast';
+import { db, getLoggedInUser } from 'helpers/auth';
+import { useQueryClient } from 'react-query';
+
 const SetBio = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [isUpdating, setIsupdatin] = useState(false);
@@ -39,9 +40,9 @@ const SetBio = () => {
 
         try {
             console.log(info);
-            await db.collection("users").doc(user.uid).update(info);
-            console.log("updated");
-            showSuccessToast({ message: "Your Bio has been updated successfully" });
+            await db.collection('users').doc(user.uid).update(info);
+            console.log('updated');
+            showSuccessToast({ message: 'Your Bio has been updated successfully' });
             setIsupdatin(false);
         } catch (err) {
             console.error(err.message);
@@ -51,14 +52,14 @@ const SetBio = () => {
 
     const formik = useFormik({
         initialValues: {
-            qualification: "",
-            address: "",
-            job: "",
+            qualification: '',
+            address: '',
+            job: '',
         },
         // onSubmit: handleSubmit,
         onSubmit: handleSubmit,
         validate: (values) => {
-            let errors = {};
+            const errors = {};
 
             const validationErrors = bioSchema.validate(values, { abortEarly: false })?.error?.details;
 
@@ -72,7 +73,7 @@ const SetBio = () => {
     console.log(formik.errors);
     return (
         <div>
-            <Button color="primary" onClick={toggle} style={{ marginBottom: "1rem" }} size="lg" block outline>
+            <Button color="primary" onClick={toggle} style={{ marginBottom: '1rem' }} size="lg" block outline>
                 Update User Bio
             </Button>
             <Collapse isOpen={isOpen}>

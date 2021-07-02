@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from 'react';
 
 function useDisclosure(initialValue = false) {
     const [isOpen, setIsOpen] = useState(initialValue);
@@ -7,14 +7,15 @@ function useDisclosure(initialValue = false) {
     const onOpen = useCallback(() => setIsOpen(true), [setIsOpen]);
     const onClose = useCallback(() => setIsOpen(false), [setIsOpen]);
 
-    const disclosure = useMemo(() => {
-        return {
+    const disclosure = useMemo(
+        () => ({
             isOpen,
             toggle,
             onOpen,
             onClose,
-        };
-    }, [isOpen, toggle, onOpen, onClose]);
+        }),
+        [isOpen, toggle, onOpen, onClose]
+    );
 
     return disclosure;
 }

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from 'react';
 
 function usePagination({ _count, _page, _pageSize }) {
     const _totalPages = useMemo(() => {

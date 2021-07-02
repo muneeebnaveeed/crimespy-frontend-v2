@@ -1,47 +1,28 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { ButtonGroup, Card, CardBody, Label, Modal, ModalBody, ModalFooter, ModalHeader, Table } from "reactstrap";
+import React, { useCallback, useState } from 'react';
+import { ButtonGroup, Card, CardBody, Table } from 'reactstrap';
 
 // Import Breadcrumb
-import { batch, useDispatch, useSelector } from "react-redux";
-import { fetchProducts, useModifiedQuery } from "helpers/query";
-import Select from "../../../components/Common/Select";
+import { useModifiedQuery } from 'helpers/query';
 
-import dayjs from "dayjs";
-import Spinner from "components/Common/Spinner";
-import Error from "components/Common/Error";
-import Button from "components/Common/Button";
-import { setDeleteProductId, toggleDeleteProductDisclosure } from "store/routes/products/actions";
-import Th from "components/Common/Th";
-import useUsersQuery from "./useUsersQuery";
-import { db, getLoggedInUser } from "helpers/auth";
-import useDisclosure from "helpers/useDisclosure";
-import { useQueryClient } from "react-query";
-import { showErrorToast, showSuccessToast } from "helpers/showToast";
-import { useHistory } from "react-router";
-import usePermissions from "helpers/usePermissions";
-import { FastField } from "formik";
-import axios from "axios";
-import DeleteUser from "./DeleteUser";
-import SearchTask from "../feed/SearchTask";
+import Spinner from 'components/Common/Spinner';
+import Error from 'components/Common/Error';
+import Button from 'components/Common/Button';
+import Th from 'components/Common/Th';
+import { db } from 'helpers/auth';
+import useDisclosure from 'helpers/useDisclosure';
+import { useQueryClient } from 'react-query';
+import { useHistory } from 'react-router-dom';
+import usePermissions from 'helpers/usePermissions';
+import axios from 'axios';
+import Select from '../../../components/Common/Select';
+import DeleteUser from './DeleteUser';
+import SearchTask from '../feed/SearchTask';
 
-const fetchUsers = async () => {
-    return axios.get(`https://crimespy.herokuapp.com/users`).then((res) => res.data);
-
-    // const snapshot = db.collection("users").get();
-    // const docs = (await snapshot).docs;
-
-    // return new Promise((resolve, reject) => {
-    //     const users = docs.map((doc) => ({
-    //         id: doc.id,
-    //         ...doc.data()
-    //     }));
-    //     resolve(users);
-    // });
-};
+const fetchUsers = async () => axios.get(`https://crimespy.herokuapp.com/users`).then((res) => res.data);
 
 const fetchPresets = async () => {
-    const snapshot = db.collection("presets").get();
-    const docs = (await snapshot).docs;
+    const snapshot = db.collection('presets').get();
+    const { docs } = await snapshot;
 
     return new Promise((resolve, reject) => {
         const presets = docs.map((doc) => ({
@@ -54,13 +35,13 @@ const fetchPresets = async () => {
 };
 
 function UsersTable(props) {
-    const users = useModifiedQuery("users", fetchUsers);
-    const presets = useModifiedQuery("presets", fetchPresets);
+    const users = useModifiedQuery('users', fetchUsers);
+    const presets = useModifiedQuery('presets', fetchPresets);
     const queryClient = useQueryClient();
     const { isOpen, toggle, onOpen } = useDisclosure();
 
     const [changingRole, setChangingRole] = useState(null);
-    const [userId, setUserId] = useState("");
+    const [userId, setUserId] = useState('');
     const history = useHistory();
 
     const handlePassInfoShow = async (id) => {
@@ -68,16 +49,16 @@ function UsersTable(props) {
         setUserId(id);
     };
 
-    const isAuthorized = usePermissions("users");
+    const isAuthorized = usePermissions('users');
 
     const handleChangeRole = useCallback(async (role, id) => {
         setChangingRole(id);
         try {
             await db
-                .collection("users")
+                .collection('users')
                 .doc(id)
                 .update({ role: role.value.title, permissions: role.value.permissions });
-            await queryClient.invalidateQueries("users");
+            await queryClient.invalidateQueries('users');
         } catch (err) {
             console.error(err.message);
         }
@@ -87,11 +68,11 @@ function UsersTable(props) {
     return (
         <>
             <Card>
-                {" "}
+                {' '}
                 {((users.isLoading && !users.isError) || (presets.isLoading && !presets.isError)) && <Spinner />}
                 {((users.isError && !users.isLoading) || (presets.isError && !presets.isLoading)) && (
                     <Error
-                        for={users.isError ? "users" : "roles"}
+                        for={users.isError ? 'users' : 'roles'}
                         onClick={users.isError ? users.refetch : presets.refetch}
                     />
                 )}
@@ -111,7 +92,7 @@ function UsersTable(props) {
                         size="xl"
                         borderless
                         hover
-                        style={{ minWidth: "706px" }}
+                        style={{ minWidth: '706px' }}
                         className="position-relative"
                     >
                         <thead>
@@ -124,14 +105,14 @@ function UsersTable(props) {
                             </tr>
                         </thead>
                         <tbody>
-                            {" "}
+                            {' '}
                             {users.data?.map((user, i) => {
                                 const isSelectBusy = changingRole === user.id;
                                 return (
                                     <>
                                         <tr key={i}>
                                             <Th scope="row" key={i}>
-                                                {user.id.substring(user.id.length - 3, user.id.length)}{" "}
+                                                {user.id.substring(user.id.length - 3, user.id.length)}{' '}
                                             </Th>
                                             <Th>{user.displayName}</Th>
                                             <Th>{user.email}</Th>
@@ -153,17 +134,17 @@ function UsersTable(props) {
                                             </Th>
                                             <Th>
                                                 <ButtonGroup>
-                                                    {" "}
-                                                    {isAuthorized("edit") && (
+                                                    {' '}
+                                                    {isAuthorized('edit') && (
                                                         <Button
                                                             color="light"
                                                             size="sm"
                                                             onClick={() => history.push(`/users/edit?user=${user.id}`)}
                                                         >
-                                                            <i class="fas fa-user-edit" />
+                                                            <i className="fas fa-user-edit" />
                                                         </Button>
                                                     )}
-                                                    {isAuthorized("delete") && (
+                                                    {isAuthorized('delete') && (
                                                         <Button
                                                             color="light"
                                                             size="sm"
@@ -171,17 +152,17 @@ function UsersTable(props) {
                                                         >
                                                             <i className="fas fa-trash-alt" />
                                                         </Button>
-                                                    )}{" "}
+                                                    )}{' '}
                                                 </ButtonGroup>
                                             </Th>
                                         </tr>
                                     </>
                                 );
-                            })}{" "}
+                            })}{' '}
                         </tbody>
                         {!users.data?.length && !users.isLoading && !users.isError && (
-                            <caption style={{ textAlign: "center" }}>No users found</caption>
-                        )}{" "}
+                            <caption style={{ textAlign: 'center' }}>No users found</caption>
+                        )}{' '}
                     </Table>
                 </CardBody>
             </Card>

@@ -1,124 +1,90 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 
-import { Row, Col, Input, Button, Alert, Container, Label, FormGroup } from "reactstrap";
-
-import { db } from "../../helpers/auth";
-import firebase from "firebase/app";
-import PhoneAuth from "./PhoneAuth";
+import { Row, Col, Button, Container } from 'reactstrap';
 
 // Redux
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from 'react-redux';
 
-import _ from "lodash";
+import _ from 'lodash';
 
 // import images
-import logodark from "../../assets/images/logo-dark.png";
-import { auth, getLoggedInUser, setSession, signInWithFacebook } from "helpers/auth";
-import { setUser } from "store/auth/actions";
-import { Redirect, useHistory,Route } from "react-router";
-import axios from "axios";
+import { getLoggedInUser, setSession, signInWithFacebook } from 'helpers/auth';
+import { setUser } from 'store/auth/actions';
+import { Redirect, useHistory } from 'react-router-dom';
+import axios from 'axios';
+import logodark from '../../assets/images/logo-dark.png';
+import PhoneAuth from './PhoneAuth';
+import { db } from '../../helpers/auth';
 
 function Login(props) {
     const dispatch = useDispatch();
     const history = useHistory();
 
-    const state = useSelector((state) => state.Auth);
-
     useEffect(() => {
-        document.body.classList.add("auth-body-bg");
+        document.body.classList.add('auth-body-bg');
         return () => {
-            document.body.classList.remove("auth-body-bg");
+            document.body.classList.remove('auth-body-bg');
         };
     }, []);
 
     const handleLogin = async () => {
-        let lon;
-        let lat;
         try {
-            const res = await signInWithFacebook();
-            console.log('sdsd',res.user)
+            const loggedInData = await signInWithFacebook();
 
-            // const fbUser = _.pick(res.user, ['uid', "displayName", "email", "photoURL"]);
-           
+            const { uid, displayName, photoURL, email } = loggedInData.user;
 
-            // const data = {
-            //     firstName: 'Finn',
-            //     lastName: 'Williams'
-            // }
+            const dbUser = (await db.collection('users').doc(uid).get()).data();
 
-            const dbUser = (await db.collection("users").doc(res.user.uid).get()).data();
-            // console.log("location", location)
-            // console.log(`DATA FROM DB ${dbUser}`);
-            // await navigator.geolocation.getCurrentPosition((position) => {
-                // console.log("1");
-                // lon = position.coords.longitude;
-                // lat = position.coords.latitude;
-                // console.log(lon, lat);
-                let user = {
-                    // ...fbUser,
-                    id: res.user.uid,
-                    displayName:res.user.displayName,
+            let user = {
+                // ...fbUser,
+                id: uid,
+                displayName,
 
-                    photoUrl: res.user.photoURL,
-                    role: "user",
-                    gender: "",
-                    email:res.user.email,
-                   
-                    bio: "",
-                    dob: "",
-                    permissions: {
-                        timeline: ["review"],
-                        users: ["review"],
-                        feed: [],
-                        map: ["review"],
-                        chart: ["review"],
-                    },
-                  
-                };
+                photoUrl: photoURL,
+                role: 'user',
+                gender: '',
+                email,
 
-                // axios.post(`https://crimespy.herokuapp.com/users/id/${
-                //     user.uid
-                // }`, user).then(res => {
-                //     console.log(res)
-                // })
-                if (!dbUser)
-                    // axios.post(`https://crimespy.herokuapp.com/users/id/${user.uid}/lat/${lat}/long/${lon}`, user).then((res) => {
-                    //     console.log(res);
-                    // });
-                      axios.post(`https://crimespy.herokuapp.com/users/id/${res.user.uid}`, user).then((res) => {
-                        console.log('here',res);
-                    });
-                    // db.collection('users').doc(res.user.uid).set(user);
-                else user = dbUser;
-                dispatch(setUser(user));
-                setSession(user);
-                history.push("/");
+                bio: '',
+                dob: '',
+                permissions: {
+                    timeline: ['review'],
+                    users: ['review'],
+                    feed: [],
+                    map: ['review'],
+                    chart: ['review'],
+                },
+            };
+            if (!dbUser)
+                axios.post(`https://crimespy.herokuapp.com/users/id/${uid}`, user).then((res) => {
+                    console.log('here', res);
+                });
+            else user = dbUser;
+            dispatch(setUser(user));
+            setSession(user);
+            history.push('/');
             // });
         } catch (err) {
             console.error(err.message);
         }
     };
 
-    const handleLoginPhoneNumber =  () =>{
-     history.push('/auth-phone')
-    }
+    const handleLoginPhoneNumber = () => {
+        history.push('/auth-phone');
+    };
 
     if (getLoggedInUser())
         return (
             <Redirect
                 to={{
-                    pathname: "/",
-                    from: "/login",
+                    pathname: '/',
+                    from: '/login',
                 }}
             />
         );
 
     return (
         <>
-            {" "}
-            {/* <div className="home-btn d-none d-sm-block">
-                <i className="mdi mdi-home-variant h2 text-white"></i>
-            </div> */}
             <div>
                 <Container fluid className="p-0">
                     <Row className="no-gutters">
@@ -144,18 +110,10 @@ function Login(props) {
                                                     </Button>
                                                 </div>
                                                 <div className="p-2 mt-2 d-flex justify-content-center">
-                                              
-
-                                               
-                                                    
-                                                    <Button color="secondary" onClick={handleLoginPhoneNumber} >
-                                                        <i class="fa fa-phone-alt mr-1" />
-                                                       
+                                                    <Button color="secondary" onClick={handleLoginPhoneNumber}>
+                                                        <i className="fa fa-phone-alt mr-1" />
                                                         Login with Number
                                                     </Button>
-   
-    
-
                                                 </div>
 
                                                 <div className="mt-5 text-center">
@@ -169,7 +127,7 @@ function Login(props) {
                         </Col>
                         <Col lg={8}>
                             <div className="authentication-bg">
-                                <div className="bg-overlay"></div>
+                                <div className="bg-overlay" />
                             </div>
                         </Col>
                     </Row>

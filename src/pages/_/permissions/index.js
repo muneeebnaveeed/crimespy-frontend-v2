@@ -1,20 +1,19 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { Container, Card, CardBody, Row, Col, Spinner } from "reactstrap";
+import React, { useCallback, useState } from 'react';
+import { Container, Row, Col, Spinner } from 'reactstrap';
 
-//Import Breadcrumb
-import Breadcrumbs from "components/Common/Breadcrumb";
-import UserDisplay from "./UserDisplay";
-import Permissions from "./Permissions";
-import { Redirect, useLocation, useParams } from "react-router";
-import qs from "querystring";
-import { useModifiedQuery } from "helpers/query";
-import userEvent from "@testing-library/user-event";
-import { db } from "helpers/auth";
-import Presets from "./Presets";
+// Import Breadcrumb
+import Breadcrumbs from 'components/Common/Breadcrumb';
+import { Redirect, useLocation } from 'react-router-dom';
+import qs from 'querystring';
+import { useModifiedQuery } from 'helpers/query';
+import { db } from 'helpers/auth';
+import Permissions from './Permissions';
+import UserDisplay from './UserDisplay';
+import Presets from './Presets';
 
 const breadcrumbItems = [
-    { title: "Crimespy", link: "/" },
-    { title: "Edit User", link: "/users" },
+    { title: 'Crimespy', link: '/' },
+    { title: 'Edit User', link: '/users' },
 ];
 
 const removeFirstLetter = (str) => {
@@ -27,14 +26,12 @@ const Permission = () => {
     const [userId, setUserId] = useState(qs.parse(removeFirstLetter(params.search)).user);
 
     const fetchUserById = useCallback(async () => {
-        console.log("fetchUserById() [userId:%s]", userId);
-        const userdata = await (await db.collection("users").doc(userId).get()).data();
+        console.log('fetchUserById() [userId:%s]', userId);
+        const userdata = await (await db.collection('users').doc(userId).get()).data();
         return userdata;
     }, [userId]);
 
-    const user = useModifiedQuery(["user", userId], fetchUserById);
-
-    console.log(user);
+    const user = useModifiedQuery(['user', userId], fetchUserById);
 
     return (
         <div className="page-content">
@@ -46,7 +43,7 @@ const Permission = () => {
                     </Col>
                 </Row>
                 <Row>
-                    <Col xs={12} style={user.isLoading ? { width: "100%" } : {}}>
+                    <Col xs={12} style={user.isLoading ? { width: '100%' } : {}}>
                         {user.isLoading && <Spinner />}
                         {user.isError && !user.isLoading && <Redirect to="/users" />}
                         {!user.isLoading && !user.isError && (

@@ -1,13 +1,9 @@
-import axios from "axios";
-import Button from "components/Common/Button";
-import { db } from "helpers/auth";
-import api, { generateErrorMessage } from "helpers/query";
-import { showErrorToast, showSuccessToast } from "helpers/showToast";
-import React, { useCallback, useRef, useState } from "react";
-import { useQueryClient } from "react-query";
-import { useDispatch, useSelector } from "react-redux";
-import { Label, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
-import { toggleDeleteProductDisclosure } from "store/routes/products/actions";
+import Button from 'components/Common/Button';
+import { db } from 'helpers/auth';
+import { showErrorToast, showSuccessToast } from 'helpers/showToast';
+import React, { useCallback, useState } from 'react';
+import { useQueryClient } from 'react-query';
+import { Label, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 
 function DeleteUser({ isOpen, toggle, postId }) {
     const [isDeletePost, setIsDeletePost] = useState(false);
@@ -17,20 +13,18 @@ function DeleteUser({ isOpen, toggle, postId }) {
     const toggleModal = useCallback(() => {
         if (!isDeletePost) toggle();
     }, [isDeletePost, toggle]);
-    console.log('deete',postId)
     const handleDeletePost = async () => {
         setIsDeletePost(true);
 
-        
         try {
-            await db.collection('feeds').doc(postId).delete()
-            await queryClient.invalidateQueries("feeds");
-            showSuccessToast({ message: "Post has been deleted successfully" });
+            await db.collection('feeds').doc(postId).delete();
+            await queryClient.invalidateQueries('feeds');
+            showSuccessToast({ message: 'Post has been deleted successfully' });
         } catch (err) {
-            showErrorToast({ message: "Unable to delete user" });
+            showErrorToast({ message: 'Unable to delete user' });
         }
         setIsDeletePost(false);
-        console.log("will do it in server");
+        console.log('will do it in server');
     };
 
     return (

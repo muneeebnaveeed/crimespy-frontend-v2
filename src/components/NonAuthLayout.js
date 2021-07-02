@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { withRouter } from "react-router-dom";
+import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 
 class NonAuthLayout extends Component {
     constructor(props) {
@@ -8,17 +8,16 @@ class NonAuthLayout extends Component {
         this.capitalizeFirstLetter.bind(this);
     }
 
-    capitalizeFirstLetter = (string) => {
-        return string.charAt(1).toUpperCase() + string.slice(2);
-    };
-
     componentDidMount() {
-        let currentage = this.capitalizeFirstLetter(this.props.location.pathname);
+        const currentage = this.capitalizeFirstLetter(this.props.location.pathname);
 
         document.title = currentage;
     }
+
+    capitalizeFirstLetter = (string) => string.charAt(1).toUpperCase() + string.slice(2);
+
     render() {
-        return <React.Fragment>{this.props.children}</React.Fragment>;
+        return <>{this.props.children}</>;
     }
 }
 

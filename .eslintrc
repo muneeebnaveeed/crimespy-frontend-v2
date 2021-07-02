@@ -3,6 +3,7 @@
         "wesbos"
     ],
     "rules": {
+        "prefer-promise-reject-errors": 1,
         "eqeqeq": 1,
         "no-console": 1,
         "no-plusplus": 0,

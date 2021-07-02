@@ -1,9 +1,7 @@
-import { db } from "helpers/auth";
-import React from "react";
+import { db } from 'helpers/auth';
+import React from 'react';
 //
-function Comment({ username, comment,id }) {
-
-
+function Comment({ username, comment, id }) {
     // const commentRef =  db.collection("comments")
     // commentsRef.doc(id)
     //         .collection("comments")
@@ -16,26 +14,23 @@ function Comment({ username, comment,id }) {
     );
 }
 
-export default function Comments({ username, comments,id }) {
-    var commentse = [];
-    const commentRef =  db.collection("comments")
-   commentRef.doc(id)
-            .collection("comments")
-            .orderBy("timestamp", "desc")
-            .onSnapshot((querySnapshot) => {
-                
-                querySnapshot.forEach((doc) => {
-                    commentse.push(doc?.data());
-                });
-                console.log("Current cities in CA: ", commentse);
+export default function Comments({ username, comments, id }) {
+    const commentse = [];
+    const commentRef = db.collection('comments');
+    commentRef
+        .doc(id)
+        .collection('comments')
+        .orderBy('timestamp', 'desc')
+        .onSnapshot((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                commentse.push(doc?.data());
             });
-    
+            console.log('Current cities in CA: ', commentse);
+        });
 
     return (
         <div className="px-3 d-flex flex-column">
-        { console.log("Curre ", commentse)
-           
-        }
+            {console.log('Curre ', commentse)}
             {/* <Comment username={username} comment={comment} />
             <Comment username={username} comment={comment} />
             <Comment username={username} comment={comment} /> */}

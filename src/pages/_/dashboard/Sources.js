@@ -1,11 +1,11 @@
-import React, { Component } from "react";
-import { Card, CardBody, Col, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Table } from "reactstrap";
-import { Link } from "react-router-dom";
+import React, { Component } from 'react';
+import { Card, CardBody, Col, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Table } from 'reactstrap';
+import { Link } from 'react-router-dom';
 
-//Import Images
-import img1 from "../../../assets/images/companies/img-1.png";
-import img2 from "../../../assets/images/companies/img-2.png";
-import img3 from "../../../assets/images/companies/img-3.png";
+// Import Images
+import img1 from '../../../assets/images/companies/img-1.png';
+import img2 from '../../../assets/images/companies/img-2.png';
+import img3 from '../../../assets/images/companies/img-3.png';
 
 class Sources extends Component {
     constructor(props) {
@@ -17,17 +17,17 @@ class Sources extends Component {
 
     render() {
         return (
-            <React.Fragment>
+            <>
                 <Col xl={6}>
                     <Card>
                         <CardBody>
                             <Dropdown
                                 className="float-right"
                                 isOpen={this.state.menu}
-                                toggle={() => this.setState({ menu: !this.state.menu })}
+                                toggle={() => this.setState((prev) => ({ menu: !prev.menu }))}
                             >
                                 <DropdownToggle tag="i" className="arrow-none card-drop">
-                                    <i className="mdi mdi-dots-vertical"></i>
+                                    <i className="mdi mdi-dots-vertical" />
                                 </DropdownToggle>
                                 <DropdownMenu right>
                                     <DropdownItem href="">Sales Report</DropdownItem>
@@ -55,7 +55,7 @@ class Sources extends Component {
                                     <Table hover className=" mb-0 table-centered table-nowrap">
                                         <tbody>
                                             <tr>
-                                                <td style={{ width: "60px" }}>
+                                                <td style={{ width: '60px' }}>
                                                     <div className="avatar-xs">
                                                         <div className="avatar-title rounded-circle bg-light">
                                                             <img src={img1} alt="" height="20" />
@@ -67,7 +67,7 @@ class Sources extends Component {
                                                     <h5 className="font-size-14 mb-0">Source 1</h5>
                                                 </td>
                                                 <td>
-                                                    <div id="spak-chart1"></div>
+                                                    <div id="spak-chart1" />
                                                 </td>
                                                 <td>
                                                     <p className="text-muted mb-0">$ 2478</p>
@@ -86,7 +86,7 @@ class Sources extends Component {
                                                 </td>
 
                                                 <td>
-                                                    <div id="spak-chart2"></div>
+                                                    <div id="spak-chart2" />
                                                 </td>
                                                 <td>
                                                     <p className="text-muted mb-0">$ 2625</p>
@@ -104,7 +104,7 @@ class Sources extends Component {
                                                     <h5 className="font-size-14 mb-0">Source 3</h5>
                                                 </td>
                                                 <td>
-                                                    <div id="spak-chart3"></div>
+                                                    <div id="spak-chart3" />
                                                 </td>
                                                 <td>
                                                     <p className="text-muted mb-0">$ 2856</p>
@@ -123,7 +123,7 @@ class Sources extends Component {
                         </CardBody>
                     </Card>
                 </Col>
-            </React.Fragment>
+            </>
         );
     }
 }

@@ -1,27 +1,24 @@
-import React from "react";
-import { useState, useCallback } from "react";
+/* eslint-disable jsx-a11y/label-has-associated-control */
+import React, { useState, useCallback } from 'react';
+
 import {
     Form,
     FormFeedback,
     FormGroup,
     InputGroup,
     InputGroupAddon,
-    FormText,
-    Label,
     Modal,
     ModalBody,
     ModalFooter,
     ModalHeader,
-    ButtonGroup,
-} from "reactstrap";
-import Input from "reactstrap/lib/Input";
-import { Formik, FormikConsumer, useFormik } from "formik";
-import { showSuccessToast } from "helpers/showToast";
-import { useControllableProp } from "@chakra-ui/hooks";
-import { db } from "helpers/auth";
-import Button from "components/Common/Button";
-import { preSetSchema } from "helpers/schema";
-import { useQueryClient } from "react-query";
+} from 'reactstrap';
+import Input from 'reactstrap/lib/Input';
+import { useFormik } from 'formik';
+import { showSuccessToast } from 'helpers/showToast';
+import { db } from 'helpers/auth';
+import Button from 'components/Common/Button';
+import { preSetSchema } from 'helpers/schema';
+import { useQueryClient } from 'react-query';
 
 const CreatePreset = ({ permissions, toggle, isOpen }) => {
     const [isCreatingPreset, setIsCreatingPreset] = useState(false);
@@ -31,22 +28,22 @@ const CreatePreset = ({ permissions, toggle, isOpen }) => {
         if (!isCreatingPreset) toggle();
     }, [isCreatingPreset, toggle]);
 
-    const handleSubmit = async ({ title }) => {
+    const handleSubmit = async ({ title }, form) => {
         setIsCreatingPreset(true);
 
-        const presetExists = await (await db.collection("presets").doc(title.toLowerCase()).get()).data();
+        const presetExists = await (await db.collection('presets').doc(title.toLowerCase()).get()).data();
         if (presetExists) {
-            formik.setFieldError("title", "Preset already exists");
+            form.setFieldError('title', 'Preset already exists');
             setIsCreatingPreset(false);
             return;
         }
 
         const newPreset = { title, permissions };
         try {
-            await db.collection("presets").doc(title.toLowerCase()).set(newPreset);
-            await queryClient.invalidateQueries("presets");
+            await db.collection('presets').doc(title.toLowerCase()).set(newPreset);
+            await queryClient.invalidateQueries('presets');
             toggle();
-            showSuccessToast({ message: "Preset created successfully" });
+            showSuccessToast({ message: 'Preset created successfully' });
         } catch (err) {
             console.error(err.message);
         }
@@ -55,11 +52,11 @@ const CreatePreset = ({ permissions, toggle, isOpen }) => {
 
     const formik = useFormik({
         initialValues: {
-            title: "",
+            title: '',
         },
         onSubmit: handleSubmit,
         validate: (values) => {
-            let errors = {};
+            const errors = {};
 
             const validationErrors = preSetSchema.validate(values, { abortEarly: false })?.error?.details;
 

@@ -1,33 +1,33 @@
-import React, { useState, useEffect } from "react";
-import { withGoogleMap, withScriptjs, GoogleMap, Marker, InfoWindow } from "react-google-maps";
+import React, { useState, useEffect } from 'react';
+import { withGoogleMap, withScriptjs, GoogleMap, Marker, InfoWindow } from 'react-google-maps';
 // import * as parkData from "./data/skateboard-parks.json";
-import mapStyles from "./mapStyle";
-import { db, getLoggedInUser } from "../../../helpers/auth";
+import mapStyles from './mapStyle';
+import { db, getLoggedInUser } from '../../../helpers/auth';
 
 function Map() {
     const [selectedPark, setSelectedPark] = useState(null);
     const [user, setUser] = useState(getLoggedInUser());
     const [postloc, setPostLoc] = useState([]);
-    const [lonn, setLon] =useState();
-    const [latt,setLat] = useState();
+    const [lonn, setLon] = useState();
+    const [latt, setLat] = useState();
 
     useEffect(() => {
         const listener = (e) => {
-            if (e.key === "Escape") {
+            if (e.key === 'Escape') {
                 setSelectedPark(null);
             }
         };
-        window.addEventListener("keydown", listener);
+        window.addEventListener('keydown', listener);
 
         return () => {
-            window.removeEventListener("keydown", listener);
+            window.removeEventListener('keydown', listener);
         };
     }, []);
 
     useEffect(() => {
         const fetchPost = async () => {
             const posts = [];
-            const postpoint = await db.collection("feeds").where("postVerified", "==", true).get();
+            const postpoint = await db.collection('feeds').where('postVerified', '==', true).get();
             postpoint.forEach(function (doc) {
                 // doc.data() is never undefined for query doc snapshots
 
@@ -35,23 +35,23 @@ function Map() {
                     id: doc.id,
                     ...doc.data(),
                 });
-                console.log(doc.id, " => ", doc.data());
+                console.log(doc.id, ' => ', doc.data());
             });
 
             setPostLoc(posts);
-            console.log("post", posts);
+            console.log('post', posts);
         };
 
         fetchPost();
     }, []);
 
     navigator.geolocation.getCurrentPosition((position) => {
-        console.log("1", position.coords.longitude);
+        console.log('1', position.coords.longitude);
         // lon = position.coords.longitude;
-        setLat(position.coords.latitude)
-        setLon(position.coords.longitude)
+        setLat(position.coords.latitude);
+        setLon(position.coords.longitude);
         // lat = position.coords.latitude;
-    })
+    });
 
     const lat = parseFloat(user.latitude);
     const long = parseFloat(user.longitude);
@@ -66,7 +66,11 @@ function Map() {
     // }));
 
     return (
-        <GoogleMap defaultZoom={10} defaultCenter={{ lat:parseFloat(latt), lng: parseFloat(lonn) }} defaultOptions={{ styles: mapStyles }}>
+        <GoogleMap
+            defaultZoom={10}
+            defaultCenter={{ lat: parseFloat(latt), lng: parseFloat(lonn) }}
+            defaultOptions={{ styles: mapStyles }}
+        >
             {postloc.map((crime) => (
                 <Marker
                     key={crime.id}
@@ -83,7 +87,7 @@ function Map() {
                     }}
                 />
             ))}
-            {console.log("selected", latt)}
+            {console.log('selected', latt)}
             {selectedPark && (
                 <InfoWindow
                     onCloseClick={() => {
@@ -108,7 +112,7 @@ const MapWrapped = withScriptjs(withGoogleMap(Map));
 
 export default function App() {
     return (
-        <div style={{ width: "100vw", height: "100vh" }}>
+        <div style={{ width: '100vw', height: '100vh' }}>
             <MapWrapped
                 googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${process.env.REACT_APP_GOOGLE_KEY}`}
                 loadingElement={<div style={{ height: `100%` }} />}

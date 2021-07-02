@@ -1,6 +1,6 @@
-import React from "react";
-import Button from "components/Common/Button";
-import { useCallback, useMemo, useRef, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from 'react';
+import Button from 'components/Common/Button';
+
 import {
     Form,
     FormFeedback,
@@ -13,4 +13,4 @@ import {
     ModalBody,
     ModalFooter,
     ModalHeader,
-} from "reactstrap";
+} from 'reactstrap';

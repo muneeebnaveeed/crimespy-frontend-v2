@@ -1,13 +1,14 @@
-import React, { useState } from "react";
-import { db, getLoggedInUser } from "../../../helpers/auth";
-import { Form, FormGroup } from "reactstrap";
-import { Input } from "reactstrap/lib";
-import Button from "components/Common/Button";
-import { useQueryClient } from "react-query";
-import { useFormik } from "formik";
-import { commentSchema } from "helpers/schema";
-import { showErrorToast } from "helpers/showToast";
-import firebase from "firebase/app";
+import React, { useState } from 'react';
+import { Form, FormGroup } from 'reactstrap';
+import { Input } from 'reactstrap/lib';
+import Button from 'components/Common/Button';
+import { useQueryClient } from 'react-query';
+import { useFormik } from 'formik';
+import { commentSchema } from 'helpers/schema';
+import { showErrorToast } from 'helpers/showToast';
+import firebase from 'firebase/app';
+import { db, getLoggedInUser } from '../../../helpers/auth';
+
 export default function CreateComment({ id, ...props }) {
     const [comments, setComments] = useState(props.comments || []);
     const [isCreatingComment, setIsCreatingComment] = useState(false);
@@ -20,7 +21,7 @@ export default function CreateComment({ id, ...props }) {
         try {
             const user = getLoggedInUser();
             // const postRef = db.collection("posts").doc(user.uid).collection("userPosts");
-            const commentRef =  db.collection("comments")
+            const commentRef = db.collection('comments');
             // const postRef = db.collection("feeds").doc(id);
 
             // const newComment = {
@@ -32,31 +33,31 @@ export default function CreateComment({ id, ...props }) {
             // setComments(updatedComments);
 
             // await postRef.update({ comments: updatedComments });
-          await commentRef.doc(id).collection("comments").add({
+            await commentRef.doc(id).collection('comments').add({
                 username: user.displayName,
                 comment: values.comment,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                 avatarUrl: user.photoUrl,
                 userId: user.id,
-              });
+            });
         } catch (err) {
             showErrorToast({
                 message: `Unable to create comment: ${err.message}`,
             });
         }
 
-        await queryClient.invalidateQueries("feeds");
+        await queryClient.invalidateQueries('feeds');
         form.resetForm();
         setIsCreatingComment(false);
     };
 
     const formik = useFormik({
         initialValues: {
-            comment: "",
+            comment: '',
         },
         onSubmit: handleSubmit,
         validate: (values) => {
-            let errors = {};
+            const errors = {};
 
             const validationErrors = commentSchema.validate(values, { abortEarly: false })?.error?.details;
 

@@ -1,10 +1,10 @@
-import React, { Component } from "react";
-import { Col, Card, CardBody, Media } from "reactstrap";
+import React, { Component } from 'react';
+import { Col, Card, CardBody, Media } from 'reactstrap';
 
 class MiniWidgets extends Component {
     render() {
         return (
-            <React.Fragment>
+            <>
                 {this.props.reports.map((report, key) => (
                     <Col key={key} md={4}>
                         <Card>
@@ -15,7 +15,7 @@ class MiniWidgets extends Component {
                                         <h4 className="mb-0">{report.value}</h4>
                                     </Media>
                                     <div className="text-primary">
-                                        <i className={report.icon + " font-size-24"}></i>
+                                        <i className={`${report.icon} font-size-24`} />
                                     </div>
                                 </Media>
                             </CardBody>
@@ -33,7 +33,7 @@ class MiniWidgets extends Component {
                         </Card>
                     </Col>
                 ))}
-            </React.Fragment>
+            </>
         );
     }
 }

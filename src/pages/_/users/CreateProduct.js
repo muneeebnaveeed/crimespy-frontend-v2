@@ -1,9 +1,9 @@
-import Button from "components/Common/Button";
-import api, { generateErrorMessage } from "helpers/query";
-import { showErrorToast, showSuccessToast } from "helpers/showToast";
-import React, { useCallback, useMemo, useRef, useState } from "react";
-import { useQueryClient } from "react-query";
-import { useDispatch, useSelector } from "react-redux";
+import Button from 'components/Common/Button';
+import api, { generateErrorMessage } from 'helpers/query';
+import { showErrorToast, showSuccessToast } from 'helpers/showToast';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { useQueryClient } from 'react-query';
+import { useDispatch, useSelector } from 'react-redux';
 import {
     Form,
     FormFeedback,
@@ -15,14 +15,14 @@ import {
     ModalBody,
     ModalFooter,
     ModalHeader,
-} from "reactstrap";
-import Input from "reactstrap/lib/Input";
-import { useFormik } from "formik";
-import { productSchema } from "helpers/schema";
-import { toggleCreateProductDisclosure } from "store/routes/products/actions";
-import { Col, Row } from "reactstrap/lib";
-import Select from "components/Common/Select";
-import useCategoriesQuery from "./categories/useCategoriesQuery";
+} from 'reactstrap';
+import Input from 'reactstrap/lib/Input';
+import { useFormik } from 'formik';
+import { productSchema } from 'helpers/schema';
+import { toggleCreateProductDisclosure } from 'store/routes/products/actions';
+import { Col, Row } from 'reactstrap/lib';
+import Select from 'components/Common/Select';
+import useCategoriesQuery from './categories/useCategoriesQuery';
 
 function CreateProduct(props) {
     const { createDisclosure, categoryId } = useSelector((state) => state.Products);
@@ -38,17 +38,17 @@ function CreateProduct(props) {
     const categories = useMemo(() => data?.map((cat) => ({ value: cat.id.toString(), label: cat.name })), [data]);
 
     const handleCreateProduct = useCallback(
-        async (values, form) => {
+        async (product, form) => {
             setIsCreatingProduct(true);
-            const newProduct = { ...values, created_by_user: 1 };
+            const newProduct = { ...product, created_by_user: 1 };
             try {
-                await api.post("/products", newProduct);
-                await queryClient.invalidateQueries("products");
-                showSuccessToast({ message: "Product has been created" });
+                await api.post('/products', newProduct);
+                await queryClient.invalidateQueries('products');
+                showSuccessToast({ message: 'Product has been created' });
                 form.resetForm();
             } catch (err) {
                 const message = generateErrorMessage(err);
-                showErrorToast({ message: "Cannot create product: " + message });
+                showErrorToast({ message: `Cannot create product: ${message}` });
             }
             setIsCreatingProduct(false);
         },
@@ -61,20 +61,21 @@ function CreateProduct(props) {
         validateOnChange: false,
         validateOnBlur: false,
         initialValues: {
-            name: "",
+            name: '',
             price: 0,
             category: categoryId,
         },
-        validate: (values) => {
-            let errors = {};
+        validate: (rawValues) => {
+            const calculatedErrors = {};
 
-            const validationErrors = productSchema.validate(values, {
+            const validationErrors = productSchema.validate(rawValues, {
                 abortEarly: false,
             })?.error?.details;
 
-            if (validationErrors) validationErrors.forEach((err) => (errors[err.context.label] = err.message));
+            if (validationErrors)
+                validationErrors.forEach((err) => (calculatedErrors[err.context.label] = err.message));
 
-            return errors;
+            return calculatedErrors;
         },
         onSubmit: handleCreateProduct,
     });
@@ -157,7 +158,7 @@ function CreateProduct(props) {
                                         options={categories}
                                         noOptionsMessage="No category found"
                                         name="category"
-                                        onChange={(category) => setFieldValue("category", category.value)}
+                                        onChange={(category) => setFieldValue('category', category.value)}
                                     />
                                     <FormFeedback invalid="true" className="d-block">
                                         {errors.category}

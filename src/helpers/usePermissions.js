@@ -1,5 +1,5 @@
-import React, { useCallback, useMemo } from "react";
-import { getLoggedInUser } from "./auth";
+import React, { useCallback, useMemo } from 'react';
+import { getLoggedInUser } from './auth';
 
 function usePermissions(route) {
     const loggedInUser = useMemo(() => getLoggedInUser(), []);

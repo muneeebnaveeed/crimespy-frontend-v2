@@ -1,9 +1,9 @@
-import axios from "axios";
-import { QueryClient, QueryClientProvider, useQuery } from "react-query";
-import React, { useMemo } from "react";
+import axios from 'axios';
+import { QueryClient, QueryClientProvider, useQuery } from 'react-query';
+import React, { useMemo } from 'react';
 
 export const api = axios.create({
-    baseURL: "https://crimespy.herokuapp.com",
+    baseURL: 'https://crimespy.herokuapp.com',
     // headers: {
     //     Authorization:
     //         "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjE2NTc0NzIwLCJleHAiOjE2MTkxNjY3MjB9.R2CiSnJnOE2SMLQUnRHyXE-FBjZMRj8_eWCCKPdzpfY",
@@ -34,20 +34,20 @@ export const useModifiedQuery = (queryKey, queryFn, options = {}) => {
     return data;
 };
 
-export const QueryProvider = (props) => {
-    return <QueryClientProvider client={queryClient}>{props.children}</QueryClientProvider>;
-};
+export const QueryProvider = (props) => (
+    <QueryClientProvider client={queryClient}>{props.children}</QueryClientProvider>
+);
 
 export const generateErrorMessage = (err) => {
-    let message,
-        error = err?.response?.status;
+    let message;
+    const error = err?.response?.status;
 
     switch (error) {
         case 500:
-            message = "Category already exists";
+            message = 'Category already exists';
             break;
         case 405:
-            message = "Method not allowed";
+            message = 'Method not allowed';
             break;
         default:
             message = err.message;

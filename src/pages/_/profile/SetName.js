@@ -1,32 +1,17 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Formik, useFormik } from "formik";
-import axios from "axios";
-import {
-    Col,
-    Collapse,
-    Container,
-    Form,
-    FormFeedback,
-    FormGroup,
-    Input,
-    InputGroup,
-    InputGroupText,
-    InputGroupAddon,
-    Card,
-    CardBody,
-    Label,
-    Row,
-} from "reactstrap";
-import { userSchema } from "helpers/schema";
-import { db, getLoggedInUser } from "helpers/auth";
-import Button from "components/Common/Button";
-import { showSuccessToast } from "helpers/showToast";
-import { useQueryClient } from "react-query";
-import Select from "components/Common/Select";
+import React, { useState } from 'react';
+import { useFormik } from 'formik';
+import axios from 'axios';
+import { Collapse, Form, FormFeedback, FormGroup, Input, Card, CardBody, Label } from 'reactstrap';
+import { userSchema } from 'helpers/schema';
+import { db, getLoggedInUser } from 'helpers/auth';
+import Button from 'components/Common/Button';
+import { showSuccessToast } from 'helpers/showToast';
+import { useQueryClient } from 'react-query';
+import Select from 'components/Common/Select';
+
 const SetName = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [isUpdating, setIsupdatin] = useState(false);
-    const queryClient = useQueryClient();
     const toggle = () => {
         setIsOpen(!isOpen);
     };
@@ -40,16 +25,16 @@ const SetName = () => {
             dob: values.dob,
             gender: values.gender,
         };
-        console.log("up here ", info);
+        console.log('up here ', info);
 
         try {
             console.log(info);
             axios.put(`https://crimespy.herokuapp.com/users/id/${user.uid}`, info).then((res) => {
-                console.log("reply from cache", res);
+                console.log('reply from cache', res);
             });
             // await db.collection("users").doc(user.uid).update(info);
-            console.log("updated");
-            showSuccessToast({ message: "General Information has been updated successfully" });
+            console.log('updated');
+            showSuccessToast({ message: 'General Information has been updated successfully' });
             setIsupdatin(false);
         } catch (err) {
             console.error(err.message);
@@ -58,27 +43,27 @@ const SetName = () => {
         form.resetForm();
     };
 
-    const gender = [
+    const genders = [
         {
-            value: "Male",
-            label: "Male",
+            value: 'Male',
+            label: 'Male',
         },
         {
-            value: "Female",
-            label: "Female",
+            value: 'Female',
+            label: 'Female',
         },
     ];
 
     const formik = useFormik({
         initialValues: {
-            fullname: "",
-            dob: "",
-            gender: gender[0].value,
+            fullname: '',
+            dob: '',
+            gender: genders[0].value,
         },
         // onSubmit: handleSubmit,
         onSubmit: handleSubmit,
         validate: (values) => {
-            let errors = {};
+            const errors = {};
 
             const validationErrors = userSchema.validate(values, { abortEarly: false })?.error?.details;
 
@@ -92,7 +77,7 @@ const SetName = () => {
     console.log(formik.errors);
     return (
         <div>
-            <Button color="primary" onClick={toggle} style={{ marginBottom: "1rem" }} size="lg" block outline>
+            <Button color="primary" onClick={toggle} style={{ marginBottom: '1rem' }} size="lg" block outline>
                 Update General info
             </Button>
             <Collapse isOpen={isOpen}>
@@ -128,13 +113,13 @@ const SetName = () => {
                             <FormGroup>
                                 <Label>Gender</Label>
                                 <Select
-                                    options={gender}
-                                    defaultValue={gender[0]}
-                                    onChange={(gender) => formik.setFieldValue("gender", gender.value)}
+                                    options={genders}
+                                    defaultValue={genders[0]}
+                                    onChange={(gender) => formik.setFieldValue('gender', gender.value)}
                                 />
                                 <FormFeedback> {formik.errors.gender}</FormFeedback>
                             </FormGroup>
-                            <Button w="74px" loading={false} type="submit" color="primary" loading={isUpdating}>
+                            <Button w="74px" type="submit" color="primary" loading={isUpdating}>
                                 Update
                             </Button>
                         </Form>

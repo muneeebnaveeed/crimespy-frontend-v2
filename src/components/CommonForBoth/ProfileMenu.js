@@ -1,12 +1,12 @@
-import { getLoggedInUser, setSession, signOutFireabse } from "helpers/auth";
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { useHistory, withRouter } from "react-router-dom";
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from "reactstrap";
-import { setUser } from "store/auth/actions";
+import { getLoggedInUser, setSession, signOutFireabse } from 'helpers/auth';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { useHistory, withRouter } from 'react-router-dom';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { setUser } from 'store/auth/actions';
 
 // users
-import avatar2 from "../../assets/images/users/avatar-2.jpg";
+import avatar2 from '../../assets/images/users/avatar-2.jpg';
 
 class ProfileMenu extends Component {
     constructor(props) {
@@ -18,28 +18,29 @@ class ProfileMenu extends Component {
         this.toggle = this.toggle.bind(this);
     }
 
+    handleLogout = async () => {
+        try {
+            await signOutFireabse();
+            setSession(null);
+            this.props.history.push('/login');
+        } catch (err) {
+            console.error(err.message);
+        }
+    };
+
+    handlePermissions = () => {
+        this.props.history.push('/profile');
+    };
+
     toggle() {
         this.setState((prevState) => ({
             menu: !prevState.menu,
         }));
     }
 
-    handleLogout = async () => {
-        try {
-            await signOutFireabse();
-            setSession(null);
-            this.props.history.push("/login");
-        } catch (err) {
-            console.error(err.message);
-        }
-    };
-    handlePermissions = () => {
-        this.props.history.push("/profile");
-    };
-
     render() {
         return (
-            <React.Fragment>
+            <>
                 <Dropdown
                     isOpen={this.state.menu}
                     onClick={this.handlePermissions}
@@ -80,13 +81,11 @@ class ProfileMenu extends Component {
                         </DropdownItem>
                     </DropdownMenu> */}
                 </Dropdown>
-            </React.Fragment>
+            </>
         );
     }
 }
 
-const mapStatetoProps = ({ Auth }) => {
-    return Auth;
-};
+const mapStatetoProps = ({ Auth }) => Auth;
 
 export default withRouter(connect(mapStatetoProps, { setUser })(ProfileMenu));

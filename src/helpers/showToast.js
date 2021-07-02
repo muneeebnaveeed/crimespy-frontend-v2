@@ -1,12 +1,12 @@
-import toastr from "toastr";
-import "toastr/build/toastr.min.css";
+import toastr from 'toastr';
+import 'toastr/build/toastr.min.css';
 
 toastr.options = {
-    positionClass: "toast-bottom-right",
-    showEasing: "swing",
-    hideEasing: "linear",
-    showMethod: "fadeIn",
-    hideMethod: "fadeOut",
+    positionClass: 'toast-bottom-right',
+    showEasing: 'swing',
+    hideEasing: 'linear',
+    showMethod: 'fadeIn',
+    hideMethod: 'fadeOut',
     showDuration: 300,
     hideDuration: 1000,
     timeOut: 5000,
@@ -18,10 +18,10 @@ toastr.options = {
     newestOnTop: false,
 };
 
-export function showSuccessToast({ title = "Action dispatched successfully", message = "" }) {
+export function showSuccessToast({ title = 'Action dispatched successfully', message = '' }) {
     toastr.success(message, title);
 }
 
-export function showErrorToast({ title = "Unable to dispatch action", message = "" }) {
+export function showErrorToast({ title = 'Unable to dispatch action', message = '' }) {
     toastr.error(message, title);
 }

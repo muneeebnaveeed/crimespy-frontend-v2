@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import { Card, CardBody, Col, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from "reactstrap";
+import React, { Component } from 'react';
+import { Card, CardBody, Col, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
-//Simple bar
-import SimpleBar from "simplebar-react";
+// Simple bar
+import SimpleBar from 'simplebar-react';
 
 class RecentlyActivity extends Component {
     constructor(props) {
@@ -14,17 +14,17 @@ class RecentlyActivity extends Component {
 
     render() {
         return (
-            <React.Fragment>
+            <>
                 <Col xl={6}>
                     <Card>
                         <CardBody>
                             <Dropdown
                                 className="float-right"
                                 isOpen={this.state.menu}
-                                toggle={() => this.setState({ menu: !this.state.menu })}
+                                toggle={() => this.setState((prev) => ({ menu: !prev.menu }))}
                             >
                                 <DropdownToggle tag="i" className="darrow-none card-drop" aria-expanded="false">
-                                    <i className="mdi mdi-dots-vertical"></i>
+                                    <i className="mdi mdi-dots-vertical" />
                                 </DropdownToggle>
                                 <DropdownMenu right>
                                     <DropdownItem href="">Sales Report</DropdownItem>
@@ -39,12 +39,12 @@ class RecentlyActivity extends Component {
 
                             <h4 className="card-title mb-4">Recent Activity Feed</h4>
 
-                            <SimpleBar style={{ maxHeight: "330px" }}>
+                            <SimpleBar style={{ maxHeight: '330px' }}>
                                 <ul className="list-unstyled activity-wid">
                                     <li className="activity-list">
                                         <div className="activity-icon avatar-xs">
                                             <span className="avatar-title bg-soft-primary text-primary rounded-circle">
-                                                <i className="ri-edit-2-fill"></i>
+                                                <i className="ri-edit-2-fill" />
                                             </span>
                                         </div>
                                         <div>
@@ -64,7 +64,7 @@ class RecentlyActivity extends Component {
                                     <li className="activity-list">
                                         <div className="activity-icon avatar-xs">
                                             <span className="avatar-title bg-soft-primary text-primary rounded-circle">
-                                                <i className="ri-user-2-fill"></i>
+                                                <i className="ri-user-2-fill" />
                                             </span>
                                         </div>
                                         <div>
@@ -84,7 +84,7 @@ class RecentlyActivity extends Component {
                                     <li className="activity-list">
                                         <div className="activity-icon avatar-xs">
                                             <span className="avatar-title bg-soft-primary text-primary rounded-circle">
-                                                <i className="ri-bar-chart-fill"></i>
+                                                <i className="ri-bar-chart-fill" />
                                             </span>
                                         </div>
                                         <div>
@@ -104,7 +104,7 @@ class RecentlyActivity extends Component {
                                     <li className="activity-list">
                                         <div className="activity-icon avatar-xs">
                                             <span className="avatar-title bg-soft-primary text-primary rounded-circle">
-                                                <i className="ri-mail-fill"></i>
+                                                <i className="ri-mail-fill" />
                                             </span>
                                         </div>
                                         <div>
@@ -124,7 +124,7 @@ class RecentlyActivity extends Component {
                                     <li className="activity-list">
                                         <div className="activity-icon avatar-xs">
                                             <span className="avatar-title bg-soft-primary text-primary rounded-circle">
-                                                <i className="ri-calendar-2-fill"></i>
+                                                <i className="ri-calendar-2-fill" />
                                             </span>
                                         </div>
                                         <div>
@@ -142,7 +142,7 @@ class RecentlyActivity extends Component {
                                     <li className="activity-list">
                                         <div className="activity-icon avatar-xs">
                                             <span className="avatar-title bg-soft-primary text-primary rounded-circle">
-                                                <i className="ri-edit-2-fill"></i>
+                                                <i className="ri-edit-2-fill" />
                                             </span>
                                         </div>
                                         <div>
@@ -160,7 +160,7 @@ class RecentlyActivity extends Component {
                                     <li className="activity-list">
                                         <div className="activity-icon avatar-xs">
                                             <span className="avatar-title bg-soft-primary text-primary rounded-circle">
-                                                <i className="ri-user-2-fill"></i>
+                                                <i className="ri-user-2-fill" />
                                             </span>
                                         </div>
                                         <div>
@@ -182,7 +182,7 @@ class RecentlyActivity extends Component {
                         </CardBody>
                     </Card>
                 </Col>
-            </React.Fragment>
+            </>
         );
     }
 }
