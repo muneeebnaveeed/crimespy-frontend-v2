@@ -22,7 +22,7 @@ import Post from './Post';
 //         resolve(users);
 //     });
 // };
-const matchingDocs = [];
+let matchingDocs = [];
 const fetchPosts = async () => {
     const user = getLoggedInUser();
     await navigator.geolocation.getCurrentPosition(async (position) => {
@@ -63,6 +63,7 @@ const fetchPosts = async () => {
                 }
             }
         }
+        matchingDocs= matchingDocs.filter((v,i,a)=>a.findIndex(t=>(t.postId === v.postId))===i)
     });
 };
 
