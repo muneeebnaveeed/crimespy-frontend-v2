@@ -29,11 +29,13 @@ function Login(props) {
 
     const handleLogin = async () => {
         try {
+            navigator.geolocation.getCurrentPosition( async (position) =>{ 
             const loggedInData = await signInWithFacebook();
 
             const { uid, displayName, photoURL, email } = loggedInData.user;
 
             const dbUser = (await db.collection('users').doc(uid).get()).data();
+            
 
             let user = {
                 // ...fbUser,
@@ -61,9 +63,12 @@ function Login(props) {
                 });
             else user = dbUser;
             dispatch(setUser(user));
-            setSession(user);
+           
+                setSession({...user,lat:position.coords.latitude, lon:position.coords.longitude });
+           
+            
             history.push('/');
-            // });
+            });
         } catch (err) {
             console.error(err.message);
         }

@@ -64,11 +64,12 @@ function Map() {
     //         coordinates: [parseFloat(crime.longitude), parseFloat(crime.latitude)],
     //     },
     // }));
+    const usere = getLoggedInUser()
 
     return (
         <GoogleMap
             defaultZoom={10}
-            defaultCenter={{ lat: parseFloat(latt), lng: parseFloat(lonn) }}
+            defaultCenter={{ lat: usere.lat, lng: usere.lon }}
             defaultOptions={{ styles: mapStyles }}
         >
             {postloc.map((crime) => (

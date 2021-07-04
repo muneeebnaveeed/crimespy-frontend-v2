@@ -46,7 +46,7 @@ export default function CreateComment({ id, ...props }) {
             });
         }
 
-        await queryClient.invalidateQueries('feeds');
+        await queryClient.invalidateQueries(['comments',id]);
         form.resetForm();
         setIsCreatingComment(false);
     };

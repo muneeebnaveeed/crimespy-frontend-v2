@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 function Comment({ avatarUrl, userId, username, comment, id }) {
     return (
         <p className="mb-1">
-            <img src={avatarUrl} alt={username} />
+            <img style={{height:'60px'}} src={avatarUrl} alt={username} />
             <Link to={`/timeline?user=${userId}`}>
                 <strong className="mr-2">{username}</strong>
             </Link>
@@ -15,22 +15,23 @@ function Comment({ avatarUrl, userId, username, comment, id }) {
 }
 
 export default function Comments({ comments, id }) {
-    const commentse = [];
-    const commentRef = db.collection('comments');
-    commentRef
-        .doc(id)
-        .collection('comments')
-        .orderBy('timestamp', 'desc')
-        .onSnapshot((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-                commentse.push(doc?.data());
-            });
-        });
+    // const commentse = [];
+    // const commentRef = db.collection('comments');
+    // commentRef
+    //     .doc(id)
+    //     .collection('comments')
+    //     .orderBy('timestamp', 'desc')
+    //     .onSnapshot((querySnapshot) => {
+    //         querySnapshot.forEach((doc) => {
+    //             commentse.push(doc?.data());
+    //         });
+    //     });
 
     return (
         <div className="px-3 d-flex flex-column">
-            {comments.map((comment) => (
+            {comments?.map((comment) => (
                 <Comment {...comment} />
+          
             ))}
         </div>
     );
