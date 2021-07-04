@@ -37,7 +37,7 @@ const DashPermissions = ({ user }) => {
     };
 
     const formik = useFormik({
-        initialValues: user.permissions,
+        initialValues: user?.permissions,
         onSubmit: handleSubmit,
         validateOnChange: false,
     });
