@@ -1,298 +1,134 @@
-import React, { Component } from 'react';
+/* eslint-disable no-use-before-define */
+/* eslint-disable jsx-a11y/label-has-associated-control */
+import React, { Component, useState } from 'react';
 import * as firebaseui from 'firebaseui';
 import firebase from 'firebase';
 import 'firebaseui/dist/firebaseui.css';
-import { db } from 'helpers/auth';
+import { db, setSession } from 'helpers/auth';
+import { useFormik } from 'formik';
+import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setUser } from 'store/auth/actions';
 
-// class PhoneAuth extends Component {
-//     componentDidMount() {
-//         // firebase.initializeApp(firebaseConfig);
-//         const uiConfig = {
-//             signInOptions: [
-//                 {
-//                     provider: firebase.auth.PhoneAuthProvider.PROVIDER_ID,
-//                     recaptchaParameters: {
-//                         type: 'image',
-//                         size: 'normal',
-//                         badge: 'bottomleft',
-//                     },
-//                     defaultCountry: 'VN',
-//                 },
-//             ],
-//             callbacks: {
-//                 async signInSuccessWithAuthResult(authResult, redirectUrl) {
-//                     alert('successful', authResult.user.uid);
-//                     console.log('herere', authResult.user.uid);
-//                     let user = {
-//                         // ...fbUser,
-//                         id: authResult.user.uid,
-//                         displayName: 'PhoneUser',
+export default function PhoneAuth(props) {
+    const [mobile, setMobile] = useState('');
+    const [otp, setOtp] = useState('');
 
-//                         photoUrl: '',
-//                         role: 'user',
-//                         gender: '',
-//                         email: '',
+    const [mobileSent, setMobileSent] = useState(false);
+    const [otpSent, setOtpSent] = useState(false);
 
-//                         bio: '',
-//                         dob: '',
-//                         permissions: {
-//                             timeline: ['review'],
-//                             users: ['review'],
-//                             feed: [],
-//                             map: ['review'],
-//                             chart: ['review'],
-//                         },
-//                     };
-//                     const dbUser = (await db.collection('users').doc(authResult.user.uid).get()).data();
+    const history = useHistory();
+    const dispatch = useDispatch();
 
-//                     if (!dbUser)
-//                         // axios.post(`https://crimespy.herokuapp.com/users/id/${user.uid}/lat/${lat}/long/${lon}`, user).then((res) => {
-//                         //     console.log(res);
-//                         // });
-//                         //   axios.post(`https://crimespy.herokuapp.com/users/id/${authResult.user.uid}`, user).then((res) => {
-//                         //     console.log('here',res);
-//                         // });
-//                       await db.collection('users')
-//                             .doc(authResult.user.uid)
-//                             .set({ ...user, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
-//                     else user = dbUser;
-//                     return true;
-//                 },
-//             },
-//             signInSuccessUrl: '', 
-//         };
+    const handleSubmitMobile = (e) => {
+        e.preventDefault();
 
-//         const ui = new firebaseui.auth.AuthUI(firebase.auth());
-//         ui.start('#firebaseui-auth-container', uiConfig);
-//     }
+        if (mobileSent) return;
 
-//     render() {
-//         return <div id="firebaseui-auth-container" />;
-//     }
-// }
-
-// export default PhoneAuth;
-
-// import React from 'react'
-// import firebaseConfig from '../../helpers/firebaseConfig';
-// import * as firebaseui from 'firebaseui';
-// import firebase from 'firebase';
-// import 'firebaseui/dist/firebaseui.css';
-// import { db, setSession } from 'helpers/auth';
-// import { useDispatch } from 'react-redux';
-// import { setUser } from 'store/auth/actions';
-
-// export default function PhoneAuth() {
-
-// const dispatch = useDispatch();
-//     const uiConfig = {
-//         signInOptions: [{
-//           provider: firebase.auth.PhoneAuthProvider.PROVIDER_ID,
-//           recaptchaParameters: {
-//             type: 'image',
-//             size: 'normal',
-//             badge: 'bottomleft'
-//           },
-//           defaultCountry: 'VN'
-//         }],
-//         callbacks: {
-//           signInSuccessWithAuthResult: async function (authResult, redirectUrl){
-//             alert('successful',authResult.user.uid);
-//             console.log('herere',authResult.user.uid);
-//             let user = {
-//               // ...fbUser,
-//               id: authResult.user.uid,
-//               displayName:"PhoneUser",
-
-//               photoUrl: "",
-//               role: "user",
-//               gender: "",
-//               email:"",
-
-//               bio: "",
-//               dob: "",
-//               permissions: {
-//                   timeline: ["review"],
-//                   users: ["review"],
-//                   feed: [],
-//                   map: ["review"],
-//                   chart: ["review"],
-//               },
-
-//           };
-//           const dbUser = (await db.collection("users").doc(authResult.user.uid).get()).data();
-
-//           if (!dbUser)
-//           // axios.post(`https://crimespy.herokuapp.com/users/id/${user.uid}/lat/${lat}/long/${lon}`, user).then((res) => {
-//           //     console.log(res);
-//           // });
-//           //   axios.post(`https://crimespy.herokuapp.com/users/id/${authResult.user.uid}`, user).then((res) => {
-//           //     console.log('here',res);
-//           // });
-//           db.collection('users').doc(authResult.user.uid).set({...user,timestamp:firebase.firestore.FieldValue.serverTimestamp()})
-
-//           else user = dbUser;
-
-//         //   dispatch(setUser(user))
-//         //   setSession(user);
-//             return true;
-//           }
-//         },
-//         signInSuccessUrl : ""
-//       };
-
-//       var ui = new firebaseui.auth.AuthUI(firebase.auth());
-//       ui.start("#firebaseui-auth-container", uiConfig);
-
-//     //   ui.delete()
-//     return (
-//         <div id='firebaseui-auth-container'>
-
-//       </div>
-//     )
-// }
-
-
-
-export default class PhoneAuth extends Component {
-  constructor() {
-    super();
-    this.state = {
-      form: true,
-      alert: false,
+        setMobileSent(true);
+        setUpRecaptcha();
+        const phoneNumber = `+92${mobile}`;
+        const appVerifier = window.recaptchaVerifier;
+        firebase
+            .auth()
+            .signInWithPhoneNumber(phoneNumber, appVerifier)
+            .then((confirmationResult) => (window.confirmationResult = confirmationResult))
+            .catch(function (error) {
+                console.log(error);
+            });
     };
-  }
 
-  onChangeHandler = (event) => {
-    const { name, value } = event.target;
-    this.setState({
-      [name]: value,
-    });
-  };
+    const setUpRecaptcha = () => {
+        window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+            size: 'invisible',
+            callback(response) {
+                handleSubmitMobile();
+            },
+            defaultCountry: 'PK',
+        });
+    };
 
-  setUpRecaptcha = () => {
-    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
-      "recaptcha-container",
-      {
-        size: "invisible",
-        callback: function (response) {
-          console.log("Captcha Resolved");
-          this.onSignInSubmit();
-        },
-        defaultCountry: "IN",
-      }
-    );
-  };
+    const handleSubmitOTP = async (e) => {
+        e.preventDefault();
+        setOtpSent(true);
+        const optConfirm = window.confirmationResult;
+        optConfirm
+            .confirm(otp)
+            .then(async function (result) {
+                const user = {
+                    id: result.user.uid,
+                    displayName: 'PhoneUser',
+                    photoUrl: '',
+                    role: 'user',
+                    gender: '',
+                    email: '',
+                    bio: '',
+                    dob: '',
+                    permissions: {
+                        timeline: ['review'],
+                        users: ['review'],
+                        feed: [],
+                        map: ['review'],
+                        chart: ['review'],
+                    },
+                };
 
-  onSignInSubmit = (e) => {
-    e.preventDefault();
-    this.setUpRecaptcha();
-    let phoneNumber = "+1" +  this.state.mobile;
-    console.log(phoneNumber);
-    let appVerifier = window.recaptchaVerifier;
-    firebase
-      .auth()
-      .signInWithPhoneNumber(phoneNumber, appVerifier)
-      .then(function (confirmationResult) {
-        // SMS sent. Prompt user to type the code from the message, then sign the
-        // user in with confirmationResult.confirm(code).
-        window.confirmationResult = confirmationResult;
-        
-        // console.log(confirmationResult);
-        console.log("OTP is sent");
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
+                await db
+                    .collection('users')
+                    .doc(result.user.uid)
+                    .set({ ...user, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
 
-  onSubmitOtp = async (e) => {
-    e.preventDefault();
-    let otpInput = this.state.otp;
-    let optConfirm = window.confirmationResult;
-    console.log(otpInput);
-    optConfirm
-      .confirm(otpInput)
-      .then(async function (result) {
-        // User signed in successfully.
-        // console.log("Result" + result.verificationID);
-        // let user = result.user;
-        // const dbUser = await db.collection("users").doc(result.user.uid).get().data();
-        let user = {
-                        // ...fbUser,
-                        id: result.user.uid,
-                        displayName:"PhoneUser",
-          
-                        photoUrl: "",
-                        role: "user",
-                        gender: "",
-                        email:"",
-          
-                        bio: "",
-                        dob: "",
-                        permissions: {
-                            timeline: ["review"],
-                            users: ["review"],
-                            feed: [],
-                            map: ["review"],
-                            chart: ["review"],
-                        },
-          
-                    };
-        
-          // if (!dbUser)
-     
-         await db.collection('users').doc(result.user.uid).set({...user,timestamp:firebase.firestore.FieldValue.serverTimestamp()})
+                setSession(user);
+                dispatch(setUser(user));
 
-          // else user = dbUser;
+                history.push('/feed');
+            })
+            .catch(function (error) {
+                console.log(error);
+                alert('Incorrect OTP');
+            });
+    };
 
-        console.log('user', user)
-      })
-      .catch(function (error) {
-        console.log(error);
-        alert("Incorrect OTP");
-      });
-  };
-
-  render() {
     return (
-      <div className='phoneAuth'>
-      <div className='container'>
-        <div className='row justify-content-center align-items-center'>
-        <div className='col-sm-6 text-left'>
-        <h2 className='mt-3'>
-          Phone Login
-        </h2>
-        <form onSubmit={this.onSignInSubmit}>
-        <div id='recaptcha-container'></div>
-          <div className="form-group mt-5">
-          <label for='exampleInputEmail'>
-            Phone Number
-          </label>
-          <input type='number' name='mobile' className='form-control' onChange={this.onChangeHandler}/>
-          </div>
-          <button type='submit' className="btn btn-primary">
-          Submit
-          </button>
-        </form>
+        <div className="phoneAuth">
+            <div className="container">
+                <div className="row justify-content-center align-items-center">
+                    <div className="col-sm-6 text-left">
+                        <h2 className="mt-3">Phone Login</h2>
+                        <form onSubmit={handleSubmitMobile}>
+                            <div id="recaptcha-container" />
+                            <div className="form-group mt-5">
+                                <label htmlFor="exampleInputEmail">Phone Number</label>
+                                <input
+                                    type="number"
+                                    name="mobile"
+                                    className="form-control"
+                                    onChange={(e) => setMobile(e.target.value)}
+                                />
+                            </div>
+                            <button type="submit" className="btn btn-primary">
+                                {mobileSent ? 'OTP IS SENT!' : 'Submit'}
+                            </button>
+                        </form>
 
-        <form onSubmit={this.onSubmitOtp}>
-     
-          <div className="form-group mt-5">
-          <label for='exampleInputEmail'>
-            OTP
-          </label>
-          <input type='number' id='otp' name='otp' className='form-control' onChange={this.onChangeHandler}/>
-          </div>
-          <button type='submit' className="btn btn-primary">
-          Submit
-          </button>
-        </form>
+                        <form onSubmit={handleSubmitOTP}>
+                            <div className="form-group mt-5">
+                                <label htmlFor="exampleInputEmail">OTP</label>
+                                <input
+                                    type="number"
+                                    id="otp"
+                                    name="otp"
+                                    className="form-control"
+                                    onChange={(e) => setOtp(e.target.value)}
+                                />
+                            </div>
+                            <button type="submit" className="btn btn-primary">
+                                {otpSent ? 'Loading...' : 'Submit'}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-        </div>
-      </div>
-        
-      </div>
     );
-  }
 }
