@@ -22,6 +22,7 @@ import Post from './Post';
 //         resolve(users);
 //     });
 // };
+
 let matchingDocs = [];
 const fetchPosts = async () => {
     const user = getLoggedInUser();
@@ -63,19 +64,15 @@ const fetchPosts = async () => {
                 }
             }
         }
-        matchingDocs= matchingDocs.filter((v,i,a)=>a.findIndex(t=>(t.postId === v.postId))===i)
+        matchingDocs = matchingDocs.filter((v, i, arr) => arr.findIndex((t) => t.postId === v.postId) === i);
     });
 };
 
 function Posts(props) {
-    const posts = useModifiedQuery('posts', fetchPosts);
-
-    const editPostDisclosure = useDisclosure();
-    const [selectedPost, setSelectedPost] = useState(null);
+    const posts = useModifiedQuery('posts', function () {});
 
     return (
         <>
-            {console.log('dasdasda', matchingDocs)}
             {matchingDocs?.map((post, i) => (
                 <Row key={i}>
                     <Col xs={12} className="d-flex justify-content-center">
