@@ -58,7 +58,7 @@ const fetchPosts = async () => {
                 if (inmeters > 5000) {
                     console.log('condition not matching', inmeters);
                 } else {
-                    matchingDocs.push({ id: doc.id, photo: userarea.data().photoUrl, ...doc.data() });
+                    matchingDocs.push({ id: doc.id, photo: userarea.data()?.photoUrl, ...doc.data() });
                     console.log('dds', userarea.data().photoUrl);
                 }
             }

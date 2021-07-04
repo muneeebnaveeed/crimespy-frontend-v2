@@ -29,10 +29,10 @@ const SetName = () => {
 
         try {
             console.log(info);
-            axios.put(`https://crimespy.herokuapp.com/users/id/${user.uid}`, info).then((res) => {
-                console.log('reply from cache', res);
-            });
-            // await db.collection("users").doc(user.uid).update(info);
+            // axios.put(`https://crimespy.herokuapp.com/users/id/${user.uid}`, info).then((res) => {
+            //     console.log('reply from cache', res);
+            // });
+            await db.collection("users").doc(user.id).update(info);
             console.log('updated');
             showSuccessToast({ message: 'General Information has been updated successfully' });
             setIsupdatin(false);

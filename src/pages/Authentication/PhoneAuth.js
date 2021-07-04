@@ -73,6 +73,7 @@ export default function PhoneAuth(props) {
                     },
                 };
 
+                
                 await db
                     .collection('users')
                     .doc(result.user.uid)
