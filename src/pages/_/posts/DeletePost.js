@@ -5,7 +5,7 @@ import React, { useCallback, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { Label, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 
-function DeleteUser({ isOpen, toggle, postId }) {
+function DeleteUser({ isOpen, toggle, postId,ownerId }) {
     const [isDeletePost, setIsDeletePost] = useState(false);
 
     const queryClient = useQueryClient();
@@ -17,8 +17,13 @@ function DeleteUser({ isOpen, toggle, postId }) {
         setIsDeletePost(true);
 
         try {
-            await db.collection('feeds').doc(postId).delete();
-            await queryClient.invalidateQueries('feeds');
+            await db.collection('posts').doc(ownerId).collection('userPosts').doc(postId).delete().then(function () {
+                console.log('delete Users info successfully');
+            })
+            .catch(function (error) {
+                console.log(`Errors post info ${error}`);
+            });
+            await queryClient.invalidateQueries('posts');
             showSuccessToast({ message: 'Post has been deleted successfully' });
         } catch (err) {
             showErrorToast({ message: 'Unable to delete user' });
@@ -26,6 +31,7 @@ function DeleteUser({ isOpen, toggle, postId }) {
         setIsDeletePost(false);
         console.log('will do it in server');
     };
+    console.log('ownerid',ownerId, postId)
 
     return (
         <Modal isOpen={isOpen} toggle={toggleModal} centered>

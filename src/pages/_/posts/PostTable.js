@@ -45,6 +45,7 @@ function PostsTable(props) {
 
     const [changingRole, setChangingRole] = useState(null);
     const [postId, setPostId] = useState('');
+    const [ownerId, setOwnerId] = useState('');
     const [post, setPost] = useState([]);
 
     const HandleViewPost = async (p) => {
@@ -57,9 +58,11 @@ function PostsTable(props) {
         setPost(p);
     };
 
-    const handlePassInfoShow = async (id) => {
+    const handlePassInfoShow = async (id,ownerid) => {
         toggle();
+        console.log('idd', ownerid)
         setPostId(id);
+        setOwnerId(ownerid)
     };
 
     const isAuthorized = usePermissions('poststable');
@@ -107,17 +110,17 @@ function PostsTable(props) {
 
                                         <Th>
                                             <ButtonGroup>
-                                                <Button color="light" size="sm" onClick={() => HandleViewPost(post)}>
+                                                <Button color="light" size="sm" onClick={() => HandleViewPost(p)}>
                                                     <i className="fas fa-eye" />
                                                 </Button>
-                                                <Button color="light" size="sm" onClick={() => HandleVerifyPost(post)}>
+                                                <Button color="light" size="sm" onClick={() => HandleVerifyPost(p)}>
                                                     <i className="fas fa-check" />
                                                 </Button>
                                                 {isAuthorized('delete') && (
                                                     <Button
                                                         color="light"
                                                         size="sm"
-                                                        onClick={() => handlePassInfoShow(post.postId)}
+                                                        onClick={() => handlePassInfoShow(p.postId, p.ownerId)}
                                                     >
                                                         <i className="fas fa-trash-alt" />
                                                     </Button>
@@ -134,8 +137,8 @@ function PostsTable(props) {
                     </Table>
                 </CardBody>
             </Card>
-            <DeletePost isOpen={isOpen} toggle={toggle} postId={postId} />
-            <ViewPost isOpen={ViewDisclosure.isOpen} toggle={ViewDisclosure.toggle} post={post} />
+            <DeletePost isOpen={isOpen} toggle={toggle} postId={postId} ownerId={ownerId}  />
+            <ViewPost isOpen={ViewDisclosure.isOpen} toggle={ViewDisclosure.toggle} post={post}  />
             <VerifyPost isOpen={VerifyDisclosure.isOpen} toggle={VerifyDisclosure.toggle} post={post} />
         </>
     );
