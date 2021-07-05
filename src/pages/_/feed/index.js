@@ -50,6 +50,8 @@ function Feed() {
                                         width: '100%',
                                         backgroundColor: '#fff',
                                         cursor: 'pointer',
+                                        borderRadius:'5px',
+                                        boxShadow:'2px 2px 4px #000000'
                                     }}
                                     className="rounded d-flex justify-content-center align-items-center shadow-sm p-4"
                                     onClick={createPostDisclosure.toggle}

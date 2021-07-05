@@ -27,8 +27,8 @@ function Post({ username, profileUrl, description, comments, id, photoURL, Title
 
     const handleDelete = useCallback(async () => {
         setIsDeletingPost(true);
-        await axios.delete(`https://crimespy.herokuapp.com/posts/id/${user.uid}/${id}`);
-        await queryClient.invalidateQueries('feeds');
+        await axios.delete(`https://crimespy.herokuapp.com/posts/id/${user.id}/${id}`);
+        await queryClient.invalidateQueries('posts');
         setIsDeletingPost(false);
     }, [setIsDeletingPost]);
 
@@ -72,7 +72,7 @@ function Post({ username, profileUrl, description, comments, id, photoURL, Title
 
         const snapshot = db.collection('comments').doc(id)
         .collection('comments')
-        .orderBy('timestamp', 'desc').get();
+        .orderBy('timestamp', 'asc').get();
         const { docs } = await snapshot;
     
         return new Promise((resolve, reject) => {
@@ -86,7 +86,7 @@ function Post({ username, profileUrl, description, comments, id, photoURL, Title
     }
     const commentse = useModifiedQuery(['comments',id],fetchComments)
     
-    console.log("comment",commentse)
+    console.log("comment",ownerId)
     return (
         <Card className="m-0 mt-4" style={{ maxWidth: 840 }}>
             <CardBody className="p-0">
@@ -117,7 +117,7 @@ function Post({ username, profileUrl, description, comments, id, photoURL, Title
                                 <i className="fas fa-ellipsis-h" style={{ color: 'black' }} />
                             </DropdownToggle>
                             <DropdownMenu right>
-                                <If condition={user.uid === ownerId || arePostAuthorized('delete')}>
+                                <If condition={user.id === ownerId || arePostAuthorized('delete')}>
                                     <DropdownItem onClick={handleDelete}>
                                         <i className="fas fa-trash-alt mr-1" />
                                         Delete
