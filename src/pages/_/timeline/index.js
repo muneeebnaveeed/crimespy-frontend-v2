@@ -22,10 +22,27 @@ const breadcrumbItems = [
     },
 ];
 
-const fetchPosts = async ({ currentUser }) =>
-    // const user = getLoggedInUser();
-    Axios.get(`https://crimespy.herokuapp.com/posts/id/${currentUser.uid}`).then((res) => res.data);
 const user = getLoggedInUser();
+const fetchPosts = async ({ currentUser }) =>{
+ 
+  return  Axios.get(`https://crimespy.herokuapp.com/posts/id/${user.id}`).then((res) => res.data);
+}
+
+
+// const fetchPosts = async () => {
+//     const snapshot = db.collection("posts").doc(user.id).collection('userPosts').get();
+//     const docs = (await snapshot).docs;
+
+//     return new Promise((resolve, reject) => {
+//         const users = docs.map((doc) => ({
+//             id: doc.id,
+//             ...doc.data(),
+//         }));
+//         resolve(users);
+//     });
+// };
+    
+// const user = getLoggedInUser();
 
 function TimeLinePosts(props) {
     const posts = useModifiedQuery('timeline', fetchPosts);
