@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ButtonGroup, Card, CardBody, Table } from 'reactstrap';
 
 // Import Breadcrumb
@@ -16,28 +16,29 @@ import ViewPost from './ViewPost';
 import VerifyPost from './VerifyPost';
 import SearchTask from '../feed/SearchTask';
 
-const fetchPosts = async () => {
-    const snapshot = db
-        .collectionGroup('userPosts')
-        .where('postVerified', '==', false)
-        .orderBy('timestamp', 'desc')
-        .get();
+// const fetchPosts = async () => {
+//     // const snapshot = db
+//     //     .collectionGroup('userPosts')
+//     //     .where('postVerified', '==', false)
+//     //     .orderBy('timestamp', 'desc')
+//     //     .get();
 
-    // const snapshot = db.collection("users").get();
-    const { docs } = await snapshot;
+//     // // const snapshot = db.collection("users").get();
+//     // const { docs } = await snapshot;
 
-    return new Promise((resolve, reject) => {
-        const postss = docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-        }));
-        resolve(postss);
-    });
-};
+//     // return new Promise((resolve, reject) => {
+//     //     const postss = docs.map((doc) => ({
+//     //         id: doc.id,
+//     //         ...doc.data(),
+//     //     }));
+//     //     resolve(postss);
+//     // });
+  
+// };
 
 function PostsTable(props) {
     //   const users = useModifiedQuery("users", fetchUsers);
-    const posts = useModifiedQuery('feeds', fetchPosts);
+    
     //  const presets = useModifiedQuery("presets", fetchPresets);
     const { isOpen, toggle, onOpen } = useDisclosure();
     const ViewDisclosure = useDisclosure();
@@ -45,8 +46,49 @@ function PostsTable(props) {
 
     const [changingRole, setChangingRole] = useState(null);
     const [postId, setPostId] = useState('');
+    const [poster, SetPoster] = useState([])
     const [ownerId, setOwnerId] = useState('');
     const [post, setPost] = useState([]);
+
+
+
+    const fetchPosts = async () => {
+        // const snapshot = db
+        //     .collectionGroup('userPosts')
+        //     .where('postVerified', '==', false)
+        //     .orderBy('timestamp', 'desc')
+        //     .get();
+    
+        // // const snapshot = db.collection("users").get();
+        // const { docs } = await snapshot;
+    
+        // return new Promise((resolve, reject) => {
+        //     const postss = docs.map((doc) => ({
+        //         id: doc.id,
+        //         ...doc.data(),
+        //     }));
+        //     resolve(postss);
+        // });
+        const ref= db
+        .collectionGroup('userPosts')
+        
+        // .orderBy('timestamp', 'desc');
+    
+      await ref.onSnapshot((querySnapshot) =>{
+            const items =[]
+            querySnapshot.forEach((doc) =>{
+                items.push(doc.data());
+    
+            });
+            SetPoster(items);
+            // resolve(items);
+            
+        })
+    };
+
+
+
+
 
     const HandleViewPost = async (p) => {
         ViewDisclosure.toggle();
@@ -64,6 +106,12 @@ function PostsTable(props) {
         setPostId(id);
         setOwnerId(ownerid)
     };
+    const posts = useModifiedQuery('feeds', fetchPosts);
+
+    useEffect(() => {
+        fetchPosts();
+        console.log('pdsdasda', posts)
+    }, [])
 
     const isAuthorized = usePermissions('poststable');
 
@@ -73,14 +121,14 @@ function PostsTable(props) {
                 <CardBody
                     className="pt-0"
                     style={
-                        posts.data?.length
+                        poster?.length
                             ? {}
                             : {
                                   minHeight: 350,
                               }
                     }
                 >
-                    <SearchTask />
+                    {/* <SearchTask /> */}
                     <Table
                         responsive
                         size="xl"
@@ -99,7 +147,7 @@ function PostsTable(props) {
                         </thead>
                         <tbody>
                             {' '}
-                            {posts.data?.map((p, i) => (
+                            {poster?.map((p, i) => (
                                 <>
                                     <tr key={i}>
                                         <Th scope="row" key={i}>
@@ -131,7 +179,7 @@ function PostsTable(props) {
                                 </>
                             ))}
                         </tbody>
-                        {!posts.data?.length && !posts.isLoading && !posts.isError && (
+                        {!poster?.length && !poster.isLoading && !poster.isError && (
                             <caption style={{ textAlign: 'center' }}>No posts found</caption>
                         )}
                     </Table>

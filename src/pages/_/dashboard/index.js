@@ -33,7 +33,7 @@ const breadcrumbItems = [
 
 const fetchPosts = async () => {
     const { latitude, longitude } = getLoggedInUser();
-    return Axios.get(`https://crimespy.herokuapp.com/posts/lat/${latitude}/lon/${longitude}`).then((res) => res.data);
+    // return Axios.get(`https://crimespy.herokuapp.com/posts/lat/${latitude}/lon/${longitude}`).then((res) => console.log('res',res.data));
 };
 
 const user = getLoggedInUser();
@@ -69,7 +69,7 @@ const Dashboard = () => {
             setReports((prev) => ({
                 number: {
                     ...prev.number,
-                    value: posts.data.length,
+                    value: posts?.data?.length,
                 },
             }));
     }, [posts.isSuccess]);
