@@ -55,12 +55,13 @@ export default function PhoneAuth(props) {
         optConfirm
             .confirm(otp)
             .then(async function (result) {
-                const user = {
+                const dbUser = await (await db.collection('users').doc(result.user.uid).get()).data();
+                let user = {
                     id: result.user.uid,
                     displayName: 'PhoneUser',
                     photoUrl: '',
                     role: 'user',
-                    gender: '',
+                    gender: 'Male',
                     email: '',
                     bio: '',
                     dob: '',
@@ -72,21 +73,31 @@ export default function PhoneAuth(props) {
                         chart: ['review'],
                     },
                 };
+                navigator.geolocation.getCurrentPosition(async (position) =>{
 
-                
-                await db
-                    .collection('users')
-                    .doc(result.user.uid)
-                    .set({ ...user, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
+                    if (!dbUser){
+                        await db
+                        .collection('users')
+                        .doc(result.user.uid)
+                        .set({ ...user, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
+                    }
+                    else user = dbUser;
+                    
+                  
+    
+                    setSession({...user,lat:position.coords.latitude,lon:position.coords.longitude});
+                    dispatch(setUser(user));
+    
+                    history.push('/feed');
+                    
+                })
 
-                setSession(user);
-                dispatch(setUser(user));
-
-                history.push('/feed');
+               
             })
             .catch(function (error) {
-                console.log(error);
-                alert('Incorrect OTP');
+                console.log(error.response);
+                debugger;
+                // alert('Incorrect OTP');
             });
     };
 

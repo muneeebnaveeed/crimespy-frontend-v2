@@ -100,7 +100,7 @@ console.log('user', posts.data)
                             description={post.description}
                             photoURL={post.mediaUrl}
                             Title={post.Title}
-                            verified={post.verified}
+                            verified={post.peopleVerifiedPost}
                             postVerified={post.postVerified}
                         />
                     </Col>

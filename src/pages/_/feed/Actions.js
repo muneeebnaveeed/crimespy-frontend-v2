@@ -4,7 +4,7 @@ import { db, getLoggedInUser } from 'helpers/auth';
 import React, { useCallback, useState, useEffect } from 'react';
 import { useQueryClient } from 'react-query';
 
-function Action({ active, username, verified, user, ...props }) {
+function Action({ active, username, verified,ownerId, user, ...props }) {
     return (
         <div
             role="button"
@@ -22,50 +22,48 @@ function Action({ active, username, verified, user, ...props }) {
     );
 }
 
-function Actions({ username, verified, id, user, postVerified }) {
+function Actions({ username, verified, id, user, postVerified,ownerId }) {
     const [isVoting, setVoting] = useState(false);
     const [votedPosts, setVotedPosts] = useState([]);
     const [votingii, setVotingii] = useState(null);
     const queryClient = useQueryClient();
     // const postRef = db.collection("posts").doc(user.uid).collection("userPosts").doc(id);
-    const postRef = db.collection('feeds').doc(id);
-
+    const postRef = db.collection('posts').doc(ownerId).collection('userPosts').doc(id);
+// 
     useEffect(() => {
         console.log(Object.values(verified).filter(Boolean).length);
         const value = Object.values(verified).filter(Boolean).length;
         let verifiedPost;
-        if (value === 1) {
+        if (value === 5) {
             postRef.update({ postVerified: true });
         }
     }, [verified]);
 
-    const handleClick = async (type) => {
+    const handleClick = async () => {
         // Do calculation to save the vote.
         setVoting(true);
         let updatedverificationStatus;
 
         const loggeduser = getLoggedInUser();
 
-        const oldverified = await (await postRef.get()).data().verified;
+        const oldverified = await (await postRef.get()).data().peopleVerifiedPost;
+        console.log('oldverified',oldverified)
 
-        const verificationStatus = oldverified[loggeduser.uid];
+        const verificationStatus = oldverified[loggeduser.id];
+        
 
-        if (type == 'upvote') {
+        
             if (verificationStatus == true) {
                 updatedverificationStatus = null;
             } else {
                 updatedverificationStatus = true;
             }
-        } else if (verificationStatus == false) {
-            updatedverificationStatus = null;
-        } else {
-            updatedverificationStatus = false;
-        }
+          
 
         await postRef.update({
-            verified: {
+            peopleVerifiedPost: {
                 ...oldverified,
-                [user.uid]: updatedverificationStatus,
+                [loggeduser.id]: updatedverificationStatus,
             },
         });
 
@@ -76,21 +74,25 @@ function Actions({ username, verified, id, user, postVerified }) {
 
     // let upVotesCount = verifiedpost;
     // let downVotesCount = notverified;
-    const isSelectBusy = votingii === verified[user.uid];
+    // const isSelectBusy = votingii === verified[user.uid];
     return (
         <div className="d-flex px-3">
             <div className="d-flex mr-4">
-                <Action active={verified[user.uid]}>
-                    <i className="fa fa-arrow-up" onClick={() => handleClick('upvote')} isLoading={isVoting} />
+            {
+                
+                console.log('ac',verified[user.id])
+            }
+                <Action active={verified[user.id]}>
+                    <i className="fa fa-arrow-up" onClick={handleClick} isLoading={isVoting} />
                 </Action>
                 <p />
             </div>
-            <div className="d-flex">
+            {/* <div className="d-flex">
                 <Action active={verified[user.uid] === false}>
                     <i className="fa fa-arrow-down" onClick={() => handleClick('downvote')} isLoading={isVoting} />
                 </Action>
                 <p />
-            </div>
+            </div> */}
         </div>
     );
 }

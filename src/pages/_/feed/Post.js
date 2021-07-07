@@ -157,7 +157,7 @@ function Post({ username, profileUrl, description, comments, id, photoURL, Title
                 </div>
 
                 <p className="p-3 m-0">{description}</p>
-                {/* <Actions username={username} verified={verified} postVerified={postVerified} user={user} id={id} /> */}
+                <Actions username={username} verified={verified} postVerified={postVerified} user={user} id={id} ownerId={ownerId} />
                 <Comments username={username} comments={commentse.data} id={id}  />
                 <When condition={isAuthorized('createComment')}>
                     <CreateComment id={id} comments={comments} />

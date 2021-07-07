@@ -44,7 +44,7 @@ function Login(props) {
 
                 photoUrl: photoURL,
                 role: 'user',
-                gender: '',
+                gender: 'Male',
                 email,
 
                 bio: '',

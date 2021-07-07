@@ -1,124 +1,154 @@
-import React, { useCallback, useRef, useState } from 'react';
-import Button from 'components/Common/Button';
-import Geocode from "react-geocode";
-
-
+import React from "react";
+import Button from "components/Common/Button";
+import { useCallback, useMemo, useRef, useState } from "react";
+import axios from "axios";
 import {
+    Form,
     FormFeedback,
     FormGroup,
     InputGroup,
     InputGroupAddon,
+    FormText,
     Label,
     Modal,
     ModalBody,
     ModalFooter,
     ModalHeader,
-} from 'reactstrap';
-import Input from 'reactstrap/lib/Input';
-import { useFormik } from 'formik';
-import Select from 'components/Common/Select';
-import firebase from 'firebase';
-import { postSchema } from 'helpers/schema';
-import { db, getLoggedInUser, storage } from 'helpers/auth';
-import makeid from 'helpers/imagefunction';
-import { useQueryClient } from 'react-query';
-import { showSuccessToast } from 'helpers/showToast';
+} from "reactstrap";
+import Input from "reactstrap/lib/Input";
+import { Formik, useFormik } from "formik";
+import { Col, Row } from "reactstrap/lib";
+import Select from "components/Common/Select";
+import firebase from "firebase";
+import { postSchema } from "helpers/schema";
+import { db, getLoggedInUser, storage } from "helpers/auth";
+import makeid from "helpers/imagefunction";
+import { useQueryClient } from "react-query";
+import { showSuccessToast } from "helpers/showToast";
 import PlacesAutocomplete, {
     geocodeByAddress,
     getLatLng
   } from "react-places-autocomplete";
-// import crimeCategories from "config/crimeCategories";
-import crimeCategories from 'config/crimeCategories';
-import { v4 as uuid } from 'uuid';
+import crimeCategories from "config/crimeCategories";
+const geofire = require("geofire-common");
 
-
-const geofire = require('geofire-common');
 
 const CreatePost = ({ toggle, isOpen }) => {
+    const uuid = (a) => {
+        return a
+            ? (a ^ ((Math.random() * 16) >> (a / 4))).toString(16)
+            : ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, uuid);
+    };
+    const postRef = db.collection("posts");
     const fileimageRef = useRef();
     const user = getLoggedInUser();
     const [isCreatingPost, setIsCreatingPost] = useState(false);
     const [isGettingGeo, setIsgettingGeo] = useState(false);
     const queryClient = useQueryClient();
     const [address, setAddress] = React.useState("");
-    const [addressforField, setAddressforField] = React.useState("");
-    const [coordinates, setCoordinates] = React.useState({
-      lat: null,
-      lng: null
-    });
-    Geocode.setApiKey(process.env.REACT_APP_GOOGLE_KEY);
+  const [coordinates, setCoordinates] = React.useState({
+    lat: null,
+    lng: null
+  });
 
-    const toggleModal = useCallback(() => {
-        if (!isCreatingPost) toggle();
-    }, [isCreatingPost, toggle]);
+    const handleChange = (e) => {
+        e.preventDefault();
+        if (e.target.files[0]) {
+            formik.setFieldValue("image", e.target.files[0]);
+            var selectedImageSrc = URL.createObjectURL(e.target.files[0]);
 
-    const handleSubmit = useCallback(
-        (values) => {
-            const postId = uuid();
-            console.log('imageid', values.image);
-            const uploadTask = storage.ref(`post_${postId}.jpg`).put(values.image);
-            Geocode.fromAddress(values.location).then(
-                (response) => {
-                  const { lat, lng } = response.results[0].geometry.location;
-                  console.log(lat, lng);
-                },
-                (error) => {
-                  console.error(error);
+            var imagepreview = document.getElementById("image-preview");
+            imagepreview.src = selectedImageSrc;
+            imagepreview.style.display = "block";
+        }
+    };
+
+    const handleSelect = async value =>{
+        const results = await geocodeByAddress(value);
+        const latLng = await getLatLng(results[0]);
+        setAddress(value);
+        setCoordinates(latLng);
+    }
+
+    const handleCurrentLocation = async () => {
+        setIsgettingGeo(true);
+        await navigator.geolocation.getCurrentPosition((position) => {
+            const lat = position.coords.latitude.toString();
+            const lon = position.coords.longitude.toString();
+
+            formik.setFieldValue("latitude", lat);
+            formik.setFieldValue("longitude", lon);
+        });
+        setIsgettingGeo(false);
+    };
+
+    const handleSubmit = useCallback((values) => {
+        var imageName = makeid(10);
+        const postId = uuid();
+        console.log('imageid', postId)
+        const uploadTask = storage.ref(`post_${postId}.jpg`).put(values.image);
+        setIsCreatingPost(true);
+        uploadTask.on(
+            "state_changed",
+            (snapshot) => {},
+            (error) => {
+                console.log(error);
+            },
+            async () => {
+                // const postId = uuid();
+
+                try {
+                    const imageUrl = await storage.ref().child(`post_${postId}.jpg`).getDownloadURL();
+                    const hash = geofire.geohashForLocation([
+                        parseFloat(values.latitude),
+                        parseFloat(values.longitude),
+                    ]);
+
+                    const newPost = {
+                        postId: postId,
+                        ownerId: user.id,
+                        longitude: parseFloat(values.longitude),
+                        latitude: parseFloat(values.latitude),
+                        // geohash: hash,
+                        Title: values.title,
+                        peopleVerifiedPost: {},
+                        description: values.description,
+                        location: values.location,
+                        mediaUrl: imageUrl,
+                        postVerified: false,
+                        category: values.crimeCategory,
+                        username: user.displayName.toLowerCase(),
+
+                       
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                    };
+                    console.log("posting");
+                    db.collection('posts').doc(user.id).collection('userPosts').doc(postId).set(newPost);
+                    // await axios.post(`https://crimespy.herokuapp.com/posts`, newPost);
+                    await queryClient.invalidateQueries("feeds");
+                    showSuccessToast({ message: "Post has been created" });
+                    toggleModal();
+                    setIsCreatingPost(false);
+                } catch (err) {
+                    console.error(err.message);
                 }
-              );
-            setIsCreatingPost(true);
-            uploadTask.on(
-                'state_changed',
-                (snapshot) => {},
-                (error) => {
-                    console.log(error);
-                },
-                async () => {
-                    try {
-                        const imageUrl = await storage.ref().child(`post_${postId}.jpg`).getDownloadURL();
-
-                        const newPost = {
-                            postId,
-                            ownerId: user.id,
-                            longitude: parseFloat(values.longitude),
-                            latitude: parseFloat(values.latitude),
-                            Title: values.title,
-                            peopleVerifiedPost: {},
-                            description: values.description,
-                            location: values.location,
-                            mediaUrl: imageUrl,
-                            postVerified: false,
-                            category: values.crimeCategory,
-                            username: user.displayName.toLowerCase(),
-                            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                        };
-                        db.collection('posts').doc(user.id).collection('userPosts').doc(postId).set(newPost);
-                        await queryClient.invalidateQueries('posts');
-                        showSuccessToast({ message: 'Post has been created' });
-                        toggleModal();
-                        setIsCreatingPost(false);
-                    } catch (err) {
-                        console.error(err.message);
-                    }
-                }
-            );
-        },
-        [queryClient, toggleModal, user.displayName, user.id]
-    );
+            }
+        );
+    }, []);
 
     const formik = useFormik({
         initialValues: {
-            title: '',
-            description: '',
-            location: '',
-            image: '',
+            title: "",
+            description: "",
+            location: "",
+            image: "",
             crimeCategory: crimeCategories[0].value,
-            longitude: '',
-            latitude: '',
+            longitude: "",
+            latitude: "",
         },
         onSubmit: handleSubmit,
         validate: (values) => {
-            const errors = {};
+            let errors = {};
 
             const validationErrors = postSchema.validate(values, { abortEarly: false })?.error?.details;
 
@@ -128,45 +158,10 @@ const CreatePost = ({ toggle, isOpen }) => {
         },
         validateOnChange: false,
     });
-    const handleSelect = async value =>{
-        const results = await geocodeByAddress(value);
-        const latLng = await getLatLng(results[0]);
-        setAddress(value);
-        setCoordinates(latLng);
-    }
-    const handleChange = (e) => {
-        e.preventDefault();
-        if (e.target.files[0]) {
-            formik.setFieldValue('image', e.target.files[0]);
-            const selectedImageSrc = URL.createObjectURL(e.target.files[0]);
 
-            const imagepreview = document.getElementById('image-preview');
-            imagepreview.src = selectedImageSrc;
-            imagepreview.style.display = 'block';
-        }
-    };
-
-    const handleCurrentLocation = async () => {
-        setIsgettingGeo(true);
-        await navigator.geolocation.getCurrentPosition((position) => {
-            const lat = position.coords.latitude.toString();
-            const lon = position.coords.longitude.toString();
-            
-            Geocode.fromLatLng(lat, lon).then(
-                (response) => {
-                  const address = response.results[0].formatted_address;
-                  console.log("address",address);
-                  setAddressforField(address)
-                },
-                (error) => {
-                  console.error(error);
-                }
-              );
-            formik.setFieldValue('latitude', lat);
-            formik.setFieldValue('longitude', lon);
-        });
-        setIsgettingGeo(false);
-    };
+    const toggleModal = useCallback(() => {
+        if (!isCreatingPost) toggle();
+    }, [isCreatingPost, toggle]);
 
     return (
         <>
@@ -211,13 +206,13 @@ const CreatePost = ({ toggle, isOpen }) => {
                                 options={crimeCategories}
                                 defaultValue={crimeCategories[0]}
                                 customStyles={{ menu: { maxHeight: 250 } }}
-                                onChange={(crimeCategory) => formik.setFieldValue('crimeCategory', crimeCategory.value)}
+                                onChange={(crimeCategory) => formik.setFieldValue("crimeCategory", crimeCategory.value)}
                             />
                         </FormGroup>
                         <FormGroup>
                             <Label for="location">Location</Label>
                             <InputGroup>
-                                <Input
+                                {/* <Input
                                     type="text"
                                     name="location"
                                     id="location"
@@ -225,19 +220,19 @@ const CreatePost = ({ toggle, isOpen }) => {
                                     placeholder="Enter the events location here"
                                     onChange={formik.handleChange}
                                     value={formik.value}
-                                />
-                                {/* <PlacesAutocomplete
+                                /> */}
+                                <PlacesAutocomplete
         value={address}
         onChange={setAddress}
         onSelect={handleSelect}
       >
 
 {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-          <div key={suggestions.description}> */}
+          <div key={suggestions.description}>
             {/* <p>Latitude: {coordinates.lat}</p>
             <p>Longitude: {coordinates.lng}</p> */}
 
-            {/* <input {...getInputProps({ placeholder: "Type address" })} />
+            <input {...getInputProps({ placeholder: "Type address" })} />
 
             <div>
               {loading ? <div>...loading</div> : null}
@@ -245,9 +240,9 @@ const CreatePost = ({ toggle, isOpen }) => {
               {suggestions.map(suggestion => {
                 const style = {
                   backgroundColor: suggestion.active ? "#41b6e6" : "#fff"
-                }; */}
+                };
 
-                {/* return (
+                return (
                   <div {...getSuggestionItemProps(suggestion, { style })}>
                     {suggestion.description}
                   </div>
@@ -255,9 +250,8 @@ const CreatePost = ({ toggle, isOpen }) => {
               })}
             </div>
           </div>
-        )} */}
-      {/* </PlacesAutocomplete> */}
-
+        )}
+      </PlacesAutocomplete>
                                 <InputGroupAddon addonType="append">
                                     <Button
                                         color="warning"
@@ -274,28 +268,28 @@ const CreatePost = ({ toggle, isOpen }) => {
                         </FormGroup>
                         <FormGroup
                             style={{
-                                display: 'flex',
-                                justifyContent: 'space-between',
+                                display: "flex",
+                                justifyContent: "space-between",
                             }}
                         >
                             <Label
                                 className="image_preview"
                                 style={{
-                                    height: '36PX',
-                                    width: '30PX',
-                                    borderRadius: '4px',
+                                    height: "36PX",
+                                    width: "30PX",
+                                    borderRadius: "4px",
                                 }}
                             >
-                                <img id="image-preview" style={{ height: '100%' }} alt="" />
+                                <img id="image-preview" style={{ height: "100%" }} alt="" />
                             </Label>
                             <Label
                                 className="customImageBtn"
                                 style={{
-                                    border: '1px solid #ccc',
-                                    display: 'inline-block',
-                                    padding: '6px 12px',
-                                    cursor: 'pointer',
-                                    backgroundColor: '',
+                                    border: "1px solid #ccc",
+                                    display: "inline-block",
+                                    padding: "6px 12px",
+                                    cursor: "pointer",
+                                    backgroundColor: "",
                                 }}
                             >
                                 <Input
@@ -304,7 +298,7 @@ const CreatePost = ({ toggle, isOpen }) => {
                                     id="image"
                                     accept="image/*"
                                     onChange={handleChange}
-                                    style={{ display: 'none' }}
+                                    style={{ display: "none" }}
                                     ref={fileimageRef}
                                 />
                                 Attach Image
