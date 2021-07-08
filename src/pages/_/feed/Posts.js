@@ -70,11 +70,12 @@ const fetchPosts = async () =>
 // }
 // matchingDocs= matchingDocs.filter((v,i,a)=>a.findIndex(t=>(t.postId === v.postId))===i)
 
-function Posts(props) {
+function Posts({ q }) {
     const posts = useQuery('posts', fetchPosts);
+    const query = q || posts;
     return (
         <>
-            {posts.data?.map((post, i) => (
+            {query.data?.map((post, i) => (
                 <Row key={i}>
                     <Col xs={12} className="d-flex justify-content-center">
                         <Post
@@ -93,20 +94,20 @@ function Posts(props) {
                     </Col>
                 </Row>
             ))}
-            <If condition={posts.isLoading}>
+            <If condition={query.isLoading}>
                 <Then>
                     <p className="mt-4 text-center">Fetching posts...</p>
                 </Then>
                 <Else>
-                    <If condition={posts.isError}>
+                    <If condition={query.isError}>
                         <Then>
                             <p className="mt-4 text-center">
-                                Unable to fetch posts: <b>{posts.error?.message}</b>
+                                Unable to fetch posts: <b>{query.error?.message}</b>
                             </p>
                         </Then>
                         <Else>
                             <p className="mt-4 text-center">
-                                {!posts.data?.length ? 'No posts available' : "You've reached the end of the internet"}
+                                {!query.data?.length ? 'No posts available' : "You've reached the end of the internet"}
                             </p>
                         </Else>
                     </If>
