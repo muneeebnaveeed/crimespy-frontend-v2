@@ -29,6 +29,8 @@ function Actions({ username, verified, id, user, postVerified, ownerId }) {
     const queryClient = useQueryClient();
     // const postRef = db.collection("posts").doc(user.uid).collection("userPosts").doc(id);
     const postRef = db.collection('posts').doc(ownerId).collection('userPosts').doc(id);
+
+    console.log({ username, verified, id, user, postVerified, ownerId });
     //
     useEffect(() => {
         const value = Object.values(verified).filter(Boolean).length;
