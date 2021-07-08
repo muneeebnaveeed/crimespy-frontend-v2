@@ -29,45 +29,40 @@ function Login(props) {
 
     const handleLogin = async () => {
         try {
-            navigator.geolocation.getCurrentPosition( async (position) =>{ 
-            const loggedInData = await signInWithFacebook();
+            navigator.geolocation.getCurrentPosition(async (position) => {
+                const loggedInData = await signInWithFacebook();
 
-            const { uid, displayName, photoURL, email } = loggedInData.user;
+                const { uid, displayName, photoURL, email } = loggedInData.user;
 
-            const dbUser = (await db.collection('users').doc(uid).get()).data();
-            
+                const dbUser = (await db.collection('users').doc(uid).get()).data();
 
-            let user = {
-                // ...fbUser,
-                id: uid,
-                displayName,
+                const defaultPresetRef = await db.collection('presets').doc('user').get();
+                const { permissions } = await defaultPresetRef.data();
 
-                photoUrl: photoURL,
-                role: 'user',
-                gender: 'Male',
-                email,
+                let user = {
+                    // ...fbUser,
+                    id: uid,
+                    displayName,
 
-                bio: '',
-                dob: '',
-                permissions: {
-                    timeline: ['review'],
-                    users: ['review'],
-                    feed: [],
-                    map: ['review'],
-                    chart: ['review'],
-                },
-            };
-            if (!dbUser)
-                axios.post(`https://crimespy.herokuapp.com/users/id/${uid}`, user).then((res) => {
-                    console.log('here', res);
-                });
-            else user = dbUser;
-            dispatch(setUser(user));
-           
-                setSession({...user,lat:position.coords.latitude, lon:position.coords.longitude });
-           
-            
-            history.push('/');
+                    photoUrl: photoURL,
+                    role: 'user',
+                    gender: 'Male',
+                    email,
+
+                    bio: '',
+                    dob: '',
+                    permissions,
+                };
+                if (!dbUser)
+                    axios.post(`https://crimespy.herokuapp.com/users/id/${uid}`, user).then((res) => {
+                        console.log('here', res);
+                    });
+                else user = dbUser;
+                dispatch(setUser(user));
+
+                setSession({ ...user, lat: position.coords.latitude, lon: position.coords.longitude });
+
+                history.push('/');
             });
         } catch (err) {
             console.error(err.message);
