@@ -40,7 +40,6 @@ const user = getLoggedInUser();
 
 const Dashboard = () => {
     const isAuthorized = usePermissions('users');
-    console.log('right here', user);
     const posts = useModifiedQuery('feeds', fetchPosts);
     const [switchCreatePreset, setSwitchCreatePreset] = useState(false);
     const [reports, setReports] = useState({
@@ -97,7 +96,6 @@ const Dashboard = () => {
                             <Button
                                 onClick={(e) => {
                                     setSwitchCreatePreset(!switchCreatePreset);
-                                    console.log('lalalala', switchCreatePreset);
                                 }}
                             >
                                 Create Preset

@@ -23,26 +23,8 @@ const breadcrumbItems = [
 ];
 
 const user = getLoggedInUser();
-const fetchPosts = async ({ currentUser }) =>{
- 
-  return  Axios.get(`https://crimespy.herokuapp.com/posts/id/${user.id}`).then((res) => res.data);
-}
-
-
-// const fetchPosts = async () => {
-//     const snapshot = db.collection("posts").doc(user.id).collection('userPosts').get();
-//     const docs = (await snapshot).docs;
-
-//     return new Promise((resolve, reject) => {
-//         const users = docs.map((doc) => ({
-//             id: doc.id,
-//             ...doc.data(),
-//         }));
-//         resolve(users);
-//     });
-// };
-    
-// const user = getLoggedInUser();
+const fetchPosts = async ({ currentUser }) =>
+    Axios.get(`https://crimespy.herokuapp.com/posts/id/${user.id}`).then((res) => res.data);
 
 function TimeLinePosts(props) {
     const posts = useModifiedQuery('timeline', fetchPosts);
@@ -61,18 +43,7 @@ function TimeLinePosts(props) {
                     {posts.data?.map((post, i) => (
                         <Row key={i}>
                             <Col xs={12} className="d-flex justify-content-center">
-                                <Post
-                                    key={post.id}
-                                    id={post.id}
-                                    ownerId={post.ownerId}
-                                    username={post.username}
-                                    comments={post.comments}
-                                    profileUrl={post.profileUrl}
-                                    description={post.description}
-                                    photoURL={post.mediaUrl}
-                                    Title={post.Title}
-                                    verified={post.verified}
-                                />
+                                <Post key={post.id} {...post} />
                             </Col>
                         </Row>
                     ))}

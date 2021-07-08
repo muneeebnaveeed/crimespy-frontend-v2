@@ -7,6 +7,7 @@ import { Else, If, Then, When } from 'react-if';
 import axios from 'axios';
 import useDisclosure from 'helpers/useDisclosure';
 import haversine from 'haversine-distance';
+import { useQuery } from 'react-query';
 import EditPost from './EditPost.js';
 import Post from './Post';
 
@@ -22,71 +23,57 @@ import Post from './Post';
 //         resolve(users);
 //     });
 // };
-let matchingDocs = [];
-let lat= null
-let lon = null
+const matchingDocs = [];
+let lat = null;
+let lon = null;
 
- navigator.geolocation.getCurrentPosition(async (position) => {
+navigator.geolocation.getCurrentPosition(async (position) => {
+    lat = position.coords.latitude;
+    lon = position.coords.longitude;
+});
+const fetchPosts = async () =>
+    axios.get(`https://crimespy.herokuapp.com/posts/lat/${lat}/lon/${lon}`).then((res) => res.data);
 
-    lat= position.coords.latitude
-    lon= position.coords.longitude
- })
-const fetchPosts = async () => {
-   
-   
-        return axios
-            .get(`https://crimespy.herokuapp.com/posts/lat/${lat}/lon/${lon}`)
-            .then((res) => res.data);
+// const latitude = parseFloat(position.coords.latitude);
+// const longitude = parseFloat(position.coords.longitude);
+// const a = { lat: latitude, lng: longitude };
+// const promises = [];
+// const q = await db.collectionGroup('userPosts').where('postVerified', '==', false).orderBy('timestamp', 'desc');
+// const useref = await db.collection('users');
 
-  
-        // const latitude = parseFloat(position.coords.latitude);
-        // const longitude = parseFloat(position.coords.longitude);
-        // const a = { lat: latitude, lng: longitude };
-        // const promises = [];
-        // const q = await db.collectionGroup('userPosts').where('postVerified', '==', false).orderBy('timestamp', 'desc');
-        // const useref = await db.collection('users');
+// promises.push(q.get());
+// const snapshots = await Promise.all(promises);
 
-        // promises.push(q.get());
-        // const snapshots = await Promise.all(promises);
+// for (const snap of snapshots) {
+//     for (const doc of snap.docs) {
+//         // console.log(doc.data());
+//         const lat = parseFloat(doc.get('latitude'));
+//         const lng = parseFloat(doc.get('longitude'));
 
-        // for (const snap of snapshots) {
-        //     for (const doc of snap.docs) {
-        //         // console.log(doc.data());
-        //         const lat = parseFloat(doc.get('latitude'));
-        //         const lng = parseFloat(doc.get('longitude'));
+//         // console.log(lat, lng);
+//         // We have to filter out a few false positives due to GeoHash
+//         // accuracy, but most will match
+//         const b = { lat, lon: lng };
+//         const userarea = await useref.doc(doc.data().ownerId).get();
+//         const inmeters = parseInt(haversine(a, b));
 
-        //         // console.log(lat, lng);
-        //         // We have to filter out a few false positives due to GeoHash
-        //         // accuracy, but most will match
-        //         const b = { lat, lon: lng };
-        //         const userarea = await useref.doc(doc.data().ownerId).get();
-        //         const inmeters = parseInt(haversine(a, b));
-
-        //         // const distanceInKm = geofire.distanceBetween([lat, lng], center);
-        //         // const distanceInM = distanceInKm * 1000;
-        //         // console.log("distances ", distanceInKm, distanceInM);
-        //         if (inmeters > 5000) {
-        //             console.log('condition not matching', inmeters);
-        //         } else {
-        //             matchingDocs.push({ id: doc.id, photo: userarea?.data()?.photoUrl, ...doc.data() });
-        //             console.log('dds', userarea.data().photoUrl);
-        //         }
-        //     }
-        // }
-        // matchingDocs= matchingDocs.filter((v,i,a)=>a.findIndex(t=>(t.postId === v.postId))===i)
-    
-};
+//         // const distanceInKm = geofire.distanceBetween([lat, lng], center);
+//         // const distanceInM = distanceInKm * 1000;
+//         // console.log("distances ", distanceInKm, distanceInM);
+//         if (inmeters > 5000) {
+//             console.log('condition not matching', inmeters);
+//         } else {
+//             matchingDocs.push({ id: doc.id, photo: userarea?.data()?.photoUrl, ...doc.data() });
+//             console.log('dds', userarea.data().photoUrl);
+//         }
+//     }
+// }
+// matchingDocs= matchingDocs.filter((v,i,a)=>a.findIndex(t=>(t.postId === v.postId))===i)
 
 function Posts(props) {
-    const posts = useModifiedQuery('posts', fetchPosts);
-    const user = getLoggedInUser();
-
-    const editPostDisclosure = useDisclosure();
-    const [selectedPost, setSelectedPost] = useState(null);
-console.log('user', posts.data)
+    const posts = useQuery('posts', fetchPosts);
     return (
         <>
-            {console.log('dasdasda', matchingDocs)}
             {posts.data?.map((post, i) => (
                 <Row key={i}>
                     <Col xs={12} className="d-flex justify-content-center">

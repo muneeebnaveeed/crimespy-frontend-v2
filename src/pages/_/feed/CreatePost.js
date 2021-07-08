@@ -1,7 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react';
 import Button from 'components/Common/Button';
-import Geocode from "react-geocode";
-
+import Geocode from 'react-geocode';
 
 import {
     FormFeedback,
@@ -23,14 +22,10 @@ import { db, getLoggedInUser, storage } from 'helpers/auth';
 import makeid from 'helpers/imagefunction';
 import { useQueryClient } from 'react-query';
 import { showSuccessToast } from 'helpers/showToast';
-import PlacesAutocomplete, {
-    geocodeByAddress,
-    getLatLng
-  } from "react-places-autocomplete";
+import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 // import crimeCategories from "config/crimeCategories";
 import crimeCategories from 'config/crimeCategories';
 import { v4 as uuid } from 'uuid';
-
 
 const geofire = require('geofire-common');
 
@@ -40,32 +35,34 @@ const CreatePost = ({ toggle, isOpen }) => {
     const [isCreatingPost, setIsCreatingPost] = useState(false);
     const [isGettingGeo, setIsgettingGeo] = useState(false);
     const queryClient = useQueryClient();
-    const [address, setAddress] = React.useState("");
-    const [addressforField, setAddressforField] = React.useState("");
+    const [address, setAddress] = React.useState('');
     const [coordinates, setCoordinates] = React.useState({
-      lat: null,
-      lng: null
+        lat: null,
+        lng: null,
     });
     Geocode.setApiKey(process.env.REACT_APP_GOOGLE_KEY);
 
-    const toggleModal = useCallback(() => {
-        if (!isCreatingPost) toggle();
-    }, [isCreatingPost, toggle]);
+    const toggleModal = useCallback(
+        (resetForm) => {
+            if (!isCreatingPost) toggle();
+            if (toggle) resetForm();
+        },
+        [isCreatingPost, toggle]
+    );
 
     const handleSubmit = useCallback(
-        (values) => {
+        (values, form) => {
             const postId = uuid();
-            console.log('imageid', values.image);
             const uploadTask = storage.ref(`post_${postId}.jpg`).put(values.image);
-            Geocode.fromAddress(values.location).then(
-                (response) => {
-                  const { lat, lng } = response.results[0].geometry.location;
-                  console.log(lat, lng);
-                },
-                (error) => {
-                  console.error(error);
-                }
-              );
+            // Geocode.fromAddress(values.location).then(
+            //     (response) => {
+            //         const { lat, lng } = response.results[0].geometry.location;
+            //         debugger;
+            //     },
+            //     (error) => {
+            //         console.error(error);
+            //     }
+            // );
             setIsCreatingPost(true);
             uploadTask.on(
                 'state_changed',
@@ -95,7 +92,7 @@ const CreatePost = ({ toggle, isOpen }) => {
                         db.collection('posts').doc(user.id).collection('userPosts').doc(postId).set(newPost);
                         await queryClient.invalidateQueries('posts');
                         showSuccessToast({ message: 'Post has been created' });
-                        toggleModal();
+                        toggleModal(form.resetForm);
                         setIsCreatingPost(false);
                     } catch (err) {
                         console.error(err.message);
@@ -124,16 +121,25 @@ const CreatePost = ({ toggle, isOpen }) => {
 
             if (validationErrors) validationErrors.forEach((err) => (errors[err.context.label] = err.message));
 
+            if (errors.location && !(errors.longitude && errors.latitude)) delete errors.location;
+            else if (!errors.location && errors.longitude && errors.latitude) {
+                delete errors.longitude;
+                delete errors.latitude;
+            }
+
             return errors;
         },
         validateOnChange: false,
     });
-    const handleSelect = async value =>{
+    const handleSelect = async (value) => {
         const results = await geocodeByAddress(value);
         const latLng = await getLatLng(results[0]);
         setAddress(value);
         setCoordinates(latLng);
-    }
+        formik.setFieldValue('location', value);
+        formik.setFieldValue('latitude', latLng.lat);
+        formik.setFieldValue('longitude', latLng.lng);
+    };
     const handleChange = (e) => {
         e.preventDefault();
         if (e.target.files[0]) {
@@ -151,26 +157,27 @@ const CreatePost = ({ toggle, isOpen }) => {
         await navigator.geolocation.getCurrentPosition((position) => {
             const lat = position.coords.latitude.toString();
             const lon = position.coords.longitude.toString();
-            
+
             Geocode.fromLatLng(lat, lon).then(
                 (response) => {
-                  const address = response.results[0].formatted_address;
-                  console.log("address",address);
-                  setAddressforField(address)
+                    const addr = response.results[0].formatted_address;
+                    formik.setFieldValue('location', addr);
+                    debugger;
                 },
                 (error) => {
-                  console.error(error);
+                    console.error(error);
                 }
-              );
+            );
+
             formik.setFieldValue('latitude', lat);
             formik.setFieldValue('longitude', lon);
         });
         setIsgettingGeo(false);
     };
-
+    console.log({ errors: formik.errors });
     return (
         <>
-            <Modal isOpen={isOpen} toggle={toggleModal} centered>
+            <Modal isOpen={isOpen} toggle={() => toggleModal(formik.resetForm)} centered>
                 <ModalHeader>Create Post</ModalHeader>
                 <form onSubmit={formik.handleSubmit}>
                     <ModalBody>
@@ -183,7 +190,7 @@ const CreatePost = ({ toggle, isOpen }) => {
                                 invalid={formik.errors.title && formik.touched.title}
                                 placeholder="Enter a short Title"
                                 onChange={formik.handleChange}
-                                value={formik.value}
+                                value={formik.values.title}
                             />
                             <FormFeedback> {formik.errors.title}</FormFeedback>
                         </FormGroup>
@@ -201,7 +208,7 @@ const CreatePost = ({ toggle, isOpen }) => {
                                 invalid={formik.errors.description && formik.touched.description}
                                 placeholder="Enter all detail of event in here atlesat above 150 words"
                                 onChange={formik.handleChange}
-                                value={formik.value}
+                                value={formik.values.description}
                             />
                             <FormFeedback> {formik.errors.description}</FormFeedback>
                         </FormGroup>
@@ -216,61 +223,59 @@ const CreatePost = ({ toggle, isOpen }) => {
                         </FormGroup>
                         <FormGroup>
                             <Label for="location">Location</Label>
-                            <InputGroup>
-                                <Input
+
+                            {/* <Input
                                     type="text"
                                     name="location"
                                     id="location"
                                     invalid={formik.errors.location && formik.touched.location}
                                     placeholder="Enter the events location here"
                                     onChange={formik.handleChange}
-                                    value={formik.value}
-                                />
-                                {/* <PlacesAutocomplete
-        value={address}
-        onChange={setAddress}
-        onSelect={handleSelect}
-      >
+                                    value={formik.values.location}
+                                /> */}
+                            <PlacesAutocomplete
+                                value={formik.values.location}
+                                onChange={(loc) => formik.setFieldValue('location', loc)}
+                                onSelect={handleSelect}
+                            >
+                                {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+                                    // formik.setFieldValue('location', value);
+                                    <div key={suggestions.description} style={{ position: 'relative' }}>
+                                        <InputGroup>
+                                            <Input {...getInputProps({ placeholder: 'Type address' })} />
+                                            <InputGroupAddon addonType="append">
+                                                <Button
+                                                    color="warning"
+                                                    type="button"
+                                                    onClick={handleCurrentLocation}
+                                                    loading={isGettingGeo}
+                                                    style={{ zIndex: 0 }}
+                                                >
+                                                    Current Location
+                                                </Button>
+                                            </InputGroupAddon>
+                                        </InputGroup>
 
-{({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-          <div key={suggestions.description}> */}
-            {/* <p>Latitude: {coordinates.lat}</p>
-            <p>Longitude: {coordinates.lng}</p> */}
+                                        <div style={{ position: 'absolute', left: 0, top: '100%' }}>
+                                            {loading ? <div>...loading</div> : null}
 
-            {/* <input {...getInputProps({ placeholder: "Type address" })} />
+                                            {suggestions.map((suggestion) => {
+                                                const style = {
+                                                    backgroundColor: suggestion.active ? '#41b6e6' : '#fff',
+                                                    padding: '0.5rem',
+                                                    cursor: 'pointer',
+                                                };
 
-            <div>
-              {loading ? <div>...loading</div> : null}
-
-              {suggestions.map(suggestion => {
-                const style = {
-                  backgroundColor: suggestion.active ? "#41b6e6" : "#fff"
-                }; */}
-
-                {/* return (
-                  <div {...getSuggestionItemProps(suggestion, { style })}>
-                    {suggestion.description}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )} */}
-      {/* </PlacesAutocomplete> */}
-
-                                <InputGroupAddon addonType="append">
-                                    <Button
-                                        color="warning"
-                                        type="button"
-                                        onClick={handleCurrentLocation}
-                                        loading={isGettingGeo}
-                                        style={{ zIndex: 0 }}
-                                    >
-                                        Current Location
-                                    </Button>
-                                </InputGroupAddon>
-                                <FormFeedback> {formik.errors.location}</FormFeedback>
-                            </InputGroup>
+                                                return (
+                                                    <div {...getSuggestionItemProps(suggestion, { style })}>
+                                                        {suggestion.description}
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                )}
+                            </PlacesAutocomplete>
                         </FormGroup>
                         <FormGroup
                             style={{

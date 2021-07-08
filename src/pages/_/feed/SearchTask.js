@@ -32,7 +32,6 @@ import { set } from 'lodash';
 const SearchTask = ({ Task }) => {
     const [searchTask, setSearchTask] = useState('');
     const Action = () => {
-        console.log({ searchTask });
         setSearchTask();
     };
     const updateText = (val) => {

@@ -10,10 +10,10 @@ import usePermissions from 'helpers/usePermissions.js';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { selectPost, toggleEditPostDisclosure } from 'store/routes/feed/actions.js';
+import { useModifiedQuery } from 'helpers/query';
 import Actions from './Actions';
 import Comments from './Comments';
 import CreateComment from './CreateComment.js.js';
-import { useModifiedQuery } from 'helpers/query';
 
 function Post({ username, profileUrl, description, comments, id, photoURL, Title, verified, postVerified, ownerId }) {
     const [menu, setMenu] = useState(false);
@@ -50,43 +50,36 @@ function Post({ username, profileUrl, description, comments, id, photoURL, Title
             ownerId,
         };
 
-        console.log('handleEditPost() [currentPost:%o]', currentPost);
-
         dispatch(selectPost(currentPost));
         dispatch(toggleEditPostDisclosure());
     }, [dispatch]);
 
-
-    const fetchComments = async () =>{
+    const fetchComments = async () => {
         // const commentse = [];
         // const commentRef =await db.collection('comments');
         // commentRef
-            // .doc(id)
-            // .collection('comments')
-            // .orderBy('timestamp', 'desc')
+        // .doc(id)
+        // .collection('comments')
+        // .orderBy('timestamp', 'desc')
         //     .onSnapshot((querySnapshot) => {
         //         querySnapshot.forEach((doc) => {
         //             commentse.push(doc?.data());
         //         });
         //     });
 
-        const snapshot = db.collection('comments').doc(id)
-        .collection('comments')
-        .orderBy('timestamp', 'asc').get();
+        const snapshot = db.collection('comments').doc(id).collection('comments').orderBy('timestamp', 'asc').get();
         const { docs } = await snapshot;
-    
+
         return new Promise((resolve, reject) => {
-            const comments = docs.map((doc) => ({
+            const c = docs.map((doc) => ({
                 id: doc.id,
                 ...doc.data(),
             }));
             // const modifiedPresets = presets.map((preset) => ({ value: preset, label: preset.title }));
-            resolve(comments);
+            resolve(c);
         });
-    }
-    const commentse = useModifiedQuery(['comments',id],fetchComments)
-    
-    console.log("comment",ownerId)
+    };
+    const commentse = useModifiedQuery(['comments', id], fetchComments);
     return (
         <Card className="m-0 mt-4" style={{ maxWidth: 840 }}>
             <CardBody className="p-0">
@@ -157,8 +150,15 @@ function Post({ username, profileUrl, description, comments, id, photoURL, Title
                 </div>
 
                 <p className="p-3 m-0">{description}</p>
-                <Actions username={username} verified={verified} postVerified={postVerified} user={user} id={id} ownerId={ownerId} />
-                <Comments username={username} comments={commentse.data} id={id}  />
+                <Actions
+                    username={username}
+                    verified={verified}
+                    postVerified={postVerified}
+                    user={user}
+                    id={id}
+                    ownerId={ownerId}
+                />
+                <Comments username={username} comments={commentse.data} id={id} />
                 <When condition={isAuthorized('createComment')}>
                     <CreateComment id={id} comments={comments} />
                 </When>

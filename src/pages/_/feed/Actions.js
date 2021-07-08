@@ -4,7 +4,7 @@ import { db, getLoggedInUser } from 'helpers/auth';
 import React, { useCallback, useState, useEffect } from 'react';
 import { useQueryClient } from 'react-query';
 
-function Action({ active, username, verified,ownerId, user, ...props }) {
+function Action({ active, username, verified, ownerId, user, ...props }) {
     return (
         <div
             role="button"
@@ -22,16 +22,15 @@ function Action({ active, username, verified,ownerId, user, ...props }) {
     );
 }
 
-function Actions({ username, verified, id, user, postVerified,ownerId }) {
+function Actions({ username, verified, id, user, postVerified, ownerId }) {
     const [isVoting, setVoting] = useState(false);
     const [votedPosts, setVotedPosts] = useState([]);
     const [votingii, setVotingii] = useState(null);
     const queryClient = useQueryClient();
     // const postRef = db.collection("posts").doc(user.uid).collection("userPosts").doc(id);
     const postRef = db.collection('posts').doc(ownerId).collection('userPosts').doc(id);
-// 
+    //
     useEffect(() => {
-        console.log(Object.values(verified).filter(Boolean).length);
         const value = Object.values(verified).filter(Boolean).length;
         let verifiedPost;
         if (value === 5) {
@@ -47,18 +46,14 @@ function Actions({ username, verified, id, user, postVerified,ownerId }) {
         const loggeduser = getLoggedInUser();
 
         const oldverified = await (await postRef.get()).data().peopleVerifiedPost;
-        console.log('oldverified',oldverified)
 
         const verificationStatus = oldverified[loggeduser.id];
-        
 
-        
-            if (verificationStatus == true) {
-                updatedverificationStatus = null;
-            } else {
-                updatedverificationStatus = true;
-            }
-          
+        if (verificationStatus == true) {
+            updatedverificationStatus = null;
+        } else {
+            updatedverificationStatus = true;
+        }
 
         await postRef.update({
             peopleVerifiedPost: {
@@ -78,10 +73,6 @@ function Actions({ username, verified, id, user, postVerified,ownerId }) {
     return (
         <div className="d-flex px-3">
             <div className="d-flex mr-4">
-            {
-                
-                console.log('ac',verified[user.id])
-            }
                 <Action active={verified[user.id]}>
                     <i className="fa fa-arrow-up" onClick={handleClick} isLoading={isVoting} />
                 </Action>

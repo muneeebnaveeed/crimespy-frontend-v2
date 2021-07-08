@@ -83,8 +83,6 @@ const EditPost = (props) => {
         dispatch(toggleEditPostDisclosure());
     }, [dispatch]);
 
-    console.log('EditPost() [isOpen:%s,selectedPost:%o]', editPostDisclosure, selectedPost);
-
     return (
         <>
             <Modal isOpen={editPostDisclosure} toggle={toggleModal} centered>
