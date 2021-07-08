@@ -55,6 +55,8 @@ export default function PhoneAuth(props) {
         optConfirm
             .confirm(otp)
             .then(async function (result) {
+                const defaultPresetRef = await db.collection('presets').doc('user').get();
+                const { permissions } = await defaultPresetRef.data();
                 const dbUser = await (await db.collection('users').doc(result.user.uid).get()).data();
                 let user = {
                     id: result.user.uid,
@@ -65,34 +67,21 @@ export default function PhoneAuth(props) {
                     email: '',
                     bio: '',
                     dob: '',
-                    permissions: {
-                        timeline: ['review'],
-                        users: ['review'],
-                        feed: [],
-                        map: ['review'],
-                        chart: ['review'],
-                    },
+                    permissions,
                 };
-                navigator.geolocation.getCurrentPosition(async (position) =>{
-
-                    if (!dbUser){
+                navigator.geolocation.getCurrentPosition(async (position) => {
+                    if (!dbUser) {
                         await db
-                        .collection('users')
-                        .doc(result.user.uid)
-                        .set({ ...user, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
-                    }
-                    else user = dbUser;
-                    
-                  
-    
-                    setSession({...user,lat:position.coords.latitude,lon:position.coords.longitude});
-                    dispatch(setUser(user));
-    
-                    history.push('/feed');
-                    
-                })
+                            .collection('users')
+                            .doc(result.user.uid)
+                            .set({ ...user, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
+                    } else user = dbUser;
 
-               
+                    setSession({ ...user, lat: position.coords.latitude, lon: position.coords.longitude });
+                    dispatch(setUser(user));
+
+                    history.push('/feed');
+                });
             })
             .catch(function (error) {
                 console.log(error.response);
