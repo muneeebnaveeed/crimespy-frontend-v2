@@ -5,6 +5,7 @@ import { Container, Card, CardBody, Row, Col, CardHeader, CardSubtitle, CardImg 
 const UserDisplay = ({ user }) => (
     <>
         <Card>
+            {console.log('user', user)}
             <CardBody>
                 <Row>
                     <div className="d-flex">

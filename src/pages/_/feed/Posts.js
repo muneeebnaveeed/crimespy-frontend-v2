@@ -75,6 +75,7 @@ function Posts({ q }) {
     const query = q || posts;
     return (
         <>
+            {console.log('psst', q)}
             {query.data?.map((post, i) => (
                 <Row key={i}>
                     <Col xs={12} className="d-flex justify-content-center">

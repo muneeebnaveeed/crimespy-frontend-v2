@@ -12,6 +12,7 @@ import UserPermissions from 'pages/_/permissions';
 import Timeline from 'pages/_/timeline';
 import Dashboard from 'pages/_/dashboard';
 import PhoneAuth from 'pages/Authentication/PhoneAuth';
+import LandingPage from 'pages/_/landing';
 import Login from '../pages/Authentication/Login';
 import Logout from '../pages/Authentication/Logout';
 
@@ -47,6 +48,7 @@ const authProtectedRoutes = [...hiddenRoutes, ...sideBarRoutes];
 
 const publicRoutes = [
     // this route should be at the end of all other routes
+    { path: '/landing', exact: true, component: LandingPage },
     { path: '/', exact: true, component: () => <Redirect to="/feed" /> },
     { path: '/logout', icon: 'fas fa-power', component: Logout },
     { path: '/login', component: Login },

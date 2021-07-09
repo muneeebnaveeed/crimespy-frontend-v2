@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { db, getLoggedInUser } from 'helpers/auth';
 import { useModifiedQuery } from 'helpers/query';
 import { Col, Container } from 'reactstrap';
@@ -28,22 +28,30 @@ const breadcrumbItems = [
 const removeFirstLetter = (str) => str.slice(1);
 
 const user = getLoggedInUser();
-const fetchPosts = async (uid) => Axios.get(`https://crimespy.herokuapp.com/posts/id/${uid}`).then((res) => res.data);
-const fetchProfile = async (uid) =>
-    Axios.get(`https://crimespy.herokuapp.com/users/id/${uid}/profile`).then((res) => res.data);
+
+// const fetchProfile = async (uid) =>
+//     Axios.get(`https://crimespy.herokuapp.com/users/id/${uid}/profile`).then((res) => res.data);
 
 function TimeLinePosts(props) {
     const { editPostDisclosure } = useSelector((state) => state.Feed);
     const location = useLocation();
 
-    const [userId, setUserId] = useState(null);
+    const [userId, setUserId] = useState(qs.parse(removeFirstLetter(location.search)).user);
+    const fetchPosts = async (uid) =>
+        Axios.get(`https://crimespy.herokuapp.com/posts/id/${userId}/timeline`).then((res) => res.data);
     const timeline = useModifiedQuery(['timeline', userId], fetchPosts);
-    const profile = useModifiedQuery(['timeline', userId], fetchProfile);
 
-    useEffect(() => {
-        const uId = qs.parse(removeFirstLetter(location.search));
-        setUserId(uId);
-    }, []);
+    const fetchProfile = useCallback(async () => {
+        console.log('fetchUserById() [userId:%s]', userId);
+        const userdata = await (await db.collection('users').doc(userId).get()).data();
+        return userdata;
+    }, [userId]);
+    const profile = useModifiedQuery(['user', userId], fetchProfile);
+
+    // useEffect(() => {
+    //     const uId = qs.parse(removeFirstLetter(location.search));
+    //     setUserId(uId);
+    // }, []);
 
     return (
         <>
@@ -52,7 +60,7 @@ function TimeLinePosts(props) {
                     <Breadcrumbs title="Time Line" breadcrumbItems={breadcrumbItems} />{' '}
                     <Row>
                         <Col xs={12}>
-                            <UserDisplay user={profile} />
+                            <UserDisplay user={profile.data} />
                         </Col>
                     </Row>
                     <Posts q={timeline} />
