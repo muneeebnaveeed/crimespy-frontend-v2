@@ -32,12 +32,13 @@ function Login(props) {
             navigator.geolocation.getCurrentPosition(async (position) => {
                 const loggedInData = await signInWithFacebook();
 
-                const { uid, displayName, photoURL, email } = loggedInData.user;
+                const { uid, displayName, photoURL, email, phoneNumber } = loggedInData.user;
 
                 const dbUser = (await db.collection('users').doc(uid).get()).data();
 
                 const defaultPresetRef = await db.collection('presets').doc('user').get();
                 const { permissions } = await defaultPresetRef.data();
+                // console.log('llasd', loggedInData);
 
                 let user = {
                     // ...fbUser,
@@ -48,6 +49,7 @@ function Login(props) {
                     role: 'user',
                     gender: 'Male',
                     email,
+                    phoneNumber,
 
                     bio: '',
                     dob: '',

@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { useLocation, Switch } from 'react-router-dom';
 import ScrollReveal from './utils/ScrollReveal';
 import LayoutDefault from './layouts/LayoutDefault';
+// import './assets/scss/style.scss';
 
 // Views
 import Home from './views/Home';

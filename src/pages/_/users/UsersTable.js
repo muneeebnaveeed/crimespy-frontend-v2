@@ -100,6 +100,7 @@ function UsersTable(props) {
                                 <th className="bold-text">#</th>
                                 <th className="bold-text">Username</th>
                                 <th className="bold-text">Email</th>
+                                <th className="bold-text">Number</th>
                                 <th className="bold-text">Role Presets</th>
                                 <th className="bold-text">Manage</th>
                             </tr>
@@ -116,6 +117,7 @@ function UsersTable(props) {
                                             </Th>
                                             <Th>{user.displayName}</Th>
                                             <Th>{user.email}</Th>
+                                            <Th>{user.phoneNumber}</Th>
                                             <Th>
                                                 <Select // as={AsyncSelect}
                                                     options={presets.data}

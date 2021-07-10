@@ -65,6 +65,7 @@ export default function PhoneAuth(props) {
                     role: 'user',
                     gender: 'Male',
                     email: '',
+                    phoneNumber: result.user.phoneNumber,
                     bio: '',
                     dob: '',
                     permissions,
