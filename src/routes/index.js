@@ -49,7 +49,7 @@ const authProtectedRoutes = [...hiddenRoutes, ...sideBarRoutes];
 const publicRoutes = [
     // this route should be at the end of all other routes
     { path: '/landing', exact: true, component: LandingPage },
-    { path: '/', exact: true, component: () => <Redirect to="/feed" /> },
+    { path: '/', exact: true, component: () => <Redirect to="/landing" /> },
     { path: '/logout', icon: 'fas fa-power', component: Logout },
     { path: '/login', component: Login },
     {

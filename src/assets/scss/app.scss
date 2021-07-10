@@ -84,6 +84,7 @@ File: Main Css File
 @import "custom/plugins/vector-maps";
 
 // Pages
+
 @import "custom/pages/authentication";
 @import "custom/pages/ecommerce";
 @import "custom/pages/email";
@@ -96,3 +97,4 @@ File: Main Css File
 @import "datatables";
 //current
 @import "custom/components/post";
+@import "../../pages/_/landing/assets/scss/style.scss";

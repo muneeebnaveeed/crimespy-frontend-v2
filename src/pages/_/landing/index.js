@@ -27,15 +27,12 @@ function LandingPage() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location]);
     return (
-        <div />
-        // <ScrollReveal
-        //     ref={childRef}
-        //     children={() => (
-        //         <Switch>
-        //             <AppRoute exact path="/landing" component={Home} layout={LayoutDefault} />
-        //         </Switch>
-        //     )}
-        // />
+        // <div />
+        <ScrollReveal ref={childRef}>
+            <Switch>
+                <AppRoute exact path="/landing" component={Home} layout={LayoutDefault} />
+            </Switch>
+        </ScrollReveal>
     );
 }
 
