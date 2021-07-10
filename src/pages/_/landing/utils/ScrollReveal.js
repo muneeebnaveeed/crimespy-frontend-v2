@@ -1,5 +1,6 @@
+/* eslint-disable react/display-name */
 import React, { useState, useEffect, useImperativeHandle } from 'react';
-import PropTypes from 'prop-types';
+
 import { throttle } from 'lodash';
 
 const ScrollReveal = React.forwardRef((props, ref) => {
@@ -37,6 +38,16 @@ const ScrollReveal = React.forwardRef((props, ref) => {
         },
     }));
 
+    const handleScroll = throttle(() => {
+        // eslint-disable-next-line no-use-before-define
+        handleListeners();
+        revealElements();
+    }, 30);
+
+    const handleResize = throttle(() => {
+        setViewportheight(window.innerHeight);
+    }, 30);
+
     useEffect(() => {
         if (typeof revealEl !== 'undefined' && revealEl.length > 0) {
             if (!checkComplete()) {
@@ -54,15 +65,6 @@ const ScrollReveal = React.forwardRef((props, ref) => {
         window.removeEventListener('resize', handleResize);
     };
 
-    const handleScroll = throttle(() => {
-        handleListeners();
-        revealElements();
-    }, 30);
-
-    const handleResize = throttle(() => {
-        setViewportheight(window.innerHeight);
-    }, 30);
-
     useEffect(() => {
         handleListeners();
         revealElements();
@@ -71,9 +73,5 @@ const ScrollReveal = React.forwardRef((props, ref) => {
 
     return <>{props.children}</>;
 });
-
-ScrollReveal.propTypes = {
-    children: PropTypes.func.isRequired,
-};
 
 export default ScrollReveal;
