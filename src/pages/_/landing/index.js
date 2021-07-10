@@ -21,7 +21,9 @@ function LandingPage() {
 
     useEffect(() => {
         const page = location.pathname;
+        document.body.classList.add('has-animations');
         document.body.classList.add('is-loaded');
+
         childRef.current.init();
         trackPage(page);
         // eslint-disable-next-line react-hooks/exhaustive-deps

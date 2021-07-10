@@ -69,7 +69,7 @@ const ScrollReveal = React.forwardRef((props, ref) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [viewportHeight]);
 
-    return <>{props.children()}</>;
+    return <>{props.children}</>;
 });
 
 ScrollReveal.propTypes = {
