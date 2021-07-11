@@ -9,6 +9,7 @@ import { useFormik } from 'formik';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setUser } from 'store/auth/actions';
+import { phoneIcon } from 'assets/images/icons';
 
 export default function PhoneAuth(props) {
     const [mobile, setMobile] = useState('');
@@ -61,7 +62,8 @@ export default function PhoneAuth(props) {
                 let user = {
                     id: result.user.uid,
                     displayName: 'PhoneUser',
-                    photoUrl: '',
+                    photoUrl:
+                        'https://lh3.googleusercontent.com/pw/AM-JKLWs-ZL7LpNC-QGTHWbdZ8lQVALOIF7q_uZDaL1iuhFanwOZGgqvRJOsj8DviFRmKVoBgxDytHOOnGnETSpbn_9rxgeKVuMRWIGMfpbFJUE35N_5IT7mQZizG5wkqBEXbE6Ric-FhFDB9uQmwyjm-MY=s477-no',
                     role: 'user',
                     gender: 'Male',
                     email: '',

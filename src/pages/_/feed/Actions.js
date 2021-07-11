@@ -76,7 +76,8 @@ function Actions({ username, verified, id, user, postVerified, ownerId }) {
         <div className="d-flex px-3">
             <div className="d-flex mr-4">
                 <Action active={verified[user.id]}>
-                    <i className="fa fa-arrow-up" onClick={handleClick} isLoading={isVoting} />
+                    {/* <i className="fa fa-arrow-up" onClick={handleClick} isLoading={isVoting} /> */}
+                    <i className="fa fa-check fa-lg" aria-hidden="true" onClick={handleClick} isLoading={isVoting} />
                 </Action>
                 <p />
             </div>
