@@ -6,10 +6,13 @@ class PieChart extends Component {
         super(props);
 
         this.state = {
-            series: [44, 55, 41, 17, 15],
+            series: [55, 41, 17],
+            // series: [this.props?.theft, this.props?.arrest, this.props?.other],
             options: {
-                labels: ['Series 1', 'Series 2', 'Series 3', 'Series 4', 'Series 5'],
-                colors: ['#34c38f', '#556ee6', '#f46a6a', '#50a5f1', '#f1b44c'],
+                labels: ['Theft', 'Arrest', 'Others'],
+                // labels: ['Vandalism', 'Arson', 'Theft', 'Shooting', 'Arrest', 'Others'],
+                colors: ['#34c38f', '#556ee6', '#f1b44c'],
+                // colors: ['#34c38f', '#556ee6', '#f46a6a', '#50a5f1', '#f1b44c'],
                 legend: {
                     show: true,
                     position: 'bottom',

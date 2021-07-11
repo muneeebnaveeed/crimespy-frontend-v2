@@ -43,6 +43,9 @@ const Dashboard = () => {
     const isAuthorized = usePermissions('users');
     const posts = useModifiedQuery('feeds', fetchPosts);
     const [switchCreatePreset, setSwitchCreatePreset] = useState(false);
+    const [assaulte, setAssault] = useState(0);
+    const [thefte, setTheft] = useState(0);
+    const [otheres, setOthers] = useState(0);
     const [reports, setReports] = useState({
         number: {
             icon: 'ri-stack-line',
@@ -90,18 +93,32 @@ const Dashboard = () => {
     //         console.log('something went ', err);
     //     }
     // };
+    let assault = 0;
+    let theft = 0;
+    let other = 0;
 
     useEffect(() => {
         try {
+            const items = [];
             const ref = db.collectionGroup('userPosts');
 
             // .orderBy('timestamp', 'desc');
 
             ref.onSnapshot((querySnapshot) => {
-                const items = [];
                 querySnapshot.forEach((doc) => {
                     items.push(doc.data());
                     console.log('item', items);
+                    if (Array.isArray(items)) {
+                        for (let i = 0; i < items.length; i++) {
+                            if (items[i].category === 'Assault') {
+                                setAssault(assault++);
+                            } else if (items[i].category === 'Theft') {
+                                setTheft(theft++);
+                            } else if (items[i].category === 'Others') {
+                                setOthers(other++);
+                            }
+                        }
+                    }
                 });
             });
         } catch (err) {
@@ -111,12 +128,13 @@ const Dashboard = () => {
 
     return (
         <div className="page-content">
+            {console.log('stugg', assaulte, thefte, otheres)}
             <Container fluid>
                 <Breadcrumbs title="Dashboard" breadcrumbItems={breadcrumbItems} />
                 <Row>
                     <Col xl={12}>
                         <Label size="lg">Chart</Label>
-                        <PieChart />
+                        <PieChart assault={assaulte} theft={thefte} other={otheres} />
                     </Col>
                 </Row>
                 <Row>
