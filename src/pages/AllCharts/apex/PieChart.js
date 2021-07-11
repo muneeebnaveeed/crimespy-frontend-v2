@@ -7,9 +7,9 @@ class PieChart extends Component {
 
         this.state = {
             series: [44, 55, 41, 17, 15],
-            options : {
-                labels: ["Series 1", "Series 2", "Series 3", "Series 4", "Series 5"],
-                colors: ["#34c38f", "#556ee6","#f46a6a", "#50a5f1", "#f1b44c"],
+            options: {
+                labels: ['Series 1', 'Series 2', 'Series 3', 'Series 4', 'Series 5'],
+                colors: ['#34c38f', '#556ee6', '#f46a6a', '#50a5f1', '#f1b44c'],
                 legend: {
                     show: true,
                     position: 'bottom',
@@ -18,27 +18,30 @@ class PieChart extends Component {
                     floating: false,
                     fontSize: '14px',
                     offsetX: 0,
-                    offsetY: -10
+                    offsetY: -10,
                 },
-                responsive: [{
-                    breakpoint: 600,
-                    options: {
-                        chart: {
-                            height: 240
+                responsive: [
+                    {
+                        breakpoint: 600,
+                        options: {
+                            chart: {
+                                height: 240,
+                            },
+                            legend: {
+                                show: false,
+                            },
                         },
-                        legend: {
-                            show: false
-                        },
-                    }
-                }],              
-            }
-        }
+                    },
+                ],
+            },
+        };
     }
+
     render() {
         return (
-            <React.Fragment>
-                <ReactApexChart options={this.state.options} series={this.state.series} type="pie" height="320" />
-            </React.Fragment>
+            <>
+                <ReactApexChart options={this.state.options} series={this.state.series} type="pie" height="420" />
+            </>
         );
     }
 }

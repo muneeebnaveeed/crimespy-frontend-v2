@@ -162,7 +162,7 @@ const CreatePost = ({ toggle, isOpen }) => {
                 (response) => {
                     const addr = response.results[0].formatted_address;
                     formik.setFieldValue('location', addr);
-                    debugger;
+                    // debugger;
                 },
                 (error) => {
                     console.error(error);
