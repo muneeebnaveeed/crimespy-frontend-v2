@@ -28,6 +28,7 @@ const SetBio = () => {
     const toggle = () => setIsOpen(!isOpen);
 
     const handleSubmit = async (values, form) => {
+        console.log('vavav', values);
         const user = getLoggedInUser();
         setIsupdatin(true);
         const info = {
@@ -40,7 +41,7 @@ const SetBio = () => {
 
         try {
             console.log(info);
-            await db.collection('users').doc(user.uid).update(info);
+            await db.collection('users').doc(user.id).update(info);
             console.log('updated');
             showSuccessToast({ message: 'Your Bio has been updated successfully' });
             setIsupdatin(false);

@@ -19,6 +19,7 @@ const UserDisplay = ({ user }) => (
                             <h1>{user?.displayName}</h1>
                             <p>{user?.dob}</p>
                             <p>{user?.gender}</p>
+                            <p>{user?.phoneNumber}</p>
                         </div>
                     </div>
                 </Row>

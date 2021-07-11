@@ -23,6 +23,16 @@ function DeleteUser({ isOpen, toggle, userId }) {
 
         try {
             // await axios.delete(`https://crimespy.herokuapp.com/users/id/${userId}`);
+            await db
+                .collection('posts')
+                .doc(userId)
+                .delete()
+                .then(function () {
+                    console.log('delete Posts info successfully');
+                })
+                .catch(function (error) {
+                    console.log(`Errors post info ${error}`);
+                });
 
             await db
                 .collection('users')

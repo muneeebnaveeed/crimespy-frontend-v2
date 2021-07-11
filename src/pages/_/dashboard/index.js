@@ -2,12 +2,13 @@ import React, { Component, useEffect, useState } from 'react';
 import { Container, Row, Col, Label, Button, Collapse, Alert, CardBody } from 'reactstrap';
 
 // Import Breadcrumb
-import { getLoggedInUser } from 'helpers/auth';
+import { db, getLoggedInUser } from 'helpers/auth';
 import { api, useModifiedQuery } from 'helpers/query';
 import Axios from 'axios';
 import { If, Then, Else, When } from 'react-if';
 import { BlockMapBuilder } from 'draft-js';
 import usePermissions from 'helpers/usePermissions';
+import PieChart from 'pages/AllCharts/apex/PieChart';
 import Breadcrumbs from '../../../components/Common/Breadcrumb';
 
 // Import Components
@@ -73,10 +74,51 @@ const Dashboard = () => {
             }));
     }, [posts.isSuccess]);
 
+    // const fetchData = async () => {
+    //     try {
+    //         const ref = db.collectionGroup('userPosts');
+
+    //         // .orderBy('timestamp', 'desc');
+
+    //         await ref.onSnapshot((querySnapshot) => {
+    //             const items = [];
+    //             querySnapshot.forEach((doc) => {
+    //                 items.push(doc.data());
+    //             });
+    //         });
+    //     } catch (err) {
+    //         console.log('something went ', err);
+    //     }
+    // };
+
+    useEffect(() => {
+        try {
+            const ref = db.collectionGroup('userPosts');
+
+            // .orderBy('timestamp', 'desc');
+
+            ref.onSnapshot((querySnapshot) => {
+                const items = [];
+                querySnapshot.forEach((doc) => {
+                    items.push(doc.data());
+                    console.log('item', items);
+                });
+            });
+        } catch (err) {
+            console.log('something went ', err);
+        }
+    }, []);
+
     return (
         <div className="page-content">
             <Container fluid>
                 <Breadcrumbs title="Dashboard" breadcrumbItems={breadcrumbItems} />
+                <Row>
+                    <Col xl={12}>
+                        <Label size="lg">Chart</Label>
+                        <PieChart />
+                    </Col>
+                </Row>
                 <Row>
                     <Col xl={12}>
                         <Label size="lg">Posts</Label>
