@@ -12,6 +12,7 @@ import {
     ModalBody,
     ModalFooter,
     ModalHeader,
+    Alert,
 } from 'reactstrap';
 import Input from 'reactstrap/lib/Input';
 import { useFormik } from 'formik';
@@ -26,6 +27,7 @@ import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-au
 // import crimeCategories from "config/crimeCategories";
 import crimeCategories from 'config/crimeCategories';
 import { v4 as uuid } from 'uuid';
+import { Hidden } from '@material-ui/core';
 
 const geofire = require('geofire-common');
 
@@ -45,7 +47,6 @@ const CreatePost = ({ toggle, isOpen }) => {
     const toggleModal = useCallback(
         (resetForm) => {
             if (!isCreatingPost) toggle();
-            debugger;
             if (toggle) resetForm();
         },
         [isCreatingPost, toggle]
@@ -118,7 +119,9 @@ const CreatePost = ({ toggle, isOpen }) => {
         validate: (values) => {
             const errors = {};
 
-            const validationErrors = postSchema.validate(values, { abortEarly: false })?.error?.details;
+            const validationErrors = postSchema.validate(values, {
+                abortEarly: false,
+            })?.error?.details;
 
             if (validationErrors) validationErrors.forEach((err) => (errors[err.context.label] = err.message));
 
@@ -257,7 +260,18 @@ const CreatePost = ({ toggle, isOpen }) => {
                                             </InputGroupAddon>
                                         </InputGroup>
 
-                                        <div style={{ position: 'absolute', left: 0, top: '100%' }}>
+                                        <div
+                                            style={{
+                                                position: 'absolute',
+                                                left: 0,
+                                                top: '100%',
+                                                width: 333.91,
+                                                zIndex: 1,
+                                                maxHeight: 150,
+                                                overflowY: 'scroll',
+                                                overflowX: 'hidden',
+                                            }}
+                                        >
                                             {loading ? <div>...loading</div> : null}
 
                                             {suggestions.map((suggestion) => {
@@ -277,6 +291,10 @@ const CreatePost = ({ toggle, isOpen }) => {
                                     </div>
                                 )}
                             </PlacesAutocomplete>
+                        </FormGroup>
+                        <FormGroup>
+                            {' '}
+                            {formik.values.image.length < 1 ? <Alert color="danger">Please insert Image</Alert> : null}
                         </FormGroup>
                         <FormGroup
                             style={{
@@ -315,11 +333,10 @@ const CreatePost = ({ toggle, isOpen }) => {
                                 />
                                 Attach Image
                             </Label>
-                            <div className="invalid-feedback">{formik.errors.image}</div>
                         </FormGroup>
                     </ModalBody>
                     <ModalFooter>
-                        <Button color="light" size="sm" onClick={toggleModal}>
+                        <Button color="light" size="sm" onClick={(e) => toggleModal(formik.resetForm)}>
                             Cancel
                         </Button>
                         <Button loading={isCreatingPost} w="55.5px" color="primary" size="sm" type="submit">
