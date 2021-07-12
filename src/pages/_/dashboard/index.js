@@ -46,6 +46,7 @@ const Dashboard = () => {
     const [assaulte, setAssault] = useState(0);
     const [thefte, setTheft] = useState(0);
     const [otheres, setOthers] = useState(0);
+    const permisssions = usePermissions('dashboard');
     const [reports, setReports] = useState({
         number: {
             icon: 'ri-stack-line',
@@ -125,10 +126,13 @@ const Dashboard = () => {
             console.log('something went ', err);
         }
     }, []);
+    if (!permisssions('review')) return <h1>You are not authorized to access dashboard</h1>;
+    console.log('sds', permisssions);
+    // debugger;
 
     return (
         <div className="page-content">
-            {console.log('stugg', assaulte, thefte, otheres)}
+            {console.log('stugg', otheres, thefte, assaulte)}
             <Container fluid>
                 <Breadcrumbs title="Dashboard" breadcrumbItems={breadcrumbItems} />
                 <Row>

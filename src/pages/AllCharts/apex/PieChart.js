@@ -7,7 +7,7 @@ class PieChart extends Component {
 
         this.state = {
             series: [55, 41, 17],
-            // series: [this.props?.theft, this.props?.arrest, this.props?.other],
+            // series: [this.props.theft, this.props.arrest, this.props.other],
             options: {
                 labels: ['Theft', 'Arrest', 'Others'],
                 // labels: ['Vandalism', 'Arson', 'Theft', 'Shooting', 'Arrest', 'Others'],
@@ -43,6 +43,7 @@ class PieChart extends Component {
     render() {
         return (
             <>
+                {console.log('dasdsadasdsasdadasd', this.props.other, this.props.theft, this.props.assault)}
                 <ReactApexChart options={this.state.options} series={this.state.series} type="pie" height="420" />
             </>
         );

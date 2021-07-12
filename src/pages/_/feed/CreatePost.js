@@ -45,6 +45,7 @@ const CreatePost = ({ toggle, isOpen }) => {
     const toggleModal = useCallback(
         (resetForm) => {
             if (!isCreatingPost) toggle();
+            debugger;
             if (toggle) resetForm();
         },
         [isCreatingPost, toggle]
@@ -92,7 +93,7 @@ const CreatePost = ({ toggle, isOpen }) => {
                         db.collection('posts').doc(user.id).collection('userPosts').doc(postId).set(newPost);
                         await queryClient.invalidateQueries('posts');
                         showSuccessToast({ message: 'Post has been created' });
-                        toggleModal(form.resetForm);
+                        toggleModal(formik.resetForm);
                         setIsCreatingPost(false);
                     } catch (err) {
                         console.error(err.message);

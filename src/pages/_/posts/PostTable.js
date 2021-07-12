@@ -33,12 +33,12 @@ import SearchTask from '../feed/SearchTask';
 //     //     }));
 //     //     resolve(postss);
 //     // });
-  
+
 // };
 
 function PostsTable(props) {
     //   const users = useModifiedQuery("users", fetchUsers);
-    
+
     //  const presets = useModifiedQuery("presets", fetchPresets);
     const { isOpen, toggle, onOpen } = useDisclosure();
     const ViewDisclosure = useDisclosure();
@@ -46,11 +46,9 @@ function PostsTable(props) {
 
     const [changingRole, setChangingRole] = useState(null);
     const [postId, setPostId] = useState('');
-    const [poster, SetPoster] = useState([])
+    const [poster, SetPoster] = useState([]);
     const [ownerId, setOwnerId] = useState('');
     const [post, setPost] = useState([]);
-
-
 
     const fetchPosts = async () => {
         // const snapshot = db
@@ -58,10 +56,10 @@ function PostsTable(props) {
         //     .where('postVerified', '==', false)
         //     .orderBy('timestamp', 'desc')
         //     .get();
-    
+
         // // const snapshot = db.collection("users").get();
         // const { docs } = await snapshot;
-    
+
         // return new Promise((resolve, reject) => {
         //     const postss = docs.map((doc) => ({
         //         id: doc.id,
@@ -69,26 +67,19 @@ function PostsTable(props) {
         //     }));
         //     resolve(postss);
         // });
-        const ref= db
-        .collectionGroup('userPosts')
-        
+        const ref = db.collectionGroup('userPosts');
+
         // .orderBy('timestamp', 'desc');
-    
-      await ref.onSnapshot((querySnapshot) =>{
-            const items =[]
-            querySnapshot.forEach((doc) =>{
+
+        await ref.onSnapshot((querySnapshot) => {
+            const items = [];
+            querySnapshot.forEach((doc) => {
                 items.push(doc.data());
-    
             });
             SetPoster(items);
             // resolve(items);
-            
-        })
+        });
     };
-
-
-
-
 
     const HandleViewPost = async (p) => {
         ViewDisclosure.toggle();
@@ -100,18 +91,18 @@ function PostsTable(props) {
         setPost(p);
     };
 
-    const handlePassInfoShow = async (id,ownerid) => {
+    const handlePassInfoShow = async (id, ownerid) => {
         toggle();
-        console.log('idd', ownerid)
+        console.log('idd', ownerid);
         setPostId(id);
-        setOwnerId(ownerid)
+        setOwnerId(ownerid);
     };
     const posts = useModifiedQuery('feeds', fetchPosts);
 
     useEffect(() => {
         fetchPosts();
-        console.log('pdsdasda', posts)
-    }, [])
+        console.log('pdsdasda', posts);
+    }, []);
 
     const isAuthorized = usePermissions('poststable');
 
@@ -142,6 +133,7 @@ function PostsTable(props) {
                                 <th className="bold-text">#</th>
                                 <th className="bold-text">Author Name</th>
                                 <th className="bold-text">Post Title</th>
+                                <th className="bold-text">Category</th>
                                 <th className="bold-text">Manage</th>
                             </tr>
                         </thead>
@@ -155,6 +147,7 @@ function PostsTable(props) {
                                         </Th>
                                         <Th>{p.username}</Th>
                                         <Th>{p.Title}</Th>
+                                        <Th>{p.category}</Th>
 
                                         <Th>
                                             <ButtonGroup>
@@ -185,8 +178,8 @@ function PostsTable(props) {
                     </Table>
                 </CardBody>
             </Card>
-            <DeletePost isOpen={isOpen} toggle={toggle} postId={postId} ownerId={ownerId}  />
-            <ViewPost isOpen={ViewDisclosure.isOpen} toggle={ViewDisclosure.toggle} post={post}  />
+            <DeletePost isOpen={isOpen} toggle={toggle} postId={postId} ownerId={ownerId} />
+            <ViewPost isOpen={ViewDisclosure.isOpen} toggle={ViewDisclosure.toggle} post={post} />
             <VerifyPost isOpen={VerifyDisclosure.isOpen} toggle={VerifyDisclosure.toggle} post={post} />
         </>
     );
