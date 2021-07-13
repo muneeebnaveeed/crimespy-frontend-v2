@@ -30,7 +30,6 @@ import PlacesAutocomplete, {
 // import crimeCategories from "config/crimeCategories";
 import crimeCategories from "config/crimeCategories";
 import { v4 as uuid } from "uuid";
-import { Hidden } from "@material-ui/core";
 
 const geofire = require("geofire-common");
 
@@ -220,8 +219,8 @@ const CreatePost = ({ toggle, isOpen }) => {
               <Label for="description">Description</Label>
               <Input
                 style={{
-                  minHeight: 100,
-                  maxHeight: 300,
+                  minHeight: 80,
+                  maxHeight: 120,
                 }}
                 type="textarea"
                 rows={8}
@@ -328,6 +327,7 @@ const CreatePost = ({ toggle, isOpen }) => {
                 )}
               </PlacesAutocomplete>
             </FormGroup>
+            {/* <FormFeedback> {formik.errors.location}</FormFeedback> */}
             <FormGroup>
               {" "}
               {formik.values.image.length < 1 ? (

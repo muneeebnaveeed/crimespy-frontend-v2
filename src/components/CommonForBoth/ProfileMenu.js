@@ -1,67 +1,86 @@
-import { getLoggedInUser, setSession, signOutFireabse } from 'helpers/auth';
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { useHistory, withRouter } from 'react-router-dom';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import { setUser } from 'store/auth/actions';
+import { getLoggedInUser, setSession, signOutFireabse } from "helpers/auth";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { useHistory, withRouter } from "react-router-dom";
+import alternateImg from "../../assets/images/default.jpg";
+import {
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+} from "reactstrap";
+import { setUser } from "store/auth/actions";
 
 // users
-import avatar2 from '../../assets/images/users/avatar-2.jpg';
+import avatar2 from "../../assets/images/users/avatar-2.jpg";
 
 class ProfileMenu extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            menu: false,
-            user: getLoggedInUser(),
-        };
-        this.toggle = this.toggle.bind(this);
-    }
-
-    handleLogout = async () => {
-        try {
-            await signOutFireabse();
-            setSession(null);
-            this.props.history.push('/login');
-        } catch (err) {
-            console.error(err.message);
-        }
+  constructor(props) {
+    super(props);
+    this.state = {
+      menu: false,
+      user: getLoggedInUser(),
     };
+    this.toggle = this.toggle.bind(this);
+  }
 
-    handlePermissions = () => {
-        this.props.history.push('/profile');
-    };
-
-    toggle() {
-        this.setState((prevState) => ({
-            menu: !prevState.menu,
-        }));
+  handleLogout = async () => {
+    try {
+      await signOutFireabse();
+      setSession(null);
+      this.props.history.push("/login");
+    } catch (err) {
+      console.error(err.message);
     }
+  };
 
-    render() {
-        return (
-            <>
-                <Dropdown
-                    isOpen={this.state.menu}
-                    onClick={this.handlePermissions}
-                    className="d-inline-block user-dropdown"
-                >
-                    <DropdownToggle
-                        tag="button"
-                        className="btn header-item waves-effect"
-                        id="page-header-user-dropdown"
-                    >
-                        <img
+  handlePermissions = () => {
+    this.props.history.push("/profile");
+  };
+
+  toggle() {
+    this.setState((prevState) => ({
+      menu: !prevState.menu,
+    }));
+  }
+
+  render() {
+    return (
+      <>
+        <Dropdown
+          isOpen={this.state.menu}
+          onClick={this.handlePermissions}
+          className="d-inline-block user-dropdown"
+        >
+          <DropdownToggle
+            tag="button"
+            className="btn header-item waves-effect"
+            id="page-header-user-dropdown"
+          >
+            {this.state.user.photoUrl != null ? (
+              <img
+                className="rounded-circle header-profile-user mr-1"
+                src={this.state.user.photoUrl}
+                alt="Header Avatar"
+              />
+            ) : (
+              <img
+                className="rounded-circle header-profile-user mr-1"
+                src={alternateImg}
+                alt="Header Avatar"
+              />
+            )}
+            {/* <img
                             className="rounded-circle header-profile-user mr-1"
                             src={this.state.user.photoUrl}
                             alt="Header Avatar"
-                        />
-                        <span className="d-none d-xl-inline-block ml-1 text-transform">
-                            {this.state.user.displayName}
-                        </span>
-                        {/* <i className="mdi mdi-chevron-down d-none ml-1 d-xl-inline-block"></i> */}
-                    </DropdownToggle>
-                    {/* <DropdownMenu right>
+                        /> */}
+            <span className="d-none d-xl-inline-block ml-1 text-transform">
+              {this.state.user.displayName}
+            </span>
+            {/* <i className="mdi mdi-chevron-down d-none ml-1 d-xl-inline-block"></i> */}
+          </DropdownToggle>
+          {/* <DropdownMenu right>
                         <DropdownItem onClick={this.handlePermissions}>
                             <i className="ri-user-line align-middle mr-1"></i> Profile
                         </DropdownItem>
@@ -80,10 +99,10 @@ class ProfileMenu extends Component {
                             <i className="ri-shut-down-line align-middle mr-1 text-danger"></i> Logout
                         </DropdownItem>
                     </DropdownMenu> */}
-                </Dropdown>
-            </>
-        );
-    }
+        </Dropdown>
+      </>
+    );
+  }
 }
 
 const mapStatetoProps = ({ Auth }) => Auth;
