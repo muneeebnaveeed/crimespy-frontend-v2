@@ -4,8 +4,9 @@ import { FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader } f
 
 function VerifyPost({ isOpen, toggle, post }) {
     const calculateIsVerified = useCallback(() => {
-        if (!post.verified) return false;
-        return Object.values(post.verified).filter(Boolean).length >= 2;
+        // if (!post.peopleVerifiedPost) return false;
+        // return Object.values(post.peopleVerifiedPost).filter(Boolean).length >= 2;
+        if (post.peopleVerifiedPost === true) return true;
     }, [post]);
 
     return (

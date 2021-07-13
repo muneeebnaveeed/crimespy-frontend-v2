@@ -41,9 +41,14 @@ const user = getLoggedInUser();
 
 const Dashboard = () => {
     const isAuthorized = usePermissions('users');
-    const permisssions = usePermissions('dashboard');
     const posts = useModifiedQuery('feeds', fetchPosts);
     const [switchCreatePreset, setSwitchCreatePreset] = useState(false);
+    const [assaulte, setAssault] = useState(0);
+    const [thefte, setTheft] = useState(0);
+    const [otheres, setOthers] = useState(0);
+    const [vanda, setVanda] = useState(0);
+    const [shoot, setShoot] = useState(0);
+    const permisssions = usePermissions('dashboard');
     const [reports, setReports] = useState({
         number: {
             icon: 'ri-stack-line',
@@ -92,26 +97,59 @@ const Dashboard = () => {
     //     }
     // };
 
+    let assault = 0;
+    let theft = 0;
+    let other = 0;
+    let vandal = 0;
+    let shooting = 0;
+
     useEffect(() => {
         try {
+            // const assault = 0;
+            // const theft = 0;
+            // const other = 0;
+            // const vanda = 0;
+            // const shoot = 0;
+
+            const items = [];
             const ref = db.collectionGroup('userPosts');
 
             // .orderBy('timestamp', 'desc');
 
             ref.onSnapshot((querySnapshot) => {
-                const items = [];
                 querySnapshot.forEach((doc) => {
                     items.push(doc.data());
-                    console.log('item', items);
+                    // console.log('item', doc.data());
                 });
+                if (Array.isArray(items)) {
+                    for (let i = 0; i < items.length; i++) {
+                        if (items[i].category === 'Assault') {
+                            console.log('ASSAULT', items[i].category);
+                            setAssault(assault++);
+                        } else if (items[i].category === 'Theft') {
+                            console.log('THEFT', items[i].category);
+                            setTheft(theft++);
+                        } else if (items[i].category === 'Others') {
+                            console.log('OTHER', items[i].category);
+                            setOthers(other++);
+                        } else if (items[i].category === 'Vandalism') {
+                            console.log('VANDALISM', items[i].category);
+                            setVanda(vandal++);
+                        } else if (items[i].category === 'Shooting') {
+                            console.log('SHOOTING', items[i].category);
+                            setShoot(shooting++);
+                        }
+                    }
+                    debugger;
+                }
             });
         } catch (err) {
             console.log('something went ', err);
         }
     }, []);
     if (!permisssions('review')) return <h1>You are not authorized to access dashboard</h1>;
-    console.log('sds', permisssions);
-    debugger;
+    // console.log('sds', permisssions);
+    // debugger;
     return (
         <div className="page-content">
             <Container fluid>
@@ -119,7 +157,8 @@ const Dashboard = () => {
                 <Row>
                     <Col xl={12}>
                         <Label size="lg">Chart</Label>
-                        <PieChart />
+                        {console.log('sds', thefte)}
+                        <PieChart assault={assaulte} theft={thefte} other={otheres} vandalism={vanda} shoot={shoot} />
                     </Col>
                 </Row>
                 <Row>

@@ -46,10 +46,11 @@ const Presets = () => {
         [viewDisclosure.toggle, setSelectedPreset]
     );
 
-    const deletePreset = async (title) => {
+    const deletePreset = async (obj) => {
+        console.log('ob', obj.title);
         const presetRef = db.collection('presets');
         await presetRef
-            .doc(title)
+            .doc(obj.title)
             .delete()
             .then(function () {
                 console.log('delete Presets info successfully');
@@ -129,9 +130,7 @@ const Presets = () => {
                                                                         <Button
                                                                             color="light"
                                                                             size="sm"
-                                                                            onClick={() =>
-                                                                                deletePreset(preset.value.title)
-                                                                            }
+                                                                            onClick={() => deletePreset(preset.value)}
                                                                         >
                                                                             <i className="fas fa-trash-alt" />
                                                                         </Button>
