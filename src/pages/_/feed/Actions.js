@@ -22,7 +22,7 @@ function Action({ active, username, verified, ownerId, user, ...props }) {
     );
 }
 
-function Actions({ username, verified, id, user, postVerified, ownerId }) {
+function Actions({ verified, id, user, postVerified, ownerId }) {
     const [isVoting, setVoting] = useState(false);
 
     const [votingii, setVotingii] = useState(null);
@@ -33,7 +33,7 @@ function Actions({ username, verified, id, user, postVerified, ownerId }) {
     useEffect(() => {
         const value = Object.values(verified).filter(Boolean).length;
 
-        if (value === 5) {
+        if (value === 1) {
             postRef.update({ postVerified: true });
         }
     }, [postRef, verified]);

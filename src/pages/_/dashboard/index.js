@@ -103,6 +103,13 @@ const Dashboard = () => {
     let vandal = 0;
     let shooting = 0;
 
+    let thef = 0;
+    let othe = 0;
+    // let theft = 0;
+    // let other = 0;
+    // let vandal = 0;
+    // let shooting = 0;
+
     useEffect(() => {
         try {
             // const assault = 0;
@@ -128,10 +135,10 @@ const Dashboard = () => {
                             setAssault(assault++);
                         } else if (items[i].category === 'Theft') {
                             console.log('THEFT', items[i].category);
-                            setTheft(theft++);
+                            thef = theft++;
                         } else if (items[i].category === 'Others') {
                             console.log('OTHER', items[i].category);
-                            setOthers(other++);
+                            othe = other++;
                         } else if (items[i].category === 'Vandalism') {
                             console.log('VANDALISM', items[i].category);
                             setVanda(vandal++);
@@ -157,7 +164,7 @@ const Dashboard = () => {
                 <Row>
                     <Col xl={12}>
                         <Label size="lg">Chart</Label>
-                        {console.log('sds', thefte)}
+                        {console.log('sds', thef, othe)}
                         <PieChart assault={assaulte} theft={thefte} other={otheres} vandalism={vanda} shoot={shoot} />
                     </Col>
                 </Row>

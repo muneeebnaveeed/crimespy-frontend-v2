@@ -247,6 +247,7 @@ function Map() {
                 )}
 
                 <Search panTo={panTo} setLantlng={setLantlng} />
+                <GuideSymbol />
             </GoogleMap>
         </div>
     );
@@ -319,6 +320,35 @@ function Search({ panTo, setLantlng }) {
                     </ComboboxList>
                 </ComboboxPopover>
             </Combobox>
+        </div>
+    );
+}
+
+function GuideSymbol() {
+    return (
+        <div className="guide">
+            <div className="col-sm-6">
+                <div className="card">
+                    <div className="card-body">
+                        <h5 className="card-title">Symbols in Map</h5>
+                        <p className="card-text">
+                            <img src={Arson} alt="arson" style={{ height: '20px', width: '20px' }} /> Arson
+                        </p>
+                        <p className="card-text">
+                            <img src={Theft} alt="theft" style={{ height: '20px', width: '20px' }} /> Theft
+                        </p>
+                        <p className="card-text">
+                            <img src={Vandalism} alt="vandalism" style={{ height: '20px', width: '20px' }} /> Vandalism
+                        </p>
+                        <p className="card-text">
+                            <img src={Shooting} alt="shooting" style={{ height: '20px', width: '20px' }} /> Shooting
+                        </p>
+                        <p className="card-text">
+                            <img src={Assault} alt="assault" style={{ height: '20px', width: '20px' }} /> Assaut
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }

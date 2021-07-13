@@ -63,8 +63,7 @@ export default function PhoneAuth(props) {
                 let user = {
                     id: result.user.uid,
                     displayName: 'PhoneUser',
-                    photoUrl:
-                        'https://lh3.googleusercontent.com/pw/AM-JKLWs-ZL7LpNC-QGTHWbdZ8lQVALOIF7q_uZDaL1iuhFanwOZGgqvRJOsj8DviFRmKVoBgxDytHOOnGnETSpbn_9rxgeKVuMRWIGMfpbFJUE35N_5IT7mQZizG5wkqBEXbE6Ric-FhFDB9uQmwyjm-MY=s477-no',
+                    photoUrl: null,
                     role: 'user',
                     gender: 'Male',
                     email: '',

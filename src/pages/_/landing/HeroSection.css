@@ -1,0 +1,70 @@
+.home_hero-img{
+    width: 100%;
+    Z-INDEX: -1;
+}
+
+
+  
+.stl{
+ 
+  padding: 8px 20px;
+  border-radius: 4px;
+  outline: none;
+  border:none;
+  cursor: pointer;
+  white-space: nowrap;
+
+}
+
+.stl:hover{
+  color: #fff;
+  background-color: #f00946;
+  transition: all 0.2s ease-out;
+
+}
+
+
+.col {
+    margin-bottom: 15px;
+    padding-right: 15px;
+    padding-left: 15px;
+    flex: 1 1;
+    max-width: 50%;
+    flex-basis: 50%;
+    POSITION: ABSOLUTE;
+    top: 25%;
+    left: 19%;
+    OVERFLOW: hidden;
+
+  }
+  .heading_a{
+      background-image: url(data:image/png;base64,/9j/4QAiRXhpZgAATU0AKgAAAAgAAQESAAMAAAABAAEAAAAAAAD/7RiKUGhvdG9zaG9wIDMuMAA4QklNBAQAAAAAABccAVoAAxslRxwBWgADGyVHHAIAAAJoAAA4QklNBCUAAAAAABBXiOhd/8na9YQVnsxtxr3lOEJJTQQ6AAAAAAERAAAAEAAAAAEAAAAAAAtwcmludE91dHB1dAAAAAUAAAAAUHN0U2Jvb2wBAAAAAEludGVlbnV...);
+      width: 100%;
+      Z-INDEX: -1;
+  }
+  .heading {
+    margin-bottom: 24px;
+    font-size: 48px;
+    line-height: 1.1;
+    font-weight: 600;
+    color: #f7f8fa;
+  }
+  .home_hero-subtitle {
+    max-width: 440px;
+    margin-bottom: 35px;
+    font-size: 18px;
+    line-height: 24px;
+    color: #fff;
+    font-family: 'CenturayGothic';
+    font-weight: 100;
+  }
+
+  .middle_content{
+      background-color: #224422;
+  }
+
+  .background_header{
+      height: auto;
+  }
+  
+  
