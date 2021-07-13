@@ -12,14 +12,14 @@ export default [
         label: 'Theft',
     },
     {
-        value: 'Others',
-        label: 'Others',
+        value: 'Other',
+        label: 'Other',
     },
     {
         value: 'Assault',
         label: 'Assault',
     },
-  
+
     {
         value: 'Shooting',
         label: 'Shooting',
@@ -28,6 +28,4 @@ export default [
         value: 'Arrest',
         label: 'Arrest',
     },
-  
-   
 ];

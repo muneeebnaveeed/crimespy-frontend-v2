@@ -1,15 +1,16 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { Component, useState } from 'react';
-import * as firebaseui from 'firebaseui';
+import React, { useState } from 'react';
+
 import firebase from 'firebase';
 import 'firebaseui/dist/firebaseui.css';
 import { db, setSession } from 'helpers/auth';
-import { useFormik } from 'formik';
+
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setUser } from 'store/auth/actions';
-import { phoneIcon } from 'assets/images/icons';
+
+import logodark from '../../assets/images/logo-dark.png';
 
 export default function PhoneAuth(props) {
     const [mobile, setMobile] = useState('');
@@ -62,8 +63,7 @@ export default function PhoneAuth(props) {
                 let user = {
                     id: result.user.uid,
                     displayName: 'PhoneUser',
-                    photoUrl:
-                        'https://lh3.googleusercontent.com/pw/AM-JKLWs-ZL7LpNC-QGTHWbdZ8lQVALOIF7q_uZDaL1iuhFanwOZGgqvRJOsj8DviFRmKVoBgxDytHOOnGnETSpbn_9rxgeKVuMRWIGMfpbFJUE35N_5IT7mQZizG5wkqBEXbE6Ric-FhFDB9uQmwyjm-MY=s477-no',
+                    photoUrl: null,
                     role: 'user',
                     gender: 'Male',
                     email: '',
@@ -98,7 +98,15 @@ export default function PhoneAuth(props) {
             <div className="container">
                 <div className="row justify-content-center align-items-center">
                     <div className="col-sm-6 text-left">
-                        <h2 className="mt-3">Phone Login</h2>
+                        <h2 className="mt-3 text-center">Phone Login</h2>
+                        <div className="text-center">
+                            <div>
+                                <img src={logodark} height="60" alt="logo" />
+                            </div>
+
+                            <h4 className="font-size-18 mt-4">Welcome Back !</h4>
+                            <p className="text-muted">Sign in to continue to Crimespy.</p>
+                        </div>
                         <form onSubmit={handleSubmitMobile}>
                             <div id="recaptcha-container" />
                             <div className="form-group mt-5">
@@ -107,6 +115,7 @@ export default function PhoneAuth(props) {
                                     type="number"
                                     name="mobile"
                                     className="form-control"
+                                    placeholder="+92"
                                     onChange={(e) => setMobile(e.target.value)}
                                 />
                             </div>
@@ -123,6 +132,7 @@ export default function PhoneAuth(props) {
                                     id="otp"
                                     name="otp"
                                     className="form-control"
+                                    placeholder="Enter OTP here"
                                     onChange={(e) => setOtp(e.target.value)}
                                 />
                             </div>

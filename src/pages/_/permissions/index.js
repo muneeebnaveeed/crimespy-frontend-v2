@@ -37,7 +37,7 @@ const Permission = () => {
         <div className="page-content">
             <Container fluid>
                 <Breadcrumbs title="User Permissions" breadcrumbItems={breadcrumbItems} pageTitleClass="pb-0" />
-                <Row>
+                <Row className="mt-4">
                     <Col xs={12}>
                         <p>Manage user permissions with a fine grained control over each aspect of the application</p>
                     </Col>
