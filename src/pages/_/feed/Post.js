@@ -114,8 +114,14 @@ function Post({
   };
   const commentse = useModifiedQuery(["comments", id], fetchComments);
   return (
-    <Card className="m-0 mt-4" style={{ maxWidth: 840 }}>
-      <CardBody className="p-0">
+    <Card
+      className="m-0 mt-4"
+      style={{ width: 800, minWidth: 750, maxWidth: 840 }}
+    >
+      <CardBody
+        className="p-0"
+        style={{ width: 800, minWidth: 750, maxWidth: 840 }}
+      >
         <div className="d-flex p-3 justify-content-between">
           <div className="d-flex align-items-center">
             <Avatar
