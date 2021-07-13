@@ -49,10 +49,8 @@ const EditPost = (props) => {
         initialValues: {
             title: selectedPost.Title,
             description: selectedPost.description,
-            location: selectedPost.location,
+
             crimeCategory: crimeCategories[0].value,
-            longitude: selectedPost.longitude,
-            latitude: selectedPost.latitude,
         },
         onSubmit: handleSubmit,
         validate: (values) => {
@@ -130,9 +128,9 @@ const EditPost = (props) => {
                             />
                         </FormGroup>
                         <FormGroup>
-                            <Label for="location">Location</Label>
-                            <InputGroup>
-                                <Input
+                            {/* <Label for="location">Location</Label> */}
+
+                            {/* <Input
                                     type="text"
                                     name="location"
                                     id="location"
@@ -140,8 +138,8 @@ const EditPost = (props) => {
                                     placeholder="Enter the events location here"
                                     onChange={formik.handleChange}
                                     value={formik.values.location}
-                                />
-                                <InputGroupAddon addonType="append">
+                                /> */}
+                            {/* <InputGroupAddon addonType="append">
                                     <Button
                                         color="warning"
                                         type="button"
@@ -151,9 +149,8 @@ const EditPost = (props) => {
                                     >
                                         Current Location
                                     </Button>
-                                </InputGroupAddon>
-                                <FormFeedback>{formik.errors.location}</FormFeedback>
-                            </InputGroup>
+                                </InputGroupAddon> */}
+                            {/* <FormFeedback>{formik.errors.location}</FormFeedback> */}
                         </FormGroup>
                         <FormGroup
                             style={{

@@ -219,8 +219,8 @@ const CreatePost = ({ toggle, isOpen }) => {
               <Label for="description">Description</Label>
               <Input
                 style={{
-                  minHeight: 80,
-                  maxHeight: 120,
+                  minHeight: 100,
+                  maxHeight: 300,
                 }}
                 type="textarea"
                 rows={8}
@@ -327,7 +327,6 @@ const CreatePost = ({ toggle, isOpen }) => {
                 )}
               </PlacesAutocomplete>
             </FormGroup>
-            {/* <FormFeedback> {formik.errors.location}</FormFeedback> */}
             <FormGroup>
               {" "}
               {formik.values.image.length < 1 ? (

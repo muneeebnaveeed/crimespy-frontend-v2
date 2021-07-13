@@ -26,7 +26,6 @@ import {
 import { useModifiedQuery } from "helpers/query";
 import Actions from "./Actions";
 import Comments from "./Comments";
-import alternateImg from "../../../assets/images/default.jpg";
 import CreateComment from "./CreateComment.js.js";
 
 function Post({
@@ -115,34 +114,11 @@ function Post({
   };
   const commentse = useModifiedQuery(["comments", id], fetchComments);
   return (
-    <Card className="m-0 mt-4" style={{ width: 800 }}>
-      <CardBody className="p-0" style={{ width: 800 }}>
+    <Card className="m-0 mt-4" style={{ maxWidth: 840 }}>
+      <CardBody className="p-0">
         <div className="d-flex p-3 justify-content-between">
           <div className="d-flex align-items-center">
-            {profileUrl != null ? (
-              <Avatar
-                alt={username.toLowerCase()}
-                src={profileUrl}
-                style={{
-                  width: 35,
-                  height: 35,
-                }}
-              >
-                {username.charAt(0)}{" "}
-              </Avatar>
-            ) : (
-              <Avatar
-                alt={username.toLowerCase()}
-                src={alternateImg}
-                style={{
-                  width: 35,
-                  height: 35,
-                }}
-              >
-                {username.charAt(0)}{" "}
-              </Avatar>
-            )}
-            {/* <Avatar
+            <Avatar
               alt={username.toLowerCase()}
               src={profileUrl}
               style={{
@@ -151,7 +127,7 @@ function Post({
               }}
             >
               {username.charAt(0)}{" "}
-            </Avatar> */}
+            </Avatar>
             <span className="ml-2 text-capitalize">{username}</span>
           </div>
           <div className="d-flex align-items-center">

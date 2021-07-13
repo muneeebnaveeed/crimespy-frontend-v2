@@ -56,6 +56,7 @@ function TimeLinePosts(props) {
     return (
         <>
             <div className="page-content">
+                {console.log('time', timeline)}
                 <Container fluid>
                     <Breadcrumbs title="Time Line" breadcrumbItems={breadcrumbItems} />{' '}
                     <Row>
