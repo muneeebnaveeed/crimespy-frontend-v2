@@ -72,6 +72,7 @@
         "react-geocode": "^0.2.3",
         "react-google-maps": "^9.4.5",
         "react-i18next": "^9.0.10",
+        "react-icons": "^4.2.0",
         "react-if": "^4.0.1",
         "react-image-lightbox": "^5.1.1",
         "react-input-mask": "^2.0.4",
